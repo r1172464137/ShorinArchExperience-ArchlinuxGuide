@@ -5,6 +5,7 @@
     border: none;
     border-radius: 0;
     font-family: "JetBrainsMono Nerd Font Propo";
+    /* font-family:"0xProto Nerd Font Propo"; */
     font-size: 18px;
     opacity: 1;
 }
@@ -309,25 +310,17 @@ window#waybar {
     padding: 0px;
 }
 
-#custom-pacman {
+#custom-updates {
     border-radius: 0px;
     padding: 0px 5px 0px 0px;
-    margin: 0px;
     background-color: @surface_container_high;
     color: @error;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
 
-#custom-pacman.pending-updates {
-    animation-name: blink-update;
-    animation-duration: 3s;
 }
 
 
 #pulseaudio {
-    padding: 0px 5px 0px 5px;
+    padding: 0px 0px 0px 5px;
 }
 
 #pulseaudio-slider {

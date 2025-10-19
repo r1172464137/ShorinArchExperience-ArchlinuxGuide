@@ -147,10 +147,11 @@
         ],
     },
     "pulseaudio": {
+        "tooltip-format":"Click to Mute | Right-Click to Mute Mic | Mid-Click to Open Pavucontrol",
         "format": "{icon} {format_source} ",
         "format-source": "{volume}%",
         "format-source-muted": "",
-        "format-muted": "  {format_source}",
+        "format-muted": " {format_source} ",
         "format-icons": {
             "headphone": "",
             // "speaker":"󰓃"
@@ -160,8 +161,9 @@
                 ""
             ],
         },
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-        "on-click-right": "pavucontrol --tab=3",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-click-middle": "pavucontrol --tab=3",
         "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
     },
@@ -188,7 +190,7 @@
         "tooltip-format": "Click to Open Applauncher or Right-Click to Select Wallpaper",
         "format": "󰣇",
         "on-click": "fuzzel",
-        "on-click-right":"waypaper"
+        "on-click-right": "waypaper"
     },
     //电源菜单
     "group/powermenu": {
@@ -329,17 +331,18 @@
     //分隔符󰇝 󱋱
     "custom/separator#1": {
         "format": "󱋱",
-        "tooltip":false
+        "tooltip": false
     },
     //archupdater
-    "custom/pacman": {
-        "format": "{icon}{0}",
+    "custom/updates": {
+        "format": "{}{icon}",
         "return-type": "json",
         "format-icons": {
-            "pending-updates": " "
+            "has-updates": "",
+            "updated": ""
         },
-        "exec-if": "which waybar-updates",
-        "exec": "waybar-updates",
+        "exec-if": "which waybar-module-pacman-updates",
+        "exec": "waybar-module-pacman-updates --no-zero-output",
         "on-click": "kitty -e yay"
     },
     //隐私
