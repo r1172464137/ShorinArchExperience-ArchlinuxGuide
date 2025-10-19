@@ -121,7 +121,14 @@ output "DP-2"{
 	scale 1
 	position x=0 y=0
     focus-at-startup
+
 }
+output "HDMI-A-1"{
+    mode "1920x1080@60"
+    scale 1 
+    position x=2560 y=0
+
+    }
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
@@ -352,6 +359,7 @@ window-rule {
     match app-id="fcitx" title="Fcitx5 Input Window"
     match app-id="org.gnome.FileRoller"
     match app-id="thunar" title="文件操作进度"
+    match app-id="waypaper"
     open-floating true
 }
 
@@ -411,6 +419,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
     //niriswitcher
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
+    Mod+Alt+W {spawn "waypaper";}
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal" { spawn "kitty"; }
@@ -421,9 +430,9 @@ binds {
     Mod+Z hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Pick a color" { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+F12 {spawn-sh "pkill waybar || true &&  waybar & disown";}
+    Mod+F12 {spawn-sh "pkill waybar & pkill cava || true &&  waybar & disown";}
     Mod+F1 {spawn "missioncenter";}
-    Mod+Alt+V {spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy";}
+    Mod+Alt+V {spawn-sh "~/.config/niri/scripts/cliphist-fuzzel-img";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
@@ -494,7 +503,7 @@ binds {
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
     Mod+Shift+A     { focus-monitor-left; }
-    Mod+Shift+S     { focus-monitor-down; }
+    //Mod+Shift+S     { focus-monitor-down; }
     Mod+Shift+W     { focus-monitor-up; }
     Mod+Shift+D     { focus-monitor-right; }
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
@@ -680,7 +689,7 @@ binds {
     Insert { screenshot; }
     Mod+Insert { screenshot-screen; }
     Mod+Ctrl+Insert { screenshot-window; }
-    Mod+Shift+Insert { spawn "~/.config/niri/scripts/screenshot-with-gradia.sh";}
+    Mod+Shift+S { spawn "~/.config/niri/scripts/edit-screenshot.sh";}
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
@@ -702,4 +711,5 @@ binds {
     Mod+MouseMiddle  { close-window; }
 
     Mod+F10 { spawn "~/.config/niri/scripts/waltheme.sh";}
+    Mod+F9 {spawn-sh "wl-mirror --fullscreen --fullscreen-output HDMI-A-1 DP-2";}
 }
