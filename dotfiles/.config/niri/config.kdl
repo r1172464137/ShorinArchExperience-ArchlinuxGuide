@@ -2,7 +2,9 @@
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://yalter.github.io/niri/Configuration:-Introduction
-
+environment {
+    LC_MESSAGES "zh_CN.UTF-8"
+}
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
@@ -109,7 +111,7 @@ input {
     position x=1280 y=0
 }
 output "eDP-1"{
-	off
+//	off
     mode "2560x1440@165"
 	scale 1.3
 	position x=0 y=0
@@ -341,7 +343,11 @@ window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
 }
-
+window-rule {
+    match app-id="fcitx"
+    match app-id="wechat"
+    open-focused false
+}
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
     // This app-id regular expression will work for both:
@@ -422,7 +428,7 @@ binds {
     Mod+Alt+W {spawn "waypaper";}
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T hotkey-overlay-title="Open a Terminal" { spawn "kitty"; }
+    Mod+T hotkey-overlay-title="Open a Terminal" { spawn "kitty" "-e" "fish"; }
     Mod+Shift+T { spawn "ghostty"; }
     Mod+E hotkey-overlay-title="Open a FilesManager: nautilus" { spawn "thunar"; }
     Mod+Alt+E {spawn "nautilus";}

@@ -10,16 +10,17 @@
     "height": 30,
     "reload_style_on_change": true,
     "modules-left": [
-        "niri/workspaces",
+        "ext/workspaces",
+        //"niri/workspaces",
         "custom/right_div#5",
-        "cffi/niri-taskbar",
-        "niri/window",
+        //"cffi/niri-taskbar",
+        //"niri/window",
+        "dwl/window",
         "custom/right_div#6"
     ],
     "modules-center": [
         
         "custom/left_div#4",
-         
         "tray",
         "custom/left_div#3",
         "bluetooth",
