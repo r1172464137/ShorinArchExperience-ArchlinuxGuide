@@ -2,15 +2,16 @@
 
 waybar & 
 
-#notification
 mako & 
 
-#polkit
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & 
 
-#wallpaper
 swww-daemon &
 
-fcitx5 & copyq & 
+fcitx5 & 
 
+copyq &
 
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots
+
+hypridle &

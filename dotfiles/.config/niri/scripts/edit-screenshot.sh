@@ -4,7 +4,8 @@
 # 功能: 1. 保存到文件, 2. 复制到剪贴板, 3. 在 Swappy 中打开编辑
 
 # --- 配置 ---
-SAVE_DIR="$HOME/Pictures/Screenshots"
+PICTURES_DIR="$(xdg-user-dir PICTURES)"
+SAVE_DIR="$PICTURES_DIR/Screenshots"
 
 # --- 准备工作 ---
 # 确保保存目录存在

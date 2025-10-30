@@ -1,5 +1,9 @@
 #!/bin/bash
+PICTURES_DIR="$(xdg-user-dir PICTURES)"
+SAVE_DIR="$PICTURES_DIR/Screenshots"
+FILE_NAME="$(date +'%Y-%m-%d-%H%M%S.png')"
+SAVE_PATH="$SAVE_DIR/$FILE_NAME"
 
-grim -g "$(slurp)" - | tee $HOME/Pictures/Screenshots/$(date +'%Y-%m-%d-%H%M%S.png') >(wl-copy)
+mkdir -p "$SAVE_DIR"
+grim -g "$(slurp)" - | tee $SAVE_PATH >(wl-copy)
 
-notify-send "截图成功复制到剪贴板，文件保存至~/Pictures。"

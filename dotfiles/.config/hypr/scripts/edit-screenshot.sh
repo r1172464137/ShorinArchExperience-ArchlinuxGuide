@@ -4,7 +4,8 @@
 # 功能: 1. 保存到文件, 2. 复制到剪贴板, 3. 在 Swappy 中打开编辑
 
 # --- 配置 ---
-SAVE_DIR="$HOME/Pictures/Screenshots"
+PICTURES_DIR="$(xdg-user-dir PICTURES)"
+SAVE_DIR="$PICTURES_DIR/Screenshots"
 
 # --- 准备工作 ---
 # 确保保存目录存在
@@ -23,4 +24,3 @@ fi
 # 2. 运行 grim 捕捉选区，并将输出通过管道传给 tee
 grim -g "$SELECTION" - | tee "$SAVE_PATH" >(wl-copy) | swappy -f - -o $SAVE_PATH
 
-notify-send "截图复制到剪贴板，编辑后文件保存至~/Pictures。"
