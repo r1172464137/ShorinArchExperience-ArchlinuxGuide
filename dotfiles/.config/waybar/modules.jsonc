@@ -373,10 +373,10 @@
     // dwl and mangowc
   "ext/workspaces": {
     "format": "{icon}",
-    "format-icons": {
-            "active": "󰜋",
-            "default": ""
-        },
+    //"format-icons": {
+    //        "active": "󰜋",
+    //        "default": ""
+    //    },
     "ignore-hidden": true,
     "on-click": "activate",
     "on-click-right": "deactivate",
