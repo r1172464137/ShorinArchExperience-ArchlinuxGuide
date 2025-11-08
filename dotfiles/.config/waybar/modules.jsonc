@@ -213,7 +213,7 @@
     "custom/lockscreen": {
         "tooltip": false,
         "format": "",
-        "on-click": "swaylock"
+        "on-click": "swaylock || hyprlock"
     },
     "custom/reboot": {
         "tooltip": false,
@@ -307,12 +307,13 @@
         "on-click": "env XDG_CURRENT_DESKTOP=GNOME gnome-control-center",
         "tooltip-format": "Open control center"
     },
-    //获取屏幕颜色oloerpicker
+    //获取屏幕颜色colorpicker
     "custom/colorpicker": {
         "tooltip": false,
         "format": "󱏜",
         "on-click": "hyprpicker | wl-copy"
     },
+    //音频可视化
     "custom/cava": {
         "tooltip": false,
         "format": "{}",
