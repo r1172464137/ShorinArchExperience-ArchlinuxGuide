@@ -126,7 +126,7 @@
   "pulseaudio": {
     "tooltip-format": "Click to Mute | Right-Click to Mute Mic | Mid-Click to Open Pavucontrol",
     "format": "{icon} {format_source} ",
-    "format-bluetooth": " {format_source}",
+    "format-bluetooth": " {format_source} ",
     "format-source": "{volume}%",
     "format-source-muted": "",
     "format-muted": " {format_source} ",
