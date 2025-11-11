@@ -558,7 +558,7 @@ start_rec() {
 
   local note; if [[ "$mode" == "full" ]]; then note="$(msg notif_started_full "$output" "$SAVE_PATH")"; else note="$(msg notif_started_region "$SAVE_PATH")"; fi
   [[ -n "$dev" ]] && note+="$(msg notif_device_suffix "$dev")"
-  echo "$note"; notify "$note"
+  echo "$note";
   emit_waybar_signal
   start_tick
 }
