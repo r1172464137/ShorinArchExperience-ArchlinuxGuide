@@ -115,6 +115,18 @@
     "on-click": "~/.config/waybar/scripts/screenshot.sh",
     "on-click-right": "~/.config/waybar/scripts/edit-screenshot.sh",
   },
+  
+  //wf-recorder
+  "custom/wfrec": {
+  "exec": "~/.config/waybar/scripts/wf-recorder.sh status-json",
+  "return-type": "json",
+  "interval": 0,                 // 每秒刷新一次
+  "signal": 9,                   // 与脚本里的 WAYBAR_SIG 对应
+  "tooltip": true,
+  "on-click": "~/.config/waybar/scripts/wf-recorder.sh toggle",  // 左键：开始/停止
+  "on-click-right": "~/.config/waybar/scripts/wf-recorder.sh stop"
+  },
+
   //声音模块
   "group/audio": {
     "orientation": "inherit",
@@ -351,4 +363,5 @@
   "dwl/window": {
     "format": "[{layout}]{title}",
   },
+
 }

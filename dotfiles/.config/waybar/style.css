@@ -213,6 +213,18 @@ window#waybar {
     font-size: 22px;
 }
 
+/* wf-recoder脚本 */
+#custom-wfrec {
+  padding: 0 7px;
+}
+
+/* 录制中 */
+#custom-wfrec.recording {
+  color: @error;            
+  background-color: @secondary_container;
+}
+
+#custom-wfrec,
 #bluetooth,
 #network,
 #custom-settings,
@@ -488,10 +500,11 @@ window#waybar.empty #window {
 tooltip {
     background: @secondary_container;
     border: 3px solid @outline;
-    opacity: 0.8;
+    opacity: 1;
 }
 
 tooltip label {
     color: white;
     font-size: 16px;
 }
+

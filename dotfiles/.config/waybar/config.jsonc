@@ -26,6 +26,7 @@
         "custom/left_div#3",
         "bluetooth",
         "network",
+        "custom/wfrec",
         "custom/screenshot",
         "custom/left_div#2",
         "idle_inhibitor",
@@ -43,9 +44,7 @@
         "clock#date",
         "custom/right_div#3",
         "battery",
-        "custom/right_div#4",
-        
-                
+        "custom/right_div#4",     
     ],
     "modules-right": [
         
