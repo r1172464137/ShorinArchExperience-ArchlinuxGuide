@@ -433,7 +433,7 @@ window#waybar {
 #workspaces button {
     padding: 0px 10px;
     background: @surface_container;
-    color: @tertiary;
+    color: @tertiary_container;
 }
 
 /* #workspaces label {
@@ -444,14 +444,8 @@ window#waybar {
     background: @on_tertiary;
 }
 
-#workspaces button.focused:hover {
-    background: @surface_bright;
-}
-
-#workspaces button.focused {
-    background: @surface_container;
-    color: @tertiary;
-
+#workspaces button.active{
+    color:@tertiary;
 }
 
 #custom-right_div.5 {
