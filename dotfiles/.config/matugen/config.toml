@@ -13,9 +13,9 @@ input_path = '~/.config/matugen/templates/btop.theme'
 output_path = '~/.config/btop/themes/matugen.theme'
 post_hook = 'killall -SIGUSR1 btop && killall -SIGUSR2 btop'
 
-#[templates.cava]
-#input_path = '~/.config/matugen/templates/cava-colors.ini'
-#output_path = '~/.config/cava/themes/your-theme'
+[templates.cava]
+input_path = '~/.config/matugen/templates/cava-colors.ini'
+output_path = '~/.config/cava/themes/your-theme'
 #post_hook = "pkill -USR1 cava"
 
 [templates.starship]
