@@ -4,6 +4,7 @@
 // https://yalter.github.io/niri/Configuration:-Introduction
 environment {
     LC_MESSAGES "zh_CN.UTF-8"
+    XMODIFIERS "@im=fcitx"
 }
 // Input device configuration.
 // Find the full list of options on the wiki:
@@ -291,6 +292,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "swww-daemon"
+spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome &"
 spawn-at-startup "mako"
 spawn-at-startup "waybar"
 spawn-at-startup "fcitx5" 
@@ -436,9 +438,9 @@ binds {
     Mod+Z hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Pick a color" { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+F12 {spawn-sh "pkill waybar & pkill cava || true &&  waybar & disown";}
+    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar ";}
     Mod+F1 {spawn "missioncenter";}
-    Mod+Alt+V {spawn-sh "~/.config/niri/scripts/cliphist-fuzzel-img";}
+    Mod+Alt+V {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
@@ -508,10 +510,6 @@ binds {
     Mod+Shift+J     { focus-monitor-down; }
     Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+L     { focus-monitor-right; }
-    Mod+Shift+A     { focus-monitor-left; }
-    //Mod+Shift+S     { focus-monitor-down; }
-    Mod+Shift+W     { focus-monitor-up; }
-    Mod+Shift+D     { focus-monitor-right; }
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
@@ -637,10 +635,10 @@ binds {
     Mod+D { consume-or-expel-window-right; }
     // Consume one window from the right to the bottom of the focused column.
     Mod+Comma  { consume-window-into-column; }
-    Mod+Alt+A  { consume-window-into-column; }
+    Mod+Shift+A  { consume-window-into-column; }
     // Expel the bottom window from the focused column to the right.
     Mod+Period { expel-window-from-column; }
-    Mod+Alt+D { expel-window-from-column; }
+    Mod+Shift+D { expel-window-from-column; }
     
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
@@ -692,10 +690,10 @@ binds {
     //Mod+Shift+X       { switch-layout "next"; }
     //Mod+Shift+Z { switch-layout "prev"; }
 
-    Insert { screenshot; }
     Mod+Insert { screenshot-screen; }
     Mod+Ctrl+Insert { screenshot-window; }
     Mod+Shift+S { spawn "~/.config/niri/scripts/edit-screenshot.sh";}
+    Mod+Alt+A {screenshot;}
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here

@@ -22,7 +22,7 @@ end
 
 
 function ls
-	command eza
+	command eza $argv
 end
 
 thefuck --alias | source
