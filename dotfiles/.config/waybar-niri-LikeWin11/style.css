@@ -74,6 +74,10 @@ tooltip label {
     color: @secondary;
 }
 
+#custom-wfrec.recording {
+    color: @error;
+}
+
 #custom-screenshot,
 #custom-wfrec,
 #custom-colorpicker {
