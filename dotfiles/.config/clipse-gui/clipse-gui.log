@@ -359,3 +359,1215 @@
 2025-11-02 20:57:24 - clipse_gui.controller - DEBUG - Received history update signal from DataManager.
 2025-11-02 20:57:24 - clipse_gui.controller - DEBUG - Populating initial 11 rows.
 2025-11-02 20:57:24 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 10
+2025-11-14 18:03:38 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:03:38 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:03:38 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:03:38 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:03:38 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:03:38 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:03:38 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:03:38 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:03:38 - clipse_gui.data_manager - DEBUG - Loaded 0 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:03:38 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:03:38 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:03:38 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:03:38 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:03:38 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:03:41 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:03:41 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:03:41 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:03:42 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:03:43 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:03:43 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:03:43 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:03:43 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:03:43 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:03:43 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:03:43 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:03:43 - clipse_gui.data_manager - DEBUG - Loaded 0 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:03:43 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:03:43 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:03:43 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:03:43 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:03:43 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:03:43 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:03:43 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:03:43 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:03:45 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:03:45 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:03:45 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:03:45 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:03:45 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:03:45 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:03:45 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:03:45 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:03:45 - clipse_gui.data_manager - DEBUG - Loaded 0 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:03:45 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:03:45 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:03:45 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:03:45 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:03:45 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:03:47 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:03:47 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:03:47 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:04:15 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:04:15 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:04:15 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:04:15 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:04:15 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:04:15 - clipse_gui.data_manager - DEBUG - Loaded 4 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:04:15 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:04:15 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Populating initial 4 rows.
+2025-11-14 18:04:15 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 3
+2025-11-14 18:04:16 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:04:16 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:04:16 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:10:28 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:10:28 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:10:28 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:10:28 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:10:28 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:10:28 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:10:28 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:10:28 - clipse_gui.data_manager - DEBUG - Loaded 8 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:10:28 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:10:28 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:10:28 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:10:28 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:10:29 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:10:29 - clipse_gui.controller - DEBUG - Populating initial 8 rows.
+2025-11-14 18:10:29 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 7
+2025-11-14 18:10:30 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:10:30 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:10:30 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:26:19 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:26:19 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:26:19 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:26:19 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:26:19 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:26:19 - clipse_gui.data_manager - DEBUG - Loaded 11 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:26:19 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:26:19 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Populating initial 11 rows.
+2025-11-14 18:26:19 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 10
+2025-11-14 18:26:22 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:26:22 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:26:22 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:26:33 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:26:34 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:26:34 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:26:34 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:26:34 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:26:34 - clipse_gui.data_manager - DEBUG - Loaded 13 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:26:34 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:26:34 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Populating initial 13 rows.
+2025-11-14 18:26:34 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 12
+2025-11-14 18:26:35 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:26:35 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:26:35 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:45:33 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:45:33 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:45:33 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:45:33 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:45:33 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:45:33 - clipse_gui.data_manager - DEBUG - Loaded 14 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:45:33 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:45:33 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Populating initial 14 rows.
+2025-11-14 18:45:33 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 13
+2025-11-14 18:45:37 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 18:45:37 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:45:37 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 18:46:06 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 18:46:06 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 18:46:06 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 18:46:06 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:46:06 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 18:46:06 - clipse_gui.data_manager - DEBUG - Loaded 14 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:46:06 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 18:46:06 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Populating initial 14 rows.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 13
+2025-11-14 18:46:06 - clipse_gui.data_manager - DEBUG - History file change detected (/home/shorin/.config/clipse/clipboard_history.json). Reloading...
+2025-11-14 18:46:06 - clipse_gui.data_manager - DEBUG - Loaded 15 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Received history update signal from DataManager.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Populating initial 15 rows.
+2025-11-14 18:46:06 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 14
+2025-11-14 18:46:07 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 18:46:07 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 23:49:32 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 23:49:32 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 23:49:32 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 23:49:32 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 23:49:32 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 23:49:32 - clipse_gui.data_manager - DEBUG - Loaded 35 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 23:49:32 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 23:49:32 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 34
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 34
+2025-11-14 23:49:32 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 34
+2025-11-14 23:49:36 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 23:49:36 - clipse_gui.app - DEBUG - Application already active - presenting existing window.
+2025-11-14 23:49:36 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 23:49:37 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 23:49:37 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 23:49:37 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-14 23:49:37 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-14 23:49:37 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-14 23:49:37 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-14 23:49:37 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 23:49:37 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-14 23:49:37 - clipse_gui.data_manager - DEBUG - Loaded 35 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-14 23:49:37 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-14 23:49:37 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 34
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 34
+2025-11-14 23:49:37 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 34
+2025-11-14 23:49:38 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-14 23:49:38 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-14 23:49:38 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:20:37 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:20:37 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:20:37 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:20:37 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:20:37 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:20:37 - clipse_gui.data_manager - DEBUG - Loaded 35 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:20:37 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:20:37 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 34
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 34
+2025-11-15 12:20:37 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 34
+2025-11-15 12:20:40 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:20:40 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:20:40 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:20:52 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:20:52 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:20:52 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:20:52 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:20:52 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:20:52 - clipse_gui.data_manager - DEBUG - Loaded 37 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:20:52 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:20:52 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 36
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 36
+2025-11-15 12:20:52 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 36
+2025-11-15 12:20:54 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:20:54 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:20:56 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:20:56 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:20:56 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:20:56 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:20:56 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:20:56 - clipse_gui.data_manager - DEBUG - Loaded 37 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:20:56 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:20:56 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 36
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 36
+2025-11-15 12:20:56 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 36
+2025-11-15 12:20:57 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:20:57 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:22:08 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:22:08 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:22:08 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:22:08 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:08 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:22:08 - clipse_gui.data_manager - DEBUG - Loaded 41 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:08 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:22:08 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 40
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 40
+2025-11-15 12:22:08 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 40
+2025-11-15 12:22:10 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:22:10 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:22:10 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:22:22 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:22:22 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:22:22 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:22:22 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:22 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:22:22 - clipse_gui.data_manager - DEBUG - Loaded 41 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:22 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:22:22 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 40
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 40
+2025-11-15 12:22:22 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 40
+2025-11-15 12:22:24 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:22:24 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:22:24 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:22:35 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:22:35 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:22:35 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:22:35 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:35 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:22:35 - clipse_gui.data_manager - DEBUG - Loaded 41 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:35 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:22:35 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 40
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 40
+2025-11-15 12:22:35 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 40
+2025-11-15 12:22:36 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:22:36 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:22:36 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:22:43 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:22:43 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:22:43 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:22:43 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:43 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:22:43 - clipse_gui.data_manager - DEBUG - Loaded 42 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:22:43 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:22:43 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 41
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 41
+2025-11-15 12:22:43 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 41
+2025-11-15 12:22:44 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:22:44 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:22:44 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:23:00 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:23:00 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:23:00 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:23:00 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:00 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:23:00 - clipse_gui.data_manager - DEBUG - Loaded 43 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:00 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:23:00 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 42
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 42
+2025-11-15 12:23:00 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 42
+2025-11-15 12:23:00 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:23:00 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:23:02 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:23:02 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:23:02 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:23:02 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:02 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:23:02 - clipse_gui.data_manager - DEBUG - Loaded 43 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:02 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:23:02 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 42
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 42
+2025-11-15 12:23:02 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 42
+2025-11-15 12:23:03 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:23:03 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:23:04 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:23:04 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:23:04 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:23:04 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:04 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:23:04 - clipse_gui.data_manager - DEBUG - Loaded 44 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:04 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:23:04 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 43
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 43
+2025-11-15 12:23:04 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 43
+2025-11-15 12:23:05 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:23:05 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:23:06 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:23:06 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:23:06 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:23:06 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:06 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:23:06 - clipse_gui.data_manager - DEBUG - Loaded 44 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:23:06 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:23:06 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 43
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 43
+2025-11-15 12:23:06 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 43
+2025-11-15 12:23:06 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:23:06 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:50:17 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:50:17 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:50:17 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:50:17 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:50:17 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:50:17 - clipse_gui.data_manager - DEBUG - Loaded 47 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:50:17 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:50:17 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 46
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 46
+2025-11-15 12:50:17 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 46
+2025-11-15 12:50:22 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:50:22 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:50:22 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:50:23 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:50:23 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:50:23 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:50:23 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:50:23 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:50:23 - clipse_gui.data_manager - DEBUG - Loaded 47 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:50:23 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:50:23 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 46
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 46
+2025-11-15 12:50:23 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 46
+2025-11-15 12:50:24 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:50:24 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:50:28 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:50:28 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:50:28 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:50:28 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:50:28 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:50:28 - clipse_gui.data_manager - DEBUG - Loaded 47 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:50:28 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:50:28 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 46
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 46
+2025-11-15 12:50:28 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 46
+2025-11-15 12:50:32 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:50:32 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:50:32 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:51:05 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:51:05 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:51:05 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:51:05 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:05 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:51:05 - clipse_gui.data_manager - DEBUG - Loaded 47 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:05 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:51:05 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 46
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 46
+2025-11-15 12:51:05 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 46
+2025-11-15 12:51:07 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:51:07 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:51:07 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:51:10 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:51:10 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:51:10 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:51:10 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:10 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:51:10 - clipse_gui.data_manager - DEBUG - Loaded 48 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:10 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:51:10 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:51:10 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 47
+2025-11-15 12:51:11 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 47
+2025-11-15 12:51:11 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 47
+2025-11-15 12:51:11 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:51:11 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:51:11 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:51:19 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:51:19 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:51:19 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:51:19 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:19 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:51:19 - clipse_gui.data_manager - DEBUG - Loaded 49 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:19 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:51:19 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 48
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 48
+2025-11-15 12:51:19 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 48
+2025-11-15 12:51:31 - clipse_gui.data_manager - DEBUG - History file change detected (/home/shorin/.config/clipse/clipboard_history.json). Reloading...
+2025-11-15 12:51:31 - clipse_gui.data_manager - DEBUG - Loaded 50 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:51:31 - clipse_gui.controller - DEBUG - Received history update signal from DataManager.
+2025-11-15 12:51:31 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:51:31 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:54:15 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:54:15 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:54:15 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 12:56:19 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 12:56:19 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 12:56:19 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 12:56:19 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:56:19 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 12:56:19 - clipse_gui.data_manager - DEBUG - Loaded 59 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 12:56:19 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 12:56:19 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 12:56:19 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 12:56:21 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 12:56:21 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 12:56:21 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 13:04:16 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 13:04:16 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 13:04:16 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 13:04:16 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 13:04:16 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 13:04:16 - clipse_gui.data_manager - DEBUG - Loaded 61 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 13:04:16 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 13:04:16 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 13:04:16 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 13:04:17 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 13:04:17 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 13:04:17 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 13:07:48 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 13:07:48 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 13:07:48 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 13:07:48 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 13:07:48 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 13:07:48 - clipse_gui.data_manager - DEBUG - Loaded 61 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 13:07:48 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 13:07:48 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 13:07:48 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 13:07:49 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 13:07:49 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 13:07:49 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 13:32:12 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 13:32:12 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 13:32:12 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 13:32:12 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 13:32:12 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 13:32:12 - clipse_gui.data_manager - DEBUG - Loaded 75 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 13:32:12 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 13:32:12 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 13:32:12 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 13:32:13 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 13:32:13 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 13:32:13 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:14:10 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:14:10 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:14:10 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:14:10 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:14:10 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:14:10 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:14:10 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:14:10 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:14:10 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:14:11 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:14:11 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:15:05 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:15:05 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:15:05 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:15:05 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:15:05 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:15:05 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:15:05 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:15:05 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:15:05 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:15:06 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 14:15:06 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:15:06 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:50:34 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:50:34 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:50:34 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:50:34 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:50:34 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:50:34 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:50:34 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:50:34 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:50:34 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:50:35 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:50:35 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:51:42 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:51:42 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:51:42 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:51:42 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:51:42 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:51:42 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:51:42 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:51:42 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:51:42 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:51:43 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:51:43 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:51:44 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 14:51:44 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:51:44 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:52:45 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:52:45 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:52:45 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:52:45 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:52:45 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:52:45 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:52:45 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:52:45 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:52:45 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:52:56 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 14:52:56 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:52:56 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:52:56 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:52:57 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:52:57 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:52:57 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:52:57 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:52:57 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:52:57 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:52:57 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:52:57 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:52:57 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 14:52:57 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:52:57 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 14:54:02 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 14:54:02 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 14:54:02 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 14:54:02 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:54:02 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 14:54:02 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 14:54:02 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 14:54:02 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 14:54:02 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 14:54:03 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 14:54:03 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 14:54:03 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:13:22 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:13:22 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:13:22 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:13:22 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:13:22 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:13:22 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:13:22 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:13:22 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:13:22 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:13:26 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:13:26 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:13:26 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:13:47 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:13:47 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:13:47 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:13:47 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:13:47 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:13:47 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:13:47 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:13:47 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:13:47 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:13:47 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:13:47 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:13:47 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:36:09 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:36:09 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:36:09 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:36:09 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:36:09 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:36:09 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:36:09 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:36:09 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:36:09 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:36:10 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:36:10 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:36:10 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:36:14 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:36:14 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:36:14 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:36:14 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:36:14 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:36:14 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:36:14 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:36:14 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:36:14 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:36:15 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:36:15 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:36:18 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:36:18 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:36:18 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:36:18 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:36:18 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:36:18 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:36:18 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:36:18 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:36:18 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:36:19 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:36:19 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:36:19 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:37:14 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:37:14 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:37:14 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:37:14 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:37:14 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:37:14 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:37:14 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:37:14 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:37:14 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Row activated: original_index=N/A
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Hiding window and scheduling paste simulation.
+2025-11-15 15:37:17 - clipse_gui.data_manager - DEBUG - History file change detected (/home/shorin/.config/clipse/clipboard_history.json). Reloading...
+2025-11-15 15:37:17 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Received history update signal from DataManager.
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Attempting paste simulation...
+2025-11-15 15:37:17 - clipse_gui.controller - DEBUG - Executing paste simulation command: ['wtype', '-M', 'ctrl', '-P', 'v', '-p', 'v', '-m', 'ctrl']
+2025-11-15 15:37:17 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Paste simulation (wtype) command successful.
+2025-11-15 15:37:17 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Paste simulation command successful.
+2025-11-15 15:37:17 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Quitting application.
+2025-11-15 15:37:17 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:37:17 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:48:41 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:48:41 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:48:41 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:48:41 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:48:41 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:48:41 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:48:41 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:48:41 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:48:41 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:48:43 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:48:43 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:48:43 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:48:53 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:48:53 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:48:53 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:48:53 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:48:53 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:48:53 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:48:53 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:48:53 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:48:53 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:48:59 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:48:59 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:48:59 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 15:59:57 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 15:59:57 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 15:59:57 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 15:59:57 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:59:57 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 15:59:57 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 15:59:57 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 15:59:57 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 15:59:57 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 15:59:58 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 15:59:58 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 15:59:58 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:10:03 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:10:03 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:10:03 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:10:03 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:10:03 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:10:03 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:10:03 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:10:03 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:10:03 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:10:04 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:10:04 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:10:04 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:11:13 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:11:13 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:11:13 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:11:13 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:11:13 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:11:13 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:11:13 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:11:13 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:11:13 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:11:15 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:11:15 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:11:15 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:12:34 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:12:35 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:12:35 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:12:35 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:12:35 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:12:35 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:12:35 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:12:35 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:12:35 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:12:36 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:12:36 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:12:36 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:14:16 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:14:16 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:14:16 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:14:16 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:14:16 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:14:16 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:14:16 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:14:16 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:14:16 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Row activated: original_index=N/A
+2025-11-15 16:14:18 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Image copied successfully.
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Hiding window and scheduling paste simulation.
+2025-11-15 16:14:18 - clipse_gui.data_manager - DEBUG - History file change detected (/home/shorin/.config/clipse/clipboard_history.json). Reloading...
+2025-11-15 16:14:18 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Received history update signal from DataManager.
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Attempting paste simulation...
+2025-11-15 16:14:18 - clipse_gui.controller - DEBUG - Executing paste simulation command: ['wtype', '-M', 'ctrl', '-P', 'v', '-p', 'v', '-m', 'ctrl']
+2025-11-15 16:14:18 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Paste simulation (wtype) command successful.
+2025-11-15 16:14:18 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Paste simulation command successful.
+2025-11-15 16:14:18 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Quitting application.
+2025-11-15 16:14:18 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:14:18 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:29:53 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:29:53 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:29:53 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:29:53 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:29:53 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:29:53 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:29:53 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:29:53 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:29:53 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:29:54 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:29:54 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:29:54 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:31:28 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:31:28 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:31:28 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:31:28 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:31:28 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:31:28 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:31:28 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:31:28 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:31:28 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:31:30 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:31:30 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:31:30 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:35:44 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:35:44 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:35:44 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:35:44 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:35:44 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:35:44 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:35:44 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:35:44 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:35:44 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:35:45 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:35:45 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:35:45 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:54:40 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:54:40 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:54:40 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:54:40 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:54:40 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:54:40 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:54:40 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:54:40 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:54:40 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:54:41 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:54:41 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:54:41 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:54:41 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:54:41 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:54:41 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 16:55:03 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 16:55:03 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 16:55:03 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 16:55:03 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:55:03 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 16:55:03 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 16:55:03 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 16:55:03 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 16:55:03 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 16:55:04 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Main window closed.
+2025-11-15 16:55:04 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 16:55:04 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2025-11-15 17:26:36 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2025-11-15 17:26:36 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI starting up.
+2025-11-15 17:26:36 - clipse_gui.app - DEBUG - Activating application - creating main window.
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Detected session type: Wayland
+2025-11-15 17:26:36 - clipse_gui.data_manager - DEBUG - DataManager initialized with history file: /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 17:26:36 - clipse_gui.ui_builder - DEBUG - Building main window UI content.
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Connecting signals.
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Creating and adding application CSS provider.
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Zoom updated to 1.00
+2025-11-15 17:26:36 - clipse_gui.data_manager - DEBUG - Loaded 100 items from /home/shorin/.config/clipse/clipboard_history.json
+2025-11-15 17:26:36 - clipse_gui.data_manager - DEBUG - Starting history watcher for /home/shorin/.config/clipse/clipboard_history.json every 300ms
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Populating initial 0 rows.
+2025-11-15 17:26:36 - clipse_gui.app - DEBUG - Main window created and shown.
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Populating initial 30 rows.
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Creating rows from filtered index 0 to 29
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Scheduling load more: rows 30 to 49
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Executing load more: rows 30 to 49
+2025-11-15 17:26:36 - clipse_gui.controller - DEBUG - Creating rows from filtered index 30 to 49
+2025-11-15 17:26:37 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
+2025-11-15 17:26:37 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.

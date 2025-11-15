@@ -5,6 +5,7 @@
 environment {
     LC_MESSAGES "zh_CN.UTF-8"
     XMODIFIERS "@im=fcitx"
+    QT_QPA_PLATFORMTHEME "qt6ct"
 }
 // Input device configuration.
 // Find the full list of options on the wiki:
@@ -296,7 +297,7 @@ spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLA
 spawn-at-startup "mako"
 spawn-at-startup "waybar"
 spawn-at-startup "fcitx5" 
-spawn-sh-at-startup "wl-paste --watch cliphist store" 
+spawn-sh-at-startup "clipse --listen" 
 spawn-at-startup "niriswitcher"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -316,7 +317,7 @@ prefer-no-csd
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d %H-%M-%S.png"
 
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
@@ -368,6 +369,9 @@ window-rule {
     match app-id="org.gnome.FileRoller"
     match app-id="thunar" title="文件操作进度"
     match app-id="waypaper"
+    match app-id="clipse-gui"
+    match title="图片查看器"
+    match title="群聊的聊天记录"
     open-floating true
 }
 
@@ -428,6 +432,7 @@ binds {
     //niriswitcher
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
     Mod+Alt+W {spawn "waypaper";}
+
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal" { spawn "kitty" "-e" "fish"; }
@@ -690,10 +695,10 @@ binds {
     //Mod+Shift+X       { switch-layout "next"; }
     //Mod+Shift+Z { switch-layout "prev"; }
 
-    Mod+Insert { screenshot-screen; }
-    Mod+Ctrl+Insert { screenshot-window; }
-    Mod+Shift+S { spawn "~/.config/niri/scripts/edit-screenshot.sh";}
     Mod+Alt+A {screenshot;}
+    Mod+Ctrl+Insert { screenshot-window; }
+    Mod+Insert { screenshot-screen; }
+    Mod+Shift+S { spawn-sh "~/.config/niri/scripts/screenshot.sh";}
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
@@ -713,7 +718,4 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
     Mod+MouseMiddle  { close-window; }
-
-    Mod+F10 { spawn "~/.config/niri/scripts/waltheme.sh";}
-    Mod+F9 {spawn-sh "wl-mirror --fullscreen --fullscreen-output HDMI-A-1 DP-2";}
 }
