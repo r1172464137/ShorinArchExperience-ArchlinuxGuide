@@ -117,8 +117,8 @@ window#waybar.empty #window {
     font-size: 25px;
     padding: 0px 10px;
     margin: 5px;
-    background-color: @surface_container_high;
-    color: @primary;
+    background-color: @primary;
+    color: @on_primary;
 }
 
 #custom-separator.2 {
