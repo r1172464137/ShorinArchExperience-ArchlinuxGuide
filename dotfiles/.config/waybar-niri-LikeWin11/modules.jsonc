@@ -40,8 +40,8 @@
   },
   //正在运行的软件
   "tray": {
-    "icon-size": 25,
-    "spacing": 8,
+    "icon-size": 24,
+    "spacing": 7,
     // 自定义图标
     // "icons": {
     //     "blueman": "/home/shorin/.config/waybar/logo/bluetooth.png",
@@ -353,6 +353,7 @@
   "cffi/niri-taskbar": {
     // module_path
     "module_path": "/usr/lib/waybar/libniri_taskbar.so",
+    
     "apps": {
       "signal": [
         {

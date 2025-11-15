@@ -71,26 +71,29 @@ tooltip label {
 #custom-wfrec,
 #custom-colorpicker {
     background-color: @surface_container_high;
-    color:@secondary;
+    color: @secondary;
 }
 
 #custom-screenshot,
 #custom-wfrec,
 #custom-colorpicker {
-    padding:0px 5px;
-    margin:5px 0px 5px 0px;
+    padding: 0px 5px;
+    margin: 5px 0px 5px 0px;
     font-size: 20px;
 }
-#custom-screenshot{
-    padding:0px 5px 0px 10px;
+
+#custom-screenshot {
+    padding: 0px 5px 0px 10px;
     margin: 5px 0px 5px 5px;
     border-radius: 5px 0px 0px 5px;
 }
-#custom-wfrec{
+
+#custom-wfrec {
     border-radius: 0px;
 }
-#custom-colorpicker{
-    padding:0px 10px 0px 5px;
+
+#custom-colorpicker {
+    padding: 0px 10px 0px 5px;
     margin: 5px 5px 5px 0px;
     border-radius: 0px 5px 5px 0px;
 }
@@ -127,7 +130,7 @@ window#waybar.empty #window {
 
 /* waybar niri taskbar */
 .niri-taskbar {
-    background: @surface;
+    background: none;
     padding: 0px;
     margin: 4px;
 }
@@ -140,12 +143,29 @@ window#waybar.empty #window {
     background: @secondary_container;
 }
 
+.niri-taskbar button.urgent {
+    background-color: @tertiary;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: @primary;
+        color: @error;
+    }
+}
+
 #custom-updates {
     padding: 0px 10px;
-    margin:5px;
+    margin: 5px;
     background-color: @surface_container_high;
     color: @error;
 }
+
 #tray {
     padding: 0px 10px;
     background-color: @surface_container_high;

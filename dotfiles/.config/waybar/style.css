@@ -469,6 +469,19 @@ window#waybar {
     background: @surface_container_high;
 }
 
+.niri-taskbar button.focused {
+    background: @secondary_container;
+}
+
+.niri-taskbar button.urgent {
+    background-color: @tertiary;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
 /* 窗口名 */
 #window {
     padding: 0px 10px;
