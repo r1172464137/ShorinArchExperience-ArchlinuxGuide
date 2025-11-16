@@ -98,15 +98,12 @@ EDIT_MODE_FILE="$CONFIG_DIR/edit_mode"   # yes / no
 ########################
 
 menu() {
-    # 不带提示的版本（备用）
     printf '%s\n' "$@" | eval "$MENU_CMD" 2>/dev/null || true
 }
 
 menu_prompt() {
-    # 第一个参数是提示文字，其余是选项
     local prompt="$1"
     shift
-    # 简单转义双引号，避免破坏 eval
     local esc_prompt="${prompt//\"/\\\"}"
     printf '%s\n' "$@" | eval "$MENU_CMD --prompt \"$esc_prompt\"" 2>/dev/null || true
 }
@@ -245,12 +242,12 @@ settings_menu() {
             "$editor_line")  choose_editor ;;
             "$backend_line")
                 if [[ -n "${SHOT_BACKEND:-}" ]]; then
-                    : # 环境变量强制时不改持久化
+                    :
                 else
                     choose_backend_mode
                 fi
                 ;;
-            *)               return ;;  # 返回上一层
+            *)               return ;;
         esac
     done
 }
@@ -259,6 +256,30 @@ latest_in_dir() {
     local dir="$1"
     find "$dir" -maxdepth 1 -type f -printf '%T@ %p\n' 2>/dev/null \
         | sort -n | tail -1 | cut -d' ' -f2-
+}
+
+########################
+# 剪贴板相关（Niri 编辑用）
+########################
+
+clip_hash() {
+    wl-paste -t image/png 2>/dev/null \
+        | sha1sum 2>/dev/null \
+        | cut -d' ' -f1 2>/dev/null \
+        || echo ""
+}
+
+wait_clipboard_change() {
+    local old new i
+    old="$(clip_hash)"
+    for i in {1..200}; do   # 最多等 ~10 秒
+        new="$(clip_hash)"
+        if [[ -n "$new" && "$new" != "$old" ]]; then
+            return 0
+        fi
+        sleep 0.05
+    done
+    return 1
 }
 
 ########################
@@ -285,22 +306,20 @@ get_niri_shot_dir() {
     printf '%s\n' "$dir"
 }
 
-edit_image() {
+# Grim 用：从文件编辑
+edit_file_image() {
     local src="$1"
     local backend="$2"  # "niri" 或 "grim"
 
-    local dir edited_link ts dst
+    local dir ts dst
 
     if [[ "$backend" == "niri" ]]; then
         dir="$NIRI_EDIT_DIR"
-        edited_link="$NIRI_EDIT_DIR/latest"
     else
         dir="$SCREEN_DIR"
-        edited_link="$SCREEN_DIR/latest"
     fi
 
     mkdir -p "$dir"
-
     ts="$(date +'%Y-%m-%d_%H-%M-%S')"
     dst="$dir/$SHOTEDITOR-$ts.png"
 
@@ -318,10 +337,42 @@ edit_image() {
     esac
 
     if [[ -f "$dst" ]]; then
-        ln -sfn "$dst" "$edited_link"
         if [[ "$backend" == "grim" && "$src" == /tmp/* ]]; then
             rm -f "$src"
         fi
+        "$COPY_CMD" < "$dst"
+    fi
+}
+
+# Niri 用：从剪贴板编辑
+edit_from_clipboard() {
+    local backend="$1"  # 目前只会传 "niri"
+
+    local dir ts dst
+    if [[ "$backend" == "niri" ]]; then
+        dir="$NIRI_EDIT_DIR"
+    else
+        dir="$SCREEN_DIR"
+    fi
+
+    mkdir -p "$dir"
+    ts="$(date +'%Y-%m-%d_%H-%M-%S')"
+    dst="$dir/$SHOTEDITOR-$ts.png"
+
+    case "$SHOTEDITOR" in
+        satty)
+            wl-paste -t image/png 2>/dev/null | satty -f - --output-filename "$dst"
+            ;;
+        swappy)
+            wl-paste -t image/png 2>/dev/null | swappy -f - -o "$dst"
+            ;;
+        *)
+            echo "Unknown SHOTEDITOR: $SHOTEDITOR (use satty or swappy)" >&2
+            return 1
+            ;;
+    esac
+
+    if [[ -f "$dst" ]]; then
         "$COPY_CMD" < "$dst"
     fi
 }
@@ -338,25 +389,33 @@ niri_capture_and_maybe_edit() {
         *)          return 1 ;;
     esac
 
-    local before shot
-    before="$(latest_in_dir "$NIRI_SHOT_DIR" || true)"
+    # 不编辑：用目录里的最新文件判断 screenshot 完成
+    if [[ "$need_edit" != "yes" ]]; then
+        local before shot
+        before="$(latest_in_dir "$NIRI_SHOT_DIR" || true)"
 
+        niri msg action "$action"
+
+        while :; do
+            shot="$(latest_in_dir "$NIRI_SHOT_DIR" || true)"
+            if [[ -z "$before" && -n "$shot" ]] || \
+               [[ -n "$before" && -n "$shot" && "$shot" != "$before" ]]; then
+                break
+            fi
+            sleep 0.05
+        done
+        return 0
+    fi
+
+    # 编辑：基于剪贴板
     niri msg action "$action"
 
-    while :; do
-        shot="$(latest_in_dir "$NIRI_SHOT_DIR" || true)"
-        if [[ -z "$before" && -n "$shot" ]] || \
-           [[ -n "$before" && -n "$shot" && "$shot" != "$before" ]]; then
-            break
-        fi
-        sleep 0.05
-    done
-
-    ln -sfn "$shot" "$NIRI_SHOT_DIR/latest"
-
-    if [[ "$need_edit" == "yes" ]]; then
-        edit_image "$shot" "niri"
+    if ! wait_clipboard_change; then
+        echo "等待剪贴板中的截图超时" >&2
+        return 1
     fi
+
+    edit_from_clipboard "niri"
 }
 
 run_niri_flow() {
@@ -395,7 +454,7 @@ run_niri_flow() {
                 else
                     save_edit_mode "yes"
                 fi
-                continue  # 回到主菜单，更新显示
+                continue
                 ;;
             "$LABEL_SETTINGS")
                 settings_menu
@@ -444,9 +503,9 @@ grim_capture_and_maybe_edit() {
                 return 1 ;;
         esac
 
-        edit_image "$shot" "grim"
+        edit_file_image "$shot" "grim"
     else
-        # 不编辑：原图保存到 Screenshots，并更新 latest
+        # 不编辑：原图保存到 Screenshots
         shot="$SCREEN_DIR/Screenshot_$ts.png"
 
         case "$mode" in
@@ -460,8 +519,6 @@ grim_capture_and_maybe_edit() {
             *)
                 return 1 ;;
         esac
-
-        ln -sfn "$shot" "$SCREEN_DIR/latest"
     fi
 }
 

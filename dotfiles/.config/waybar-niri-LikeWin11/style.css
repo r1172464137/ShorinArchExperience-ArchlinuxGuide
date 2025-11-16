@@ -34,7 +34,7 @@ tooltip label {
 
 #workspaces button {
     padding: 0px 10px;
-    color: @inverse_primary;
+    color: @tertiary_container;
 }
 
 /* #workspaces label {
@@ -46,32 +46,31 @@ tooltip label {
 }
 
 #workspaces button.active {
-    color: @primary;
+    color: @tertiary;
 }
 
 #mpris,
 #custom-cava {
     background-color: @surface_container_high;
-    color: @tertiary;
+    color: @primary;
 }
 
 #custom-cava {
     padding: 0px 5px 0px 10px;
     margin: 5px 0px 5px 5px;
-    border-radius: 5px 0px 0px 5px;
-}
 
+}
 #mpris {
-    padding: 0px 10px 0px 5px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 0px 5px 5px 0px;
+    padding: 0px 5px;
+    margin: 5px 0px 5px 5px;
+
 }
 
 #custom-screenshot,
 #custom-wfrec,
 #custom-colorpicker {
     background-color: @surface_container_high;
-    color: @secondary;
+    color: @tertiary;
 }
 
 #custom-wfrec.recording {
@@ -88,7 +87,7 @@ tooltip label {
 
 #custom-screenshot {
     padding: 0px 5px 0px 10px;
-    margin: 5px 0px 5px 5px;
+    margin: 5px 0px 5px 10px;
     border-radius: 5px 0px 0px 5px;
 }
 
@@ -381,7 +380,7 @@ window#waybar.empty #window {
 #custom-reboot,
 #custom-lockscreen,
 #custom-logout {
-    color: @primary;
+    color: @tertiary;
     padding: 0px 10px;
     background-color: @surface_container_high;
 }

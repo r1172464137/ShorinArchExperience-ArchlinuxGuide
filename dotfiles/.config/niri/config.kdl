@@ -1,7 +1,7 @@
 // This config is in the KDL format: https://kdl.dev
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
-// https://yalter.github.io/niri/Configuration:-Introduction
+// https://yalter.github.io/niri/Configuration:-Introduction:
 environment {
     LC_MESSAGES "zh_CN.UTF-8"
     XMODIFIERS "@im=fcitx"
@@ -372,6 +372,8 @@ window-rule {
     match app-id="clipse-gui"
     match title="图片查看器"
     match title="群聊的聊天记录"
+    match title="画中画"
+    match title="重命名"
     open-floating true
 }
 
@@ -432,6 +434,7 @@ binds {
     //niriswitcher
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
     Mod+Alt+W {spawn "waypaper";}
+    Mod+F1 {spawn-sh "pkill fcitx5 || fcitx5";}
 
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
@@ -441,10 +444,9 @@ binds {
     Mod+Alt+E {spawn "nautilus";}
     Mod+B hotkey-overlay-title="打开浏览器: firefox" { spawn "firefox"; }
     Mod+Z hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Pick a color" { spawn-sh "hyprpicker | wl-copy"; }
     Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar ";}
-    Mod+F1 {spawn "missioncenter";}
     Mod+Alt+V {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -698,7 +700,7 @@ binds {
     Mod+Alt+A {screenshot;}
     Mod+Ctrl+Insert { screenshot-window; }
     Mod+Insert { screenshot-screen; }
-    Mod+Shift+S { spawn-sh "~/.config/niri/scripts/screenshot.sh";}
+    Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here

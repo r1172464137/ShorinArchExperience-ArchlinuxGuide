@@ -377,6 +377,5 @@
   },
   "dwl/window": {
     "format": "[{layout}]{title}",
-  },
-
+  }
 }
