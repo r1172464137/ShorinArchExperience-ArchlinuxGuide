@@ -15,7 +15,7 @@
     "interval": 1,
     "format": "{:%H:%M:%S}",
     "format-alt": "{:%Y/%m/%d %A}",
-    "tooltip":false,
+   // "tooltip":false,
     "tooltip-format": "{:%Y/%m/%d %A}",
     "max-length": 25,
     //"on-click": "gnome-clocks",
