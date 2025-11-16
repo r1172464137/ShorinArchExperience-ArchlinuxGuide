@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # 声明一个变量，值是wl-paste输出的当前剪贴版的数据
 CLIPNOW=$(wl-paste)
