@@ -1,6 +1,6 @@
 :root {
   /* 背景 */
-  --bg-color: {{colors.surface_container.default.rgba | set_alpha: 0.95}};
+  --bg-color: {{colors.surface.default.rgba | set_alpha: 0.95}};
   /* 标题颜色 */
   --label-color: {{colors.on_surface.default.rgba | set_alpha: 1.0}};
   /* 右上角显示器标签文字的颜色 */
@@ -10,7 +10,7 @@
   /* 边框 */
   --border-color: {{colors.outline.default.rgba | set_alpha: 1.0}};
   /* 选中窗口的背景高亮和右上角显示器标签背景的颜色 */
-  --highlight-color: {{colors.primary_container.default.rgba | set_alpha: 0.8}};
+  --highlight-color: {{colors.surface_bright.default.rgba | set_alpha: 0.8}};
   /* 不知道是啥 */
   --urgency-color: {{colors.error.default.rgba | set_alpha: 1.0}};
   /* 左边显示的当前工作区的指示器的颜色 */

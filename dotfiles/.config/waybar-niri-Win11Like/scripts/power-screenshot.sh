@@ -16,7 +16,7 @@ COPY_CMD="wl-copy"                            # 复制到剪贴板的命令
 MENU_CMD='fuzzel --dmenu'
 
 # 图片目录
-PICTURES_DIR=$(xdg-user-dir PICTURES 2>/dev/null || echo "$HOME/Pictures")
+PICTURES_DIR="$(xdg-user-dir PICTURES 2>/dev/null || echo "$HOME/Pictures")"
 SCREEN_DIR="$PICTURES_DIR/Screenshots"
 
 ########################
@@ -242,12 +242,12 @@ settings_menu() {
             "$editor_line")  choose_editor ;;
             "$backend_line")
                 if [[ -n "${SHOT_BACKEND:-}" ]]; then
-                    :
+                    : # 环境变量强制时不改持久化
                 else
                     choose_backend_mode
                 fi
                 ;;
-            *)               return ;;
+            *)               return ;;  # 返回上一层
         esac
     done
 }
@@ -332,7 +332,7 @@ edit_file_image() {
             ;;
         *)
             echo "Unknown SHOTEDITOR: $SHOTEDITOR (use satty or swappy)" >&2
-            return 1
+            return 0
             ;;
     esac
 
@@ -368,7 +368,7 @@ edit_from_clipboard() {
             ;;
         *)
             echo "Unknown SHOTEDITOR: $SHOTEDITOR (use satty or swappy)" >&2
-            return 1
+            return 0
             ;;
     esac
 
@@ -386,7 +386,7 @@ niri_capture_and_maybe_edit() {
         fullscreen) action="screenshot-screen" ;;
         window)     action="screenshot-window" ;;
         region)     action="screenshot"       ;;
-        *)          return 1 ;;
+        *)          return 0 ;;
     esac
 
     # 不编辑：用目录里的最新文件判断 screenshot 完成
@@ -412,14 +412,15 @@ niri_capture_and_maybe_edit() {
 
     if ! wait_clipboard_change; then
         echo "等待剪贴板中的截图超时" >&2
-        return 1
+        return 0
     fi
 
     edit_from_clipboard "niri"
+    return 0
 }
 
 run_niri_flow() {
-    NIRI_SHOT_DIR="$(get_niri_shot_dir)" || exit 1
+    NIRI_SHOT_DIR="$(get_niri_shot_dir)" || return 0
     NIRI_EDIT_DIR="$NIRI_SHOT_DIR/Edited"
     mkdir -p "$NIRI_SHOT_DIR" "$NIRI_EDIT_DIR"
 
@@ -442,7 +443,7 @@ run_niri_flow() {
             "$LABEL_CANCEL"
         )"
 
-        [[ -z "$choice" || "$choice" == "$LABEL_CANCEL" ]] && exit 0
+        [[ -z "$choice" || "$choice" == "$LABEL_CANCEL" ]] && return 2
 
         case "$choice" in
             "$LABEL_NIRI_FULL")   mode="fullscreen" ;;
@@ -457,11 +458,24 @@ run_niri_flow() {
                 continue
                 ;;
             "$LABEL_SETTINGS")
+                # 进入设置菜单（可以在里面改 editor / backend / edit-mode）
                 settings_menu
+
+                # 立即重新加载持久化配置，使修改即时生效
+                SHOTEDITOR="$(load_editor)"
+                BACKEND_MODE="$(load_backend_mode)"
+
+                # 检查后端是否被改动；若改动则通知上层切换后端
+                NEW_BACKEND="$(detect_backend)"
+                if [[ "$NEW_BACKEND" != "niri" ]]; then
+                    return 1
+                fi
+
                 continue
                 ;;
             *)
-                exit 0 ;;
+                return 2
+                ;;
         esac
 
         edit_mode="$(load_edit_mode)"
@@ -470,7 +484,9 @@ run_niri_flow() {
         else
             niri_capture_and_maybe_edit "$mode" "no"
         fi
-        exit 0
+
+        # 截图完成后退出（主循环会根据返回码决定是否结束脚本）
+        return 0
     done
 }
 
@@ -496,14 +512,15 @@ grim_capture_and_maybe_edit() {
                 grim "$shot"
                 ;;
             region)
-                geo="$(slurp 2>/dev/null)" || exit 0
+                geo="$(slurp 2>/dev/null)" || return 0
                 grim -g "$geo" "$shot"
                 ;;
             *)
-                return 1 ;;
+                return 0 ;;
         esac
 
         edit_file_image "$shot" "grim"
+        return 0
     else
         # 不编辑：原图保存到 Screenshots
         shot="$SCREEN_DIR/Screenshot_$ts.png"
@@ -513,12 +530,13 @@ grim_capture_and_maybe_edit() {
                 grim "$shot"
                 ;;
             region)
-                geo="$(slurp 2>/dev/null)" || exit 0
+                geo="$(slurp 2>/dev/null)" || return 0
                 grim -g "$geo" "$shot"
                 ;;
             *)
-                return 1 ;;
+                return 0 ;;
         esac
+        return 0
     fi
 }
 
@@ -543,7 +561,7 @@ run_grim_flow() {
             "$LABEL_CANCEL"
         )"
 
-        [[ -z "$choice" || "$choice" == "$LABEL_CANCEL" ]] && exit 0
+        [[ -z "$choice" || "$choice" == "$LABEL_CANCEL" ]] && return 2
 
         case "$choice" in
             "$LABEL_GRIM_FULL")   mode="fullscreen" ;;
@@ -558,10 +576,21 @@ run_grim_flow() {
                 ;;
             "$LABEL_SETTINGS")
                 settings_menu
+
+                # 立即重新加载持久化配置，使修改即时生效
+                SHOTEDITOR="$(load_editor)"
+                BACKEND_MODE="$(load_backend_mode)"
+
+                NEW_BACKEND="$(detect_backend)"
+                if [[ "$NEW_BACKEND" != "grim" ]]; then
+                    return 1
+                fi
+
                 continue
                 ;;
             *)
-                exit 0 ;;
+                return 2
+                ;;
         esac
 
         edit_mode="$(load_edit_mode)"
@@ -570,21 +599,49 @@ run_grim_flow() {
         else
             grim_capture_and_maybe_edit "$mode" "no"
         fi
-        exit 0
+
+        return 0
     done
 }
 
 ########################
-# 入口
+# 入口（主循环）
 ########################
 
-BACKEND_MODE="$(load_backend_mode)"
-SHOTEDITOR="$(load_editor)"
+while :; do
+    BACKEND_MODE="$(load_backend_mode)"
+    SHOTEDITOR="$(load_editor)"
 
-BACKEND="$(detect_backend)"
+    BACKEND="$(detect_backend)"
 
-case "$BACKEND" in
-    niri) run_niri_flow ;;
-    grim) run_grim_flow ;;
-    *)    run_grim_flow ;;
-esac
+    case "$BACKEND" in
+        niri)
+            rc=0
+            run_niri_flow || rc=$?
+            if [[ "$rc" -eq 0 ]]; then
+                exit 0
+            elif [[ "$rc" -eq 1 ]]; then
+                # 后端切换：继续主循环以根据新后端重试
+                continue
+            else
+                # 取消或其他：退出
+                exit 0
+            fi
+            ;;
+        grim)
+            rc=0
+            run_grim_flow || rc=$?
+            if [[ "$rc" -eq 0 ]]; then
+                exit 0
+            elif [[ "$rc" -eq 1 ]]; then
+                continue
+            else
+                exit 0
+            fi
+            ;;
+        *)
+            run_grim_flow
+            exit 0
+            ;;
+    esac
+done

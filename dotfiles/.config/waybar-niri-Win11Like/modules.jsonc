@@ -5,10 +5,10 @@
     "states": {
       "critical": 20,
     },
-    "format": "{icon} {capacity}%",
+    "format": "{icon}",
     "format-charging": "󰂄 {capacity}% ",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂂", "󰁹"],
-    "tooltip-format": "󰂍 {power} | {timeTo}",
+    "tooltip-format": " {capacity}% | -{power} | Time:{timeTo}",
   },
   //时钟
   "clock": {
