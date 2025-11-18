@@ -375,6 +375,7 @@ window-rule {
     match title="群聊的聊天记录"
     match title="画中画"
     match title="重命名"
+    match title="聊天记录"
     open-floating true
 }
 
@@ -687,6 +688,7 @@ binds {
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
+    Mod+Shift+X { toggle-column-tabbed-display; }
     Mod+X { toggle-column-tabbed-display; }
     Mod+MouseForward { focus-window-up; }
     Mod+MouseBack    { focus-window-down; }

@@ -23,8 +23,8 @@ mkdir -p "$STATE_DIR"
 MODE_DECIDED=""
 
 # ================== Tunables (ENV overridable) ==================
-# defaults
-_DEFAULT_CODEC="h264_vaapi"
+# defaults — 默认使用 CPU 编码 (libx264)
+_DEFAULT_CODEC="libx264"
 _DEFAULT_FRAMERATE=""
 _DEFAULT_AUDIO="on"
 _DEFAULT_SAVE_EXT="auto"            # auto/mp4/mkv/webm
@@ -63,6 +63,9 @@ ICON_REC="${ICON_REC:-⏺}"
 ICON_IDLE="${ICON_IDLE:-}"
 
 PKILL_AFTER_STOP="${PKILL_AFTER_STOP:-on}"
+
+# DEBUG: 若设为 on，则在前台运行 wf-recorder，并把输出直接显示到终端（仅终端，不写文件）
+DEBUG="${DEBUG:-off}"
 
 # ================== Utils ==================
 has() { command -v "$1" >/dev/null 2>&1; }
@@ -282,7 +285,7 @@ render_display() {
 pick_render_device() {
   local dev="${DRM_DEVICE:-}"
   if [[ -n "$dev" && ! -r "$dev" ]]; then
-    printf '%s\n' "$(msg warn_drm_ignored "$dev")" >&2
+    printf '%s\n' "$(msg warn_render_unreadable "$dev")" >&2
     dev=""
   fi
   echo -n "$dev"
@@ -432,9 +435,9 @@ show_settings_menu() {
       printf '%s' "$AUDIO" >"$CFG_AUDIO"
 
     elif [[ "$pick" == "$(msg menu_set_codec "$CODEC")" ]]; then
+      # 仅保留 CPU (libx264) 与所有常见 VAAPI 编码选项，CPU 放在首位
       local newc; newc="$(menu_pick "$(msg title_select_codec)" \
-                       "h264_vaapi" "libx264" "hevc_vaapi" \
-                       "av1_vaapi"  "libsvtav1" "libaom-av1" "libvpx-vp9")" || continue
+                       "libx264" "h264_vaapi" "hevc_vaapi" "av1_vaapi" "vp9_vaapi")" || continue
       CODEC="$newc"; printf '%s' "$CODEC" >"$CFG_CODEC"
 
     elif [[ "$pick" == "$(msg menu_set_filefmt "$ff_display")" ]]; then
@@ -549,6 +552,25 @@ start_rec() {
   if [[ "$CODEC" == *"_vaapi" ]]; then args+=( -F "scale_vaapi=format=nv12:out_range=full:out_color_primaries=bt709" )
   else args+=( -F "format=yuv420p" ); fi
 
+  # === 不保存日志：仅在 DEBUG=on 时将 wf-recorder 输出到终端 ===
+  if [[ "${DEBUG,,}" == "on" ]]; then
+    echo "DEBUG=on: running wf-recorder in foreground"
+    echo "Command: wf-recorder ${args[*]}"
+    wf-recorder "${args[@]}" 2>&1 &
+    local pid=$!
+    echo "$pid" >"$PIDFILE"
+    date +%s >"$STARTFILE"
+    echo "$SAVE_PATH" >"$SAVEPATH_FILE"
+    echo "$mode" >"$MODEFILE"
+    local note; if [[ "$mode" == "full" ]]; then note="$(msg notif_started_full "$output" "$SAVE_PATH")"; else note="$(msg notif_started_region "$SAVE_PATH")"; fi
+    [[ -n "$dev" ]] && note+="$(msg notif_device_suffix "$dev")"
+    echo "$note";
+    emit_waybar_signal
+    start_tick
+    return 0
+  fi
+
+  # 非 DEBUG：后台运行，且不保存任何日志（与原脚本行为相近）
   setsid nohup wf-recorder "${args[@]}" >/dev/null 2>&1 &
   local pid=$!
   echo "$pid" >"$PIDFILE"
@@ -578,7 +600,8 @@ stop_rec() {
 
   local save_path=""; [[ -r "$SAVEPATH_FILE" ]] && read -r save_path <"$SAVEPATH_FILE"
   if [[ -n "$save_path" && -f "$save_path" ]]; then
-    ln -sf "$(basename "$save_path")" "$(dirname "$save_path")/latest.${save_path##*.}" || true
+    # ← 修改点：生成不带后缀的 latest（例如：.../latest）
+    ln -sf "$(basename "$save_path")" "$(dirname "$save_path")/latest" || true
     local s; s="$(msg notif_saved "$save_path")"; echo "$s"; notify "$s"
   else
     local s; s="$(msg notif_stopped)"; echo "$s"; notify "$s"

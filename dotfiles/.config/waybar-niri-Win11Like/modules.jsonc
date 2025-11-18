@@ -12,13 +12,13 @@
   },
   //时钟
   "clock": {
-    "interval": 1,
-    "format": "{:%H:%M:%S}",
-    "format-alt": "{:%Y/%m/%d %A}",
+    "interval": 60,
+    "format": "{:%H:%M}",
+    //"format-alt": "{:%Y/%m/%d %A}",
    // "tooltip":false,
     "tooltip-format": "{:%Y/%m/%d %A}",
     "max-length": 25,
-    //"on-click": "gnome-clocks",
+    "on-click": "gnome-clocks",
     "on-click-right": "gnome-calendar",
   },
   "clock#date": {
