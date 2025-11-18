@@ -145,12 +145,7 @@ window#waybar.empty #window {
   padding: 0 7px;
 }
 
-/* 录制中 */
-#custom-wfrec.recording {
-  color: @error;            
-  background-color: @secondary_container;
-}
-
+#custom-wfrec.recording,
 #custom-wfrec,
 #bluetooth,
 #network,
@@ -158,6 +153,10 @@ window#waybar.empty #window {
 #custom-screenshot {
     background-color: @surface_container_high;
     color: @secondary;
+}
+/* 录制中 */
+#custom-wfrec.recording {
+  color: @error;            
 }
 /* #custom-wfrec,
 #custom-screenshot{
@@ -291,7 +290,7 @@ window#waybar.empty #window {
 
 #custom-updates {
     border-radius: 0px;
-    padding: 0px 7px;
+    padding: 0px 3px 0px 7px;
     background-color: @surface_bright;
     color: @error;
 
