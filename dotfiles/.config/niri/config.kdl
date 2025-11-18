@@ -7,6 +7,12 @@ environment {
     XMODIFIERS "@im=fcitx"
     QT_QPA_PLATFORMTHEME "qt6ct"
 }
+
+cursor {
+    xcursor-theme "breeze_cursors"
+    xcursor-size 27
+    hide-after-inactive-ms 15000
+}
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
@@ -146,7 +152,7 @@ layout {
     // - "always", the focused column will always be centered.
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
-    center-focused-column "on-overflow"
+    center-focused-column "never"
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
     preset-column-widths {
         // Proportion sets the width as a fraction of the output width, taking gaps into account.
@@ -376,6 +382,7 @@ window-rule {
     match title="画中画"
     match title="重命名"
     match title="聊天记录"
+    match title="日历"
     open-floating true
 }
 
