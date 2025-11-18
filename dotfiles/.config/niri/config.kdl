@@ -2,6 +2,8 @@
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://yalter.github.io/niri/Configuration:-Introduction:
+
+
 environment {
     LC_MESSAGES "zh_CN.UTF-8"
     XMODIFIERS "@im=fcitx"
@@ -455,7 +457,8 @@ binds {
     Mod+Z hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Pick a color" { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar ";}
+    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css";}
+    Mod+F3 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c ~/.config/waybar-niri-Win11Like/config.jsonc -s ~/.config/waybar-niri-Win11Like/style.css";}
     Mod+Alt+V {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
