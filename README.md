@@ -38,14 +38,14 @@
 
     ![](pictures/小黄鸭补帧、wine运行老游戏、vmware网游单机版.png)
 
--  我的niri/hyprland配置
+- 我的第一个waybar设计
 
-    ![](pictures/WM-images1.png)
+    ![](pictures/waybar-top.png)
 
-- Waybar
+- 我为niri设计的类windows布局waybar
 
-    ![](pictures/waybar.png)
-
+    ![](pictures/waybar-bottom-niri.png)
+    
 - matugen基于壁纸生成主题颜色
 
     ![](pictures/WM-images2.png)

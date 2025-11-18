@@ -62,15 +62,11 @@ tooltip label {
 }
 
 .niri-taskbar button:hover {
-    background: @surface_container_high;
+    background: @surface_container;
 }
 
 .niri-taskbar button.focused {
-    background: @surface_container_high;
-}
-
-.niri-taskbar button.focused {
-    background: @secondary_container;
+    background: @inverse_primary;
 }
 
 .niri-taskbar button.urgent {
@@ -80,6 +76,12 @@ tooltip label {
     animation-timing-function: steps(12);
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+@keyframes blink {
+    to {
+        background-color: @primary;
+        color: @error;
+    }
 }
 
 /* 窗口名 */
