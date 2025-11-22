@@ -62,7 +62,7 @@ input {
         accel-profile "flat"
 	// scroll-method "no-scroll"
         //speed of scroll,like:
-        //scroll-factor horizontal=2.0 vertical=-1.0 
+        //scroll-factor horizontal=2.0 vertical=-5.0 
     }
 
     trackpoint {
@@ -347,7 +347,12 @@ animations {
 // https://yalter.github.io/niri/Configuration:-Window-Rules
 
 // Work around WezTerm's initial configure bug
+
 // by setting an empty default-column-width.
+layer-rule{
+    match namespace="hyprpaper"
+     place-within-backdrop true
+}
 window-rule {
     // This regular expression is intentionally made as specific as possible,
     // since this is the default config, and we want no false positives.
@@ -358,6 +363,7 @@ window-rule {
 window-rule {
     match app-id="fcitx"
     match app-id="wechat"
+    match title="QQ"
     open-focused false
 }
 // Open the Firefox picture-in-picture player as floating by default.
@@ -385,6 +391,8 @@ window-rule {
     match title="重命名"
     match title="聊天记录"
     match title="日历"
+    match title="图片和视频"
+    match title="视频播放器"
     open-floating true
 }
 
@@ -457,8 +465,7 @@ binds {
     Mod+Z hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Pick a color" { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css";}
-    Mod+F3 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c ~/.config/waybar-niri-Win11Like/config.jsonc -s ~/.config/waybar-niri-Win11Like/style.css";}
+    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar ";}
     Mod+Alt+V {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
