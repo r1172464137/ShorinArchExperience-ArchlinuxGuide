@@ -396,6 +396,12 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    match title="gsr ui"
+
+    open-fullscreen true
+    open-floating true
+}
 /-window-rule {
     // This app-id regular expression will work for both:
     // - host Firefox (app-id is "firefox")
