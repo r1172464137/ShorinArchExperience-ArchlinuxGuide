@@ -53,7 +53,7 @@ tooltip label {
 
 #custom-right_div.5 {
     background: @surface_bright;
-    color: @surface_container;
+    color: @surface;
     font-size: 1.39em; /* 25px */
     padding: 0px;
 }
