@@ -11,7 +11,7 @@
     border: none;
     border-radius: 5px;
     font-family: JetBrainsMono NFP;
-    font-size: 17px; /* 1em（基准） */
+    font-size: 18px; /* 1em（基准） */
     min-height: 0;
 }
 
@@ -141,7 +141,7 @@ window#waybar.empty #window {
 .niri-taskbar {
     background: none;
     padding: 0px;
-    margin: 4px;
+    margin: 4px 4px 4px 0px;
 }
 
 .niri-taskbar button:hover {
@@ -305,7 +305,9 @@ window#waybar.empty #window {
     margin: 5px 0px 5px 5px;
     border-radius: 5px 0px 0px 5px;
 }
-
+#bluetooth.disabled{
+    padding: 0px 3px 0px 9px;
+}
 #network {
     padding: 0px 10px 0px 5px;
     margin: 5px 5px 5px 0px;
@@ -326,7 +328,9 @@ window#waybar.empty #window {
     border-radius: 5px 0px 0px 5px;
     color: @tertiary;
 }
-
+#idle_inhibitor.activated{
+    padding: 0px 6px 0px 11px;
+}
 #power-profiles-daemon {
     padding: 0px 8px 0px 5px;
     margin: 5px 0px 5px 0px;
