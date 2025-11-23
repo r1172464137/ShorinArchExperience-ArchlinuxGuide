@@ -1,18 +1,12 @@
 @import "colors.css";
 
-
-/* 用ai把所有的字体大小都设置为自动变化的了
-    核心修改逻辑：
-   这里定义基准大小为 18px。
-   下方所有使用 em 单位的字体都会基于这个数值缩放。
-   如果未来 Bar 高度变了，只需要修改这里的 18px 即可。
-*/
 * {
     border: none;
     border-radius: 5px;
     font-family: JetBrainsMono NFP;
-    font-size: 17px; /* 1em（基准） */
+    font-size: 18px;
     min-height: 0;
+
 }
 
 window#waybar {
@@ -29,7 +23,7 @@ tooltip {
 
 tooltip label {
     color: @on_surface;
-    font-size: 0.89em; /* 原 16px */
+    font-size: 16px;
 }
 
 #workspaces {
@@ -44,7 +38,7 @@ tooltip label {
 }
 
 /* #workspaces label {
-    font-size: 1.11em; 原 20px 
+    font-size: 20;
 } */
 
 #workspaces button:hover {
@@ -88,7 +82,7 @@ tooltip label {
 #custom-colorpicker {
     padding: 0px 5px;
     margin: 5px 0px 5px 0px;
-    font-size: 1.11em; /* 原 20px */
+    font-size: 20px;
 }
 
 #custom-screenshot {
@@ -115,7 +109,7 @@ tooltip label {
 }
 
 #window label {
-    font-size: 0.89em; /* 原 16px */
+    font-size: 16px;
 }
 
 window#waybar.empty #window {
@@ -123,7 +117,7 @@ window#waybar.empty #window {
 }
 
 #custom-applauncher {
-    font-size: 1.39em; /* 原 25px */
+    font-size: 25px;
     padding: 0px 10px;
     margin: 5px;
     background-color: @primary;
@@ -131,7 +125,7 @@ window#waybar.empty #window {
 }
 
 #custom-separator.2 {
-    font-size: 1.56em; /* 原 28px */
+    font-size: 28px;
     padding: 0px 5px;
     /* background-color:@primary; */
     color: @on_surface;
@@ -194,7 +188,7 @@ window#waybar.empty #window {
 #custom-ddcutil-night,
 #custom-ddcutil-sleep,
 #custom-separator.1 {
-    font-size: 1.11em; /* 原 20px */
+    font-size: 20px;
     padding: 0px 5px;
 }
 
@@ -217,7 +211,7 @@ window#waybar.empty #window {
 
 
 #backlight {
-    font-size: 1.22em; /* 原 22px */
+    font-size: 22px;
     padding: 0px 5px 0px 0px;
     margin: 8px 0px;
     border-radius: 0px;
@@ -255,7 +249,7 @@ window#waybar.empty #window {
 }
 
 #pulseaudio {
-    /* font-size: 1.11em; 原 20px */
+    /* font-size:20px; */
     padding: 0px 10px;
     margin: 5px;
 }
@@ -297,7 +291,7 @@ window#waybar.empty #window {
 #bluetooth {
     background-color: @surface_container_high;
     color: @secondary;
-    font-size: 1.22em; /* 原 22px */
+    font-size: 22px;
 }
 
 #bluetooth {
@@ -336,7 +330,7 @@ window#waybar.empty #window {
 
 #power-profiles-daemon.performance {
     color: @error;
-    font-size: 1.28em; /* 原 23px */
+    font-size: 23px;
     padding: 0px 10px 0px 8px;
 }
 
@@ -377,7 +371,7 @@ window#waybar.empty #window {
 
 #custom-wlogout {
     padding: 0px 10px 0px 10px;
-    font-size: 1.39em; /* 原 25px */
+    font-size: 25px;
     border-radius: 50%;
     margin: 5px
 }
