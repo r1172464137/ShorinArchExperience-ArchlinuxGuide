@@ -427,8 +427,8 @@ window#waybar.empty #window {
 }
 
 #battery.critical:not(.charging) {
-    background-color: @error;
-    color: @on_error;
+    background-color: @surface_container;
+    color: @error;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: steps(12);
