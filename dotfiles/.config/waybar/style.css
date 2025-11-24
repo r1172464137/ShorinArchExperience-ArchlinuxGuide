@@ -52,7 +52,7 @@ tooltip label {
 }
 
 #custom-right_div.5 {
-    background: @surface_bright;
+    background: @surface_container_high;
     color: @surface;
     font-size: 1.39em; /* 25px */
     padding: 0px;
@@ -60,7 +60,7 @@ tooltip label {
 
 /* waybar niri taskbar */
 .niri-taskbar {
-    background: @surface_bright;
+    background: @surface_container_high;
     padding: 0 0 0 0.28em; /* 5px */
 }
 
@@ -69,7 +69,7 @@ tooltip label {
 }
 
 .niri-taskbar button.focused {
-    background: @inverse_primary;
+    background: @surface;
 }
 
 .niri-taskbar button.urgent {
@@ -90,7 +90,7 @@ tooltip label {
 /* 窗口名 */
 #window {
     padding: 0px 0.56em; /* 10px */
-    background-color: @surface_bright;
+    background-color: @surface_container_high;
     color: @on_surface;
 }
 
@@ -99,11 +99,11 @@ tooltip label {
 }
 
 window#waybar.empty #window {
-    background-color: @surface_bright;
+    background-color: @surface_container_high;
 }
 
 #custom-right_div.6 {
-    color: @surface_bright;
+    color: @surface_container_high;
     font-size: 1.39em; /* 25px */
     padding: 0px;
 }
