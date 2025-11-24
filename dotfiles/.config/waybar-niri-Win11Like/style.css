@@ -3,15 +3,15 @@
 
 /* 用ai把所有的字体大小都设置为自动变化的了
     核心修改逻辑：
-   这里定义基准大小为 18px。
+   这里定义基准大小
    下方所有使用 em 单位的字体都会基于这个数值缩放。
-   如果未来 Bar 高度变了，只需要修改这里的 18px 即可。
+   如果未来 Bar 高度变了，只需要修改这里即可。
 */
 * {
     border: none;
     border-radius: 5px;
     font-family: JetBrainsMono NFP;
-    font-size: 18px; /* 1em（基准） */
+    font-size: 17px; /* 1em（基准） */
     min-height: 0;
 }
 
@@ -124,7 +124,7 @@ window#waybar.empty #window {
 
 #custom-applauncher {
     font-size: 1.39em; /* 原 25px */
-    padding: 0px 10px;
+    padding: 0px 11px;
     margin: 5px;
     background-color: @primary;
     color: @on_primary;

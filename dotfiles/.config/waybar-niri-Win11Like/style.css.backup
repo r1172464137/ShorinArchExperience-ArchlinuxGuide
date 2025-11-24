@@ -293,7 +293,9 @@ window#waybar.empty #window {
     color: @secondary;
     font-size: 22px;
 }
-
+#bluetooth.disabled{
+    padding: 0px 3px 0px 9px;
+}
 #bluetooth {
     padding: 0px 5px 0px 10px;
     margin: 5px 0px 5px 5px;
@@ -319,6 +321,9 @@ window#waybar.empty #window {
     margin: 5px 0px 5px 5px;
     border-radius: 5px 0px 0px 5px;
     color: @tertiary;
+}
+#idle_inhibitor.activated{
+    padding: 0px 6px 0px 11px;
 }
 
 #power-profiles-daemon {
