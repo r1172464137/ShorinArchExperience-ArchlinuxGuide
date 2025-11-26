@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
+# 作用：更改gtk文件夹颜色
+# 逻辑：png图片由magick更改为灰色然后适应matugen颜色。svg图标已事先获取svg内的目标色，根据光影逻辑用sed适配matugen色。修改后的图标文件保存到~/.local/share/icons目录下，取名为Adwaita-Matugen，fallback是Adwaita。保存为A和B两份，在AB之间切换做到瞬间切换的效果。
 # ==============================================================================
 # 1. 颜色配置 (由 Matugen 填充)
 # ==============================================================================
 
-# [组 A] 文件夹与 Mimetype 使用的主色系 (Primary)
-COLOR_FOLDER_MAIN="{{colors.primary_fixed_dim.default.hex}}"
-COLOR_FOLDER_HIGHLIGHT="{{colors.primary.default.hex}}"
-COLOR_FOLDER_SHADOW="{{colors.primary_container.default.hex}}"
+# [组 A] 文件夹与 Mimetype 使用的主色系 
+COLOR_FOLDER_MAIN="{{colors.secondary_fixed_dim.default.hex}}"
+COLOR_FOLDER_HIGHLIGHT="{{colors.secondary.default.hex}}"
+COLOR_FOLDER_SHADOW="{{colors.secondary_container.default.hex}}"
 
-# [组 B] 功能图标 (网络/垃圾桶) 使用的强调色系 (Tertiary)
+# [组 B] 功能图标 (网络/垃圾桶) 使用的强调色系 
 COLOR_ACCENT_MAIN="{{colors.tertiary.default.hex}}"
 COLOR_ACCENT_LIGHT="{{colors.tertiary_fixed_dim.default.hex}}"
 COLOR_ACCENT_DARK="{{colors.tertiary_container.default.hex}}"
