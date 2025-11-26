@@ -35,8 +35,8 @@ recent-windows {
     }
 
     binds {
-        Mod+Tab         { next-window scope="output"; }
-        Mod+Shift+Tab   { previous-window scope="output"; }
+        Mod+Tab         { next-window scope="workspace"; }
+        Mod+Shift+Tab   { previous-window scope="workspace"; }
         Mod+grave       { next-window     filter="app-id"; }
         Mod+Shift+grave { previous-window filter="app-id"; }
     }

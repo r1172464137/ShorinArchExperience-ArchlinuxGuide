@@ -186,7 +186,7 @@ window#waybar.empty #window {
     padding: 0px 0.33em; /* 6px */
 }
 #idle_inhibitor.activated{
-    padding: 0px 0.35em 0px 0.35em;
+    padding: 0px 0.4em 0px 0.4em;
 }
 #power-profiles-daemon.performance {
     color: @on_error;
