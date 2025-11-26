@@ -10,10 +10,10 @@
     // "height": 30,
     "reload_style_on_change": true,
     "modules-left": [
-        "ext/workspaces",
-        //"niri/workspaces",
+       // "ext/workspaces",
+        "niri/workspaces",
         "custom/right_div#5",
-        "cffi/niri-taskbar",
+       // "cffi/niri-taskbar",
         "niri/window",
         //"dwl/window",
         // "hyprland/window",

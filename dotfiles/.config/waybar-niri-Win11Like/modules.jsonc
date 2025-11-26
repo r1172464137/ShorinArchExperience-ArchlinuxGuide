@@ -123,7 +123,8 @@
     "format": "",
     "tooltip-format": "Click to easy Screenshot Right Click to power screenshot",
     "on-click":"~/.config/waybar/scripts/screenshot.sh",
-    "on-click-right": "~/.config/waybar/scripts/power-screenshot.sh"
+    "on-click-right": "~/.config/waybar/scripts/power-screenshot.sh",
+    "on-click-middle":"~/.config/waybar/scripts/longshot.sh"
   },
   
   //wf-recorder
@@ -304,7 +305,7 @@
   "custom/cava": {
     "tooltip": false,
     "format": "{}",
-    "exec": "~/.config/waybar/scripts/cava.sh",
+    "exec": "/home/shorin/.config/waybar-niri-Win11Like/scripts/cava.sh",
   },
   //禁止熄屏
   "idle_inhibitor": {

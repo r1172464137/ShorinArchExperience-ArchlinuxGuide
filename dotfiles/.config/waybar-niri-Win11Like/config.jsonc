@@ -1,7 +1,6 @@
 {
     "include": [
-        "modules.jsonc",
-        "modules-dividers.jsonc"
+        "/home/shorin/.config/waybar-niri-Win11Like/modules.jsonc",
     ],
     "layer": "top",
     "position": "bottom",
