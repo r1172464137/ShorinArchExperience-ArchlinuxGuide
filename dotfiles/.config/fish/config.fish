@@ -26,3 +26,5 @@ function ls
 end
 
 thefuck --alias | source
+
+abbr f 'fastfetch'
