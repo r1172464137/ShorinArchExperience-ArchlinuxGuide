@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # ==============================================================================
-# 1. 本地化与文案配置 (Localization)
+# 1. 本地化与文案配置
 # ==============================================================================
-
-# 默认英文 (English Default)
+# 默认英文
 STR_PROMPT="Longshot> "
 STR_START="⛶  Start Selection (Width as baseline)"
 STR_CANCEL="❌ Cancel"
@@ -19,7 +18,7 @@ STR_ERR_DEP="Missing dependency"
 STR_ERR_MENU="Menu tool not found"
 STR_ERR_TITLE="Error"
 
-# 本地化检测逻辑：检查 env 输出中是否包含 zh_CN
+# 中文检测
 if env | grep -q "zh_CN"; then
     STR_PROMPT="长截图> "
     STR_START="⛶  开始框选（该图宽视为基准）"
@@ -37,25 +36,40 @@ if env | grep -q "zh_CN"; then
 fi
 
 # ==============================================================================
-# 2. 用户配置区
+# 2. 用户配置与安全初始化
 # ==============================================================================
-# [修改点] 保存路径增加 longshots 子文件夹
 SAVE_DIR="$HOME/Pictures/Screenshots/longshots"
-TMP_DIR="/tmp/niri_longshot_$(date +%s)"
+TMP_BASE_NAME="niri_longshot"
+TMP_DIR="/tmp/${TMP_BASE_NAME}_$(date +%s)"
 FILENAME="longshot_$(date +%Y%m%d_%H%M%S).png"
 RESULT_PATH="$SAVE_DIR/$FILENAME"
 TMP_STITCHED="$TMP_DIR/stitched_temp.png"
 
-# 菜单工具参数配置
+# --- [保险措施 1] 启动时清理陈旧垃圾 ---
+# 查找 /tmp 下名字包含 niri_longshot 且修改时间超过 10 分钟的目录并删除
+# 这可以防止因断电或 kill -9 导致的垃圾堆积，同时不影响刚启动的其他实例
+find /tmp -maxdepth 1 -type d -name "${TMP_BASE_NAME}_*" -mmin +10 -exec rm -rf {} + 2>/dev/null
+
+# 创建目录
+mkdir -p "$SAVE_DIR"
+mkdir -p "$TMP_DIR"
+
+# --- [保险措施 2] 增强型 Trap ---
+# 无论脚本是正常退出 (EXIT)、被 Ctrl+C (SIGINT)、还是被 kill (SIGTERM)，都执行清理
+# 这里的逻辑是：只要脚本进程结束，就删掉本次生成的 TMP_DIR
+cleanup() {
+    rm -rf "$TMP_DIR"
+}
+trap cleanup EXIT SIGINT SIGTERM SIGHUP
+
+# ==============================================================================
+# 3. 依赖与工具探测
+# ==============================================================================
 CMD_FUZZEL="fuzzel -d --anchor=top --y-margin=10 --lines=5 --width=45 --prompt=$STR_PROMPT"
 CMD_ROFI="rofi -dmenu -i -p $STR_PROMPT -l 5"
 CMD_WOFI="wofi --dmenu --lines 5 --prompt $STR_PROMPT"
 
-# ==============================================================================
-# 3. 依赖检查
-# ==============================================================================
 REQUIRED_CMDS=("grim" "slurp" "magick" "notify-send")
-
 for cmd in "${REQUIRED_CMDS[@]}"; do
     if ! command -v "$cmd" &> /dev/null; then
         PKG_NAME="$cmd"
@@ -65,19 +79,10 @@ for cmd in "${REQUIRED_CMDS[@]}"; do
     fi
 done
 
-# ==============================================================================
-# 4. 工具探测 (编辑器 & 菜单)
-# ==============================================================================
-
-# --- 编辑器探测 (Satty > Swappy) ---
 EDITOR_CMD=""
-if command -v satty &> /dev/null; then
-    EDITOR_CMD="satty --filename"
-elif command -v swappy &> /dev/null; then
-    EDITOR_CMD="swappy -f"
-fi
+if command -v satty &> /dev/null; then EDITOR_CMD="satty --filename"; 
+elif command -v swappy &> /dev/null; then EDITOR_CMD="swappy -f"; fi
 
-# --- 菜单工具探测 ---
 MENU_CMD=""
 if command -v fuzzel &> /dev/null; then MENU_CMD="$CMD_FUZZEL"
 elif command -v rofi &> /dev/null; then MENU_CMD="$CMD_ROFI"
@@ -86,13 +91,6 @@ else
     notify-send -u critical "$STR_ERR_TITLE" "$STR_ERR_MENU"
     exit 1
 fi
-
-# ==============================================================================
-# 5. 辅助函数与初始化
-# ==============================================================================
-mkdir -p "$SAVE_DIR"
-mkdir -p "$TMP_DIR"
-trap 'rm -rf "$TMP_DIR"' EXIT
 
 function show_menu() { echo -e "$1" | $MENU_CMD; }
 
@@ -105,6 +103,7 @@ if [[ "$SELECTION" != "$STR_START" ]]; then exit 0; fi
 
 sleep 0.2 
 GEO_1=$(slurp)
+# 如果第一步被 Super+Q 杀掉 slurp，GEO_1 为空，脚本会在此退出并触发 cleanup
 if [ -z "$GEO_1" ]; then exit 0; fi
 
 IFS=', x' read -r FIX_X FIX_Y FIX_W FIX_H <<< "$GEO_1"
@@ -117,23 +116,22 @@ INDEX=2
 SAVE_MODE=""
 
 while true; do
-    # 构建菜单选项
     MENU_OPTIONS="$STR_NEXT\n$STR_SAVE"
-    
-    if [[ -n "$EDITOR_CMD" ]]; then
-        MENU_OPTIONS="$MENU_OPTIONS\n$STR_EDIT"
-    fi
-    
+    if [[ -n "$EDITOR_CMD" ]]; then MENU_OPTIONS="$MENU_OPTIONS\n$STR_EDIT"; fi
     MENU_OPTIONS="$MENU_OPTIONS\n$STR_ABORT"
     
-    # 显示菜单
+    # 如果此时 Super+Q 杀掉了 Fuzzel，ACTION 为空
     ACTION=$(show_menu "$MENU_OPTIONS")
     
     case "$ACTION" in
         *"📸"*)
             sleep 0.2
             GEO_NEXT=$(slurp)
-            if [ -z "$GEO_NEXT" ]; then break; fi 
+            
+            # 如果此时 Super+Q 杀掉 Slurp，GEO_NEXT 为空，回到菜单
+            if [ -z "$GEO_NEXT" ]; then 
+                continue 
+            fi
             
             IFS=', x' read -r _TEMP_X NEW_Y _TEMP_W NEW_H <<< "$GEO_NEXT"
             FINAL_GEO="${FIX_X},${NEW_Y} ${FIX_W}x${NEW_H}"
@@ -143,22 +141,25 @@ while true; do
             ((INDEX++))
             ;;
             
-        *"💾"*) # 保存
+        *"💾"*) 
             SAVE_MODE="save"
-            break
+            break 
             ;;
             
-        *"🎨"*) # 编辑
+        *"🎨"*) 
             SAVE_MODE="edit"
-            break
+            break 
             ;;
             
-        *"❌"*) # 放弃/取消
-            exit 0
+        *"❌"*) 
+            exit 0 
             ;;
             
-        *) # Esc 关闭菜单
-            break
+        *) 
+            # Fuzzel 被 Super+Q 关闭，ACTION 为空，进入这里
+            # 直接 Break 跳出循环，进入保存/拼接流程 (防止误操作导致丢失)
+            # 或者如果你想放弃，这里改成 exit 0
+            break 
             ;;
     esac
 done
@@ -169,15 +170,15 @@ done
 COUNT=$(ls "$TMP_DIR"/*.png 2>/dev/null | wc -l)
 
 if [ "$COUNT" -gt 0 ]; then
-    # 拼接
     magick "$TMP_DIR"/*.png -append "$TMP_STITCHED"
     
-    # 编辑模式
     if [[ "$SAVE_MODE" == "edit" ]]; then
         $EDITOR_CMD "$TMP_STITCHED"
     fi
     
-    # 保存与通知
+    # 只要有保存意向 (SAVE_MODE不为空)，或者是因为意外退出且至少有图
+    # 如果你是"意外退出菜单"，默认是不保存的 (SAVE_MODE为空)
+    # 这里我们只在显式选择保存/编辑时才保存
     if [[ -n "$SAVE_MODE" ]]; then
         mv "$TMP_STITCHED" "$RESULT_PATH"
         
@@ -190,3 +191,5 @@ if [ "$COUNT" -gt 0 ]; then
         notify-send -i "$RESULT_PATH" "$STR_NOTIFY_TITLE" "$STR_NOTIFY_SAVED $FILENAME\n$COPY_MSG"
     fi
 fi
+
+# 脚本结束，触发 Trap 清理 TMP_DIR
