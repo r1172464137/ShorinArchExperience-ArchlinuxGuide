@@ -97,3 +97,8 @@ post_hook= 'pkill niriswitcher || true && niriswitcher & disown'
 [templates.niri]
 input_path = '~/.config/matugen/templates/niri-colors.kdl'
 output_path = '~/.config/niri/colors.kdl'
+
+[templates.gtk-folder]
+input_path = '~/.config/matugen/templates/gtk-folder/recolor.sh'
+output_path = '~/.cache/matugen/recoloricons.sh'
+post_hook = 'bash ~/.cache/matugen/recoloricons.sh '

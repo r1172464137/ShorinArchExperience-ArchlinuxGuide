@@ -6,7 +6,7 @@ environment {
     LC_MESSAGES "zh_CN.UTF-8"
     XMODIFIERS "@im=fcitx"
     QT_QPA_PLATFORMTHEME "qt6ct"
-    GSK_RENDERRE "ql"
+    GSK_RENDERER "ql"
 }
 
 cursor {
@@ -496,6 +496,7 @@ binds {
     Mod+F1 {spawn-sh "pkill fcitx5 || fcitx5 ";}
     Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar/config.jsonc -s /home/shorin/.config/waybar/style.css ";}
     Mod+F3 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar-niri-Win11Like/config.jsonc -s /home/shorin/.config/waybar-niri-Win11Like/style.css ";}
+    Mod+M {spawn "gnome-text-editor";}
 
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
