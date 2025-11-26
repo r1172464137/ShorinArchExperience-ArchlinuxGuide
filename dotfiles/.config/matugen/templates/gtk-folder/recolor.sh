@@ -129,4 +129,8 @@ find "$TARGET_DIR/scalable" -name "user-trash*.svg" \
 # 直接修改 GSettings，GTK 会自动检测到主题变更并瞬间重绘
 gsettings set org.gnome.desktop.interface icon-theme "$TARGET_THEME_NAME"
 
+# 2. [新增] 同步 Flatpak 图标设置 (动态更新 override)
+# 这会告诉所有 Flatpak 程序：现在的图标主题是这个 A 或 B
+flatpak override --user --env=ICON_THEME="$TARGET_THEME_NAME"
+
 exit 0

@@ -11,7 +11,7 @@ output_path = '~/.config/waybar/colors.css'
 [templates.pywalfox]
 input_path = '~/.config/matugen/templates/pywalfox-colors.json'
 output_path = '~/.cache/wal/colors.json'
-post_hook = 'pywalfox update'
+post_hook = 'pywalfox update &'
 
 [templates.fuzzel]
 input_path = '~/.config/matugen/templates/fuzzel.ini'
@@ -19,22 +19,22 @@ output_path = '~/.config/fuzzel/colors.ini'
 [templates.kitty]
 input_path = '~/.config/matugen/templates/kitty-colors.conf'
 output_path ='~/.config/kitty/themes/matugen.conf'
-post_hook = "kitty +kitten themes --reload-in=all matugen"
+post_hook = "kitty +kitten themes --reload-in=all matugen &"
 
 [templates.fcitx5]
 input_path = '~/.config/matugen/templates/fcitx5-theme.conf'
 output_path = '~/.local/share/fcitx5/themes/Matugen/theme.conf'
-post_hook= 'fcitx5 -r -d & disown'
+post_hook= 'fcitx5 -r -d & disown '
 
 [templates.mako]
 input_path = '~/.config/matugen/templates/mako-colors.conf'
 output_path = '~/.config/mako/colors.conf'
-post_hook='makoctl reload'
+post_hook='makoctl reload &'
 
 [templates.btop]
 input_path = '~/.config/matugen/templates/btop.theme'
 output_path = '~/.config/btop/themes/matugen.theme'
-post_hook = 'killall -SIGUSR1 btop && killall -SIGUSR2 btop'
+post_hook = 'killall -SIGUSR1 btop && killall -SIGUSR2 btop &'
 
 [templates.cava]
 input_path = '~/.config/matugen/templates/cava-colors.ini'
@@ -50,26 +50,29 @@ input_path = '~/.config/matugen/templates/yazi-theme.toml'
 output_path = '~/.config/yazi/theme.toml'
 
 [templates.wlogout]
-input_path = '~/.config/matugen/templates/kitty-colors.conf'
+input_path = '~/.config/matugen/templates/colors.css'
 output_path = '~/.config/wlogout/colors.css'
-
+[templates.wlogout-recolor]
+input_path = '~/.config/matugen/templates/wlogout/recolor.sh'
+output_path = '~/.config/wlogout/icons/recolor.sh'
+post_hook = 'chmod +x ~/.config/wlogout/icons/recolor.sh && bash ~/.config/wlogout/icons/recolor.sh &'
 [templates.gtk3]
 input_path ='~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/colors.css'
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark'
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark &'
 [templates.gtk4]
 input_path ='~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
-post_hook = 'nautilus -q'
+post_hook = 'nautilus -q &'
 #[templates.swaync]
 #input_path = '~/.config/matugen/templates/swaync-colors.css'
 #output_path = '~/.config/swaync/colors.css'
-#post_hook = 'swaync-client -rs'
+#post_hook = 'swaync-client -rs &'
 
 [templates.ghostty]
 input_path = '~/.config/matugen/templates/ghostty-colors.conf'
 output_path = '~/.config/ghostty/themes/colors.conf'
-#post_hook = 'wtype -M ctrl -M shift -P comma -p comma -m ctrl -m shift'
+#post_hook = 'wtype -M ctrl -M shift -P comma -p comma -m ctrl -m shift &'
 
 [templates.qt5ct]
 input_path = '~/.config/matugen/templates/qtct-colors.conf'
@@ -86,7 +89,7 @@ output_path = '~/.local/share/color-schemes/Matugen.colors'
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland-colors.conf'
 output_path = '~/.config/hypr/colors.conf'
-post_hook = 'hyprctl reload'
+post_hook = 'hyprctl reload &'
 
 [templates.niriswitcher]
 input_path = '~/.config/matugen/templates/niriswitcher-colors.css'
@@ -101,4 +104,9 @@ output_path = '~/.config/niri/colors.kdl'
 [templates.gtk-folder]
 input_path = '~/.config/matugen/templates/gtk-folder/recolor.sh'
 output_path = '~/.cache/matugen/recoloricons.sh'
-post_hook = 'bash ~/.cache/matugen/recoloricons.sh '
+post_hook = 'bash ~/.cache/matugen/recoloricons.sh &'
+
+[templates.swayosd]
+input_path = '~/.config/matugen/templates/colors.css'
+output_path = '~/.config/swayosd/colors.css'
+post_hook = 'systemctl restart --user swayosd &'

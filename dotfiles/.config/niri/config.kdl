@@ -379,6 +379,11 @@ layer-rule{
      place-within-backdrop true
 }
 window-rule {
+    match app-id="imv"
+    open-focused false
+    open-floating true
+    }
+window-rule {
     // This regular expression is intentionally made as specific as possible,
     // since this is the default config, and we want no false positives.
     // You can get away with just app-id="wezterm" if you want.
