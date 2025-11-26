@@ -1,5 +1,11 @@
 layout{
     focus-ring{
-        active-color "{{colors.primary.default.hex}}"
+        active-gradient from="{{colors.primary.default.hex}}cc" to="{{colors.tertiary.default.hex}}cc" angle=135
+        }
+}
+recent-windows {    
+    highlight {
+        active-color "{{colors.surface_bright.default.hex}}"
+        urgent-color "{{colors.primary.default.hex}}"
     }
 }

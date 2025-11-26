@@ -1,23 +1,47 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
+// This config is in the KDL format: https://kdl.dev // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://yalter.github.io/niri/Configuration:-Introduction:
-
 
 environment {
     LC_MESSAGES "zh_CN.UTF-8"
     XMODIFIERS "@im=fcitx"
     QT_QPA_PLATFORMTHEME "qt6ct"
+    GSK_RENDERRE "ql"
 }
 
 cursor {
     xcursor-theme "breeze_cursors"
-    xcursor-size 27
+    xcursor-size 30
     hide-after-inactive-ms 15000
 }
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
+recent-windows {
+    // off
+    debounce-ms 750
+    open-delay-ms 150
+
+    highlight {
+        active-color "#999999ff"
+        urgent-color "#ff9999ff"
+        padding 30
+        corner-radius 12
+    }
+
+    previews {
+        max-height 480
+        max-scale 0.5
+    }
+
+    binds {
+        Mod+Tab         { next-window scope="output"; }
+        Mod+Shift+Tab   { previous-window scope="output"; }
+        Mod+grave       { next-window     filter="app-id"; }
+        Mod+Shift+grave { previous-window filter="app-id"; }
+    }
+}
+include "colors.kdl"
 input {
     keyboard {
         xkb {
@@ -58,7 +82,7 @@ input {
         
 	// off
         // natural-scroll
-        //accel-speed 1
+        accel-speed -0.15 
         accel-profile "flat"
 	// scroll-method "no-scroll"
         //speed of scroll,like:
@@ -199,7 +223,7 @@ layout {
         // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
         // Color of the ring on the active monitor.
-        active-color "#f0f0f0cc"
+        //active-color "@primary"
         //active-color "#00000000"
         // Color of the ring on inactive monitors.
         //
@@ -308,6 +332,7 @@ spawn-at-startup "fcitx5"
 spawn-sh-at-startup "clipse --listen" 
 spawn-at-startup "niriswitcher"
 spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
+spawn-at-startup "swayosd-server"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
@@ -336,11 +361,11 @@ screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d %H-%M-%S.png"
 // https://yalter.github.io/niri/Configuration:-Animations
 animations {
     // Uncomment to turn off all animations.
-    // off
+    //off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    // slowdown 1.0 
-}
+     slowdown 1.15 
+     }
 
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
@@ -402,9 +427,15 @@ window-rule {
 
 window-rule {
     match title="gsr ui"
-
+    match app-id="waydroid"
     open-fullscreen true
     open-floating true
+    focus-ring{
+        off
+    }
+    shadow {
+    off
+    }
 }
 /-window-rule {
     // This app-id regular expression will work for both:
@@ -456,7 +487,6 @@ binds {
     //
     // Most actions that you can bind here can also be invoked programmatically with
     // `niri msg action do-something`.
-
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -464,18 +494,19 @@ binds {
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
     Mod+Alt+W {spawn "waypaper";}
     Mod+F1 {spawn-sh "pkill fcitx5 || fcitx5 ";}
+    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar/config.jsonc -s /home/shorin/.config/waybar/style.css ";}
+    Mod+F3 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar-niri-Win11Like/config.jsonc -s /home/shorin/.config/waybar-niri-Win11Like/style.css ";}
 
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal" { spawn "kitty"; }
     Mod+Shift+T { spawn "ghostty"; }
     Mod+E hotkey-overlay-title="Open a FilesManager: nautilus" { spawn "thunar"; }
-    Mod+Alt+E {spawn "nautilus";}
+    Mod+Alt+E {spawn-sh "env GSK_RENDERER=gl nautilus";}
     Mod+B hotkey-overlay-title="打开浏览器: firefox" { spawn "firefox"; }
     Mod+Z hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+P hotkey-overlay-title="Pick a color" { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar ";}
     Mod+Alt+V {spawn-sh "copyq toggle || clipse-gui";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -728,6 +759,7 @@ binds {
     //Mod+Shift+Z { switch-layout "prev"; }
 
     Mod+Alt+A {screenshot;}
+    Insert {screenshot;}
     Mod+Ctrl+Insert { screenshot-window; }
     Mod+Insert { screenshot-screen; }
     Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
