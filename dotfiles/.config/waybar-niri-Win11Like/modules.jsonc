@@ -253,16 +253,22 @@
     "tooltip-format": "Ex.Monitor 100% brightness",
     "format": "󰃠",
     "on-click": "ddcutil --display 1 setvcp 10 100 ",
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   "custom/ddcutil-night": {
     "tooltip-format": "Ex.Monitor 65% brightness",
     "format": "󰃟",
     "on-click": "ddcutil --display 1 setvcp 10 65 ",
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   "custom/ddcutil-sleep": {
     "tooltip-format": "Ex.Monitor 5% brightness",
     "format": "󰃞",
     "on-click": "ddcutil --display 1 setvcp 10 5 ",
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   //swaync通知模块
   "custom/swaync": {

@@ -325,6 +325,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "swww-daemon"
+spawn-at-startup "awww-daemon"
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome &"
 spawn-at-startup "mako"
 spawn-at-startup "waybar"
@@ -376,6 +377,8 @@ animations {
 // by setting an empty default-column-width.
 layer-rule{
     match namespace="hyprpaper"
+    match namespace="wallpaper"
+    match namespace="awww-daemon"
      place-within-backdrop true
 }
 window-rule {
@@ -765,10 +768,10 @@ binds {
     //Mod+Shift+Z { switch-layout "prev"; }
 
     Mod+Alt+A {screenshot;}
-    Insert {screenshot;}
-    Mod+Ctrl+Insert { screenshot-window; }
-    Mod+Insert { screenshot-screen; }
-    Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
+    Mod+Alt+Ctrl+A { screenshot-window; }
+    Mod+Alt+Ctrl+Shift+A { screenshot-screen; }
+    //Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
+    Mod+Shift+S { spawn-sh "wl-paste | satty -f -";}
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
