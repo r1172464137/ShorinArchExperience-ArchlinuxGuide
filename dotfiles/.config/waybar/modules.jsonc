@@ -179,6 +179,7 @@
     "format": "󰣇",
     "on-click": "fuzzel",
     "on-click-right": "waypaper",
+    "on-click-middle":"~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh"
   },
   //电源菜单
   "group/powermenu": {

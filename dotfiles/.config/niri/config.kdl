@@ -296,7 +296,7 @@ layout {
         softness 20
 
         // Spread expands the shadow.
-        spread 3
+        spread 2
 
         // Offset moves the shadow relative to the window.
         offset x=-4 y=-4
@@ -326,6 +326,7 @@ layout {
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "awww-daemon"
+spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome &"
 spawn-at-startup "mako"
 spawn-at-startup "waybar"
@@ -334,6 +335,7 @@ spawn-sh-at-startup "clipse --listen"
 spawn-at-startup "niriswitcher"
 spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
 spawn-at-startup "swayosd-server"
+
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
@@ -479,9 +481,8 @@ window-rule {
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
-    opacity 0.99
+    opacity 0.97
     draw-border-with-background false
-
 }
 
 
@@ -501,6 +502,7 @@ binds {
     //niriswitcher
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
     Mod+Alt+W {spawn "waypaper";}
+    Mod+F10 {spawn "waypaper" "--random";}
     Mod+F1 {spawn-sh "pkill fcitx5 || fcitx5 ";}
     Mod+F2 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar/config.jsonc -s /home/shorin/.config/waybar/style.css ";}
     Mod+F3 {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar-niri-Win11Like/config.jsonc -s /home/shorin/.config/waybar-niri-Win11Like/style.css ";}

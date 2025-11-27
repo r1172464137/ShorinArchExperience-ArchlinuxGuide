@@ -1,0 +1,18 @@
+[Unit]
+Description=Niri Auto Blur Wallpaper Daemon
+# 确保在图形界面启动后才启动
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+# !!! 修改下面这行为你脚本的真实路径 !!!
+ExecStart=/home/shorin/.config/scripts/niri_auto_blur_bg.sh
+# 如果脚本崩溃，自动重启
+Restart=always
+RestartSec=3
+# 停止服务时，给脚本发送 SIGTERM，脚本会执行 trap 还原壁纸
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=graphical-session.target
