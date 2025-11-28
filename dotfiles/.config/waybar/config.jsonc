@@ -4,6 +4,8 @@
         "modules.jsonc",
         "modules-dividers.jsonc"
     ],
+    //这一行layer top设置会让waybar显示在最上方
+    "layer":"top",
     "output": "DP-2",
     "position": "top",
     "fixed-center": true,

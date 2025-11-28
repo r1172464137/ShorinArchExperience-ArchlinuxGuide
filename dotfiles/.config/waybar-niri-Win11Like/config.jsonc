@@ -2,7 +2,7 @@
     "include": [
         "/home/shorin/.config/waybar-niri-Win11Like/modules.jsonc",
     ],
-    "layer": "top",
+    "layer":"top",
     "position": "bottom",
     // "height": 40,
     "fixed-center": true,

@@ -30,7 +30,8 @@ cleanup() { rm -rf "$TMP_DIR"; }
 trap cleanup EXIT SIGINT SIGTERM
 
 # 菜单工具
-CMD_FUZZEL="fuzzel -d --anchor=top --y-margin=20 --lines=3 --width=45"
+# [修改]: 将 fuzzel 宽度从 45 调整为 30，使其更紧凑
+CMD_FUZZEL="fuzzel -d --anchor=top --y-margin=20 --lines=3 --width=30"
 CMD_WOFI="wofi --dmenu --lines 3"
 CMD_ROFI="rofi -dmenu -l 3"
 
@@ -39,7 +40,28 @@ elif command -v wofi &> /dev/null; then MENU_CMD="$CMD_WOFI"
 elif command -v rofi &> /dev/null; then MENU_CMD="$CMD_ROFI"
 else exit 1; fi
 
-function show_menu() { echo -e "$1" | $MENU_CMD; }
+# [新增]: 动态计算宽度函数 (主要针对 wofi)
+function get_dynamic_width() {
+    local text="$1"
+    # 获取最长行的长度
+    local max_len=$(echo -e "$text" | wc -L)
+    # 计算: 字符数 * 28px + 60px 边距 (可根据屏幕分辨率微调)
+    echo $(( max_len * 28 + 60 ))
+}
+
+# [修改]: 增加对 wofi 的动态宽度支持
+function show_menu() {
+    local content="$1"
+    
+    if [[ "$MENU_CMD" == *"wofi"* ]]; then
+        # 如果是 wofi，计算宽度并附加参数
+        local width=$(get_dynamic_width "$content")
+        echo -e "$content" | $MENU_CMD --width "$width"
+    else
+        # 其他工具 (fuzzel/rofi) 保持原样
+        echo -e "$content" | $MENU_CMD
+    fi
+}
 
 # ======================================
 # Step 1: 第一张截图 (直接开始，不询问)
@@ -58,7 +80,7 @@ INDEX=2
 DO_SAVE=false
 
 while true; do
-    # 菜单提示下一张
+    # 菜单提示下一张 (show_menu 会自动处理宽度)
     ACTION=$(show_menu "$STR_NEXT\n$STR_FINISH\n$STR_ABORT")
     
     case "$ACTION" in
