@@ -114,7 +114,7 @@
     "tooltip-format": "Click to easy Screenshot Right Click to power screenshot or Middle Click to longshot",
     "on-click":"~/.config/waybar/scripts/screenshot.sh",
     "on-click-right": "~/.config/waybar/scripts/power-screenshot.sh",
-    "on-click-middle":"~/.config/waybar/scripts/longshot.sh"
+    "on-click-middle":"~/.config/waybar/scripts/longshot-sh/longshot.sh"
   },
   
   //wf-recorder
