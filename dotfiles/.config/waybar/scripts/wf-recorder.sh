@@ -1,23 +1,34 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# ================== Runtime state ==================
+# ================== Runtime state & Persistent Config ==================
 APP="wf-recorder"
+
+# --- 运行时状态 (应在每次会话结束时消失, 遵循 XDG_RUNTIME_DIR) ---
 RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$UID}"
 STATE_DIR="$RUNTIME_DIR/wfrec"
+
 PIDFILE="$STATE_DIR/pid"
 STARTFILE="$STATE_DIR/start"
 SAVEPATH_FILE="$STATE_DIR/save_path"
-MODEFILE="$STATE_DIR/mode"          # full/region -> tooltip
+MODEFILE="$STATE_DIR/mode"             # full/region -> tooltip
 TICKPIDFILE="$STATE_DIR/tickpid"
 WAYBAR_PIDS_CACHE="$STATE_DIR/waybar.pids"
-CFG_CODEC="$STATE_DIR/codec"
-CFG_FPS="$STATE_DIR/framerate"
-CFG_AUDIO="$STATE_DIR/audio"
-CFG_DRM="$STATE_DIR/drm_device"
-CFG_EXT="$STATE_DIR/container_ext"  # persisted file format (auto/mp4/mkv/webm)
 
+
+# --- 持久性配置 (缓存/设置, 存放在 .cache/ 下, 遵循 XDG_CACHE_HOME) ---
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+CONFIG_DIR="$XDG_CACHE_HOME/wf-recorder-sh" # 目标目录 .cache/wf-recorder-sh
+
+CFG_CODEC="$CONFIG_DIR/codec"
+CFG_FPS="$CONFIG_DIR/framerate"
+CFG_AUDIO="$CONFIG_DIR/audio"
+CFG_DRM="$CONFIG_DIR/drm_device"
+CFG_EXT="$CONFIG_DIR/container_ext"      # persisted file format (auto/mp4/mkv/webm)
+
+# 创建所需的目录
 mkdir -p "$STATE_DIR"
+mkdir -p "$CONFIG_DIR"
 
 # Hold chosen mode
 MODE_DECIDED=""
@@ -27,7 +38,7 @@ MODE_DECIDED=""
 _DEFAULT_CODEC="libx264"
 _DEFAULT_FRAMERATE=""
 _DEFAULT_AUDIO="on"
-_DEFAULT_SAVE_EXT="auto"            # auto/mp4/mkv/webm
+_DEFAULT_SAVE_EXT="auto"             # auto/mp4/mkv/webm
 
 # load persisted settings if exist
 codec_from_file=$(cat "$CFG_CODEC" 2>/dev/null || true)
@@ -47,14 +58,14 @@ TITLE="${TITLE:-}"
 SAVE_DIR_ENV="${SAVE_DIR:-}"
 SAVE_SUBDIR_FS="${SAVE_SUBDIR_FS:-fullscreen}"
 
-OUTPUT="${OUTPUT:-}"                      # e.g. eDP-1 / DP-2
-OUTPUT_SELECT="${OUTPUT_SELECT:-auto}"    # off|auto|menu
+OUTPUT="${OUTPUT:-}"                     # e.g. eDP-1 / DP-2
+OUTPUT_SELECT="${OUTPUT_SELECT:-auto}"   # off|auto|menu
 MENU_TITLE_OUTPUT="${MENU_TITLE_OUTPUT:-}"
-MENU_BACKEND="${MENU_BACKEND:-auto}"      # auto|fuzzel|wofi|rofi|bemenu|fzf|term
+MENU_BACKEND="${MENU_BACKEND:-auto}"     # auto|fuzzel|wofi|rofi|bemenu|fzf|term
 
-RECORD_MODE="${RECORD_MODE:-ask}"         # ask|full|region
+RECORD_MODE="${RECORD_MODE:-ask}"        # ask|full|region
 MODE_MENU_TITLE="${MODE_MENU_TITLE:-Select recording mode}"
-REC_AREA="${REC_AREA:-}"                  # "x,y WIDTHxHEIGHT" (optional)
+REC_AREA="${REC_AREA:-}"                 # "x,y WIDTHxHEIGHT" (optional)
 GEOM_IN_NAME="${GEOM_IN_NAME:-off}"
 
 WAYBAR_POKE="${WAYBAR_POKE:-on}"
@@ -96,11 +107,11 @@ msg() {
         notif_saved)    printf "已保存：%s" "$@" ;;
         notif_stopped)  printf "已停止录制。" ;;
         already_running) printf "already running" ;;
-        not_running)     printf "not running" ;;
-        title_mode)      printf "选择录制模式" ;;
-        title_output)    printf "选择输出" ;;
+        not_running)      printf "not running" ;;
+        title_mode)       printf "选择录制模式" ;;
+        title_output)     printf "选择输出" ;;
         menu_fullscreen) printf "全屏" ;;
-        menu_region)     printf "选择区域" ;;
+        menu_region)      printf "选择区域" ;;
         # settings labels -> "标签：值"
         title_settings)  printf "设置" ;;
         menu_settings)   printf "设置..." ;;
@@ -109,18 +120,18 @@ msg() {
         menu_set_filefmt) printf "文件格式：%s" "$@" ;;
         menu_toggle_audio) printf "音频：%s" "$@" ;;
         menu_set_render) printf "渲染设备：%s" "$@" ;;
-        menu_back)       printf "返回" ;;
-        fps_unlimited)   printf "不限制" ;;
-        render_auto)     printf "自动" ;;
-        ext_auto)        printf "自动" ;;
+        menu_back)        printf "返回" ;;
+        fps_unlimited)    printf "不限制" ;;
+        render_auto)      printf "自动" ;;
+        ext_auto)         printf "自动" ;;
         title_select_codec) printf "选择编码格式" ;;
-        title_select_fps)   printf "选择帧率" ;;
+        title_select_fps)     printf "选择帧率" ;;
         title_select_filefmt) printf "选择文件格式" ;;
         title_select_render) printf "选择渲染设备（/dev/dri/renderD*）" ;;
-        mode_full)       printf "全屏" ;;
-        mode_region)     printf "区域" ;;
+        mode_full)        printf "全屏" ;;
+        mode_region)      printf "区域" ;;
         prompt_enter_number) printf "输入编号：" ;;
-        menu_exit)       printf "退出" ;;
+        menu_exit)        printf "退出" ;;
         *) printf "%s" "$id" ;;
       esac
       ;;
@@ -141,11 +152,11 @@ msg() {
         notif_saved)    printf "保存しました：%s" "$@" ;;
         notif_stopped)  printf "録画を停止しました。" ;;
         already_running) printf "already running" ;;
-        not_running)     printf "not running" ;;
-        title_mode)      printf "録画モードを選択" ;;
-        title_output)    printf "出力を選択" ;;
+        not_running)      printf "not running" ;;
+        title_mode)       printf "録画モードを選択" ;;
+        title_output)     printf "出力を選択" ;;
         menu_fullscreen) printf "全画面" ;;
-        menu_region)     printf "領域選択" ;;
+        menu_region)      printf "領域選択" ;;
         # settings labels -> "ラベル：値"（全角コロン）
         title_settings)  printf "設定" ;;
         menu_settings)   printf "設定..." ;;
@@ -154,18 +165,18 @@ msg() {
         menu_set_filefmt) printf "ファイル形式：%s" "$@" ;;
         menu_toggle_audio) printf "音声：%s" "$@" ;;
         menu_set_render) printf "レンダーデバイス：%s" "$@" ;;
-        menu_back)       printf "戻る" ;;
-        fps_unlimited)   printf "無制限" ;;
-        render_auto)     printf "自動" ;;
-        ext_auto)        printf "自動" ;;
+        menu_back)        printf "戻る" ;;
+        fps_unlimited)    printf "無制限" ;;
+        render_auto)      printf "自動" ;;
+        ext_auto)         printf "自動" ;;
         title_select_codec) printf "コーデックを選択" ;;
-        title_select_fps)   printf "フレームレートを選択" ;;
+        title_select_fps)     printf "フレームレートを選択" ;;
         title_select_filefmt) printf "ファイル形式を選択" ;;
         title_select_render) printf "レンダーデバイスを選択（/dev/dri/renderD*）" ;;
-        mode_full)       printf "全画面" ;;
-        mode_region)     printf "領域" ;;
+        mode_full)        printf "全画面" ;;
+        mode_region)      printf "領域" ;;
         prompt_enter_number) printf "番号を入力：" ;;
-        menu_exit)       printf "終了" ;;
+        menu_exit)        printf "終了" ;;
         *) printf "%s" "$id" ;;
       esac
       ;;
@@ -186,11 +197,11 @@ msg() {
         notif_saved)    printf "Saved: %s" "$@" ;;
         notif_stopped)  printf "Recording stopped." ;;
         already_running) printf "already running" ;;
-        not_running)     printf "not running" ;;
-        title_mode)      printf "Select recording mode" ;;
-        title_output)    printf "Select output" ;;
+        not_running)      printf "not running" ;;
+        title_mode)       printf "Select recording mode" ;;
+        title_output)     printf "Select output" ;;
         menu_fullscreen) printf "Fullscreen" ;;
-        menu_region)     printf "Region" ;;
+        menu_region)      printf "Region" ;;
         # settings labels -> "Label: Value"
         title_settings)  printf "Settings" ;;
         menu_settings)   printf "Settings..." ;;
@@ -199,18 +210,18 @@ msg() {
         menu_set_filefmt) printf "File Format: %s" "$@" ;;
         menu_toggle_audio) printf "Audio: %s" "$@" ;;
         menu_set_render) printf "Render Device: %s" "$@" ;;
-        menu_back)       printf "Back" ;;
-        fps_unlimited)   printf "unlimited" ;;
-        render_auto)     printf "Auto" ;;
-        ext_auto)        printf "Auto" ;;
+        menu_back)        printf "Back" ;;
+        fps_unlimited)    printf "unlimited" ;;
+        render_auto)      printf "Auto" ;;
+        ext_auto)         printf "Auto" ;;
         title_select_codec) printf "Select Codec" ;;
-        title_select_fps)   printf "Select Framerate" ;;
+        title_select_fps)     printf "Select Framerate" ;;
         title_select_filefmt) printf "Select File Format" ;;
         title_select_render) printf "Select Render Device (/dev/dri/renderD*)" ;;
-        mode_full)       printf "Fullscreen" ;;
-        mode_region)     printf "Region" ;;
+        mode_full)        printf "Fullscreen" ;;
+        mode_region)      printf "Region" ;;
         prompt_enter_number) printf "Enter number: " ;;
-        menu_exit)       printf "Exit" ;;
+        menu_exit)        printf "Exit" ;;
         *) printf "%s" "$id" ;;
       esac
       ;;
@@ -437,7 +448,7 @@ show_settings_menu() {
     elif [[ "$pick" == "$(msg menu_set_codec "$CODEC")" ]]; then
       # 仅保留 CPU (libx264) 与所有常见 VAAPI 编码选项，CPU 放在首位
       local newc; newc="$(menu_pick "$(msg title_select_codec)" \
-                       "libx264" "h264_vaapi" "hevc_vaapi" "av1_vaapi" "vp9_vaapi")" || continue
+                        "libx264" "h264_vaapi" "hevc_vaapi" "av1_vaapi" "vp9_vaapi")" || continue
       CODEC="$newc"; printf '%s' "$CODEC" >"$CFG_CODEC"
 
     elif [[ "$pick" == "$(msg menu_set_filefmt "$ff_display")" ]]; then
@@ -456,7 +467,7 @@ show_settings_menu() {
 # ---------- Mode selection ----------
 decide_mode() {
   case "${RECORD_MODE,,}" in
-    full|fullscreen) MODE_DECIDED="full";   return 0 ;;
+    full|fullscreen) MODE_DECIDED="full";    return 0 ;;
     region|area)     MODE_DECIDED="region"; return 0 ;;
     *) ;;
   esac
@@ -469,7 +480,7 @@ decide_mode() {
   local title; title="$(msg title_mode)"
   while :; do
     local pick; pick="$(menu_pick "$title" "$L_FULL" "$L_REGION" "$L_SETTINGS" "$L_EXIT")" || return 130
-    if   [[ "$pick" == "$L_FULL"    ]]; then MODE_DECIDED="full";   return 0
+    if    [[ "$pick" == "$L_FULL"    ]]; then MODE_DECIDED="full";    return 0
     elif [[ "$pick" == "$L_REGION"  ]]; then MODE_DECIDED="region"; return 0
     elif [[ "$pick" == "$L_SETTINGS" ]]; then show_settings_menu; continue
     elif [[ "$pick" == "$L_EXIT"    ]]; then return 130
@@ -595,12 +606,13 @@ stop_rec() {
   sleep 0.2
   is_running && kill -KILL "$pid" 2>/dev/null || true
 
+  # 停止后清理运行时状态文件
   rm -f "$PIDFILE" "$MODEFILE"
   stop_tick
 
   local save_path=""; [[ -r "$SAVEPATH_FILE" ]] && read -r save_path <"$SAVEPATH_FILE"
   if [[ -n "$save_path" && -f "$save_path" ]]; then
-    # ← 修改点：生成不带后缀的 latest（例如：.../latest）
+    # 生成不带后缀的 latest（例如：.../latest）
     ln -sf "$(basename "$save_path")" "$(dirname "$save_path")/latest" || true
     local s; s="$(msg notif_saved "$save_path")"; echo "$s"; notify "$s"
   else
@@ -688,13 +700,13 @@ status_rec() {
 
 # ================== Main ==================
 case "${1:-toggle}" in
-  start)        start_rec ;;
-  stop)         stop_rec ;;
-  status)       status_rec ;;
-  status-json)  status_rec --json ;;
-  waybar)       status_rec --json ;;
-  is-active)    if is_running; then exit 0; else exit 1; fi ;;
-  toggle)       is_running && stop_rec || start_rec ;;
-  settings)     show_settings_menu ;;
-  *)            echo "Usage: $0 {start|stop|toggle|status|status-json|waybar|is-active|settings}"; exit 2 ;;
+  start)         start_rec ;;
+  stop)          stop_rec ;;
+  status)        status_rec ;;
+  status-json)   status_rec --json ;;
+  waybar)        status_rec --json ;;
+  is-active)     if is_running; then exit 0; else exit 1; fi ;;
+  toggle)        is_running && stop_rec || start_rec ;;
+  settings)      show_settings_menu ;;
+  *)             echo "Usage: $0 {start|stop|toggle|status|status-json|waybar|is-active|settings}"; exit 2 ;;
 esac

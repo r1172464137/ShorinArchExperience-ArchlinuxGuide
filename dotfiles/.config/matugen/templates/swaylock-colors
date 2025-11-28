@@ -1,0 +1,11 @@
+screenshots
+clock
+indicator
+indicator-radius=200
+indicator-thickness=15
+effect-blur=10x5
+ring-color={{colors.tertiary.default.hex}}
+key-hl-color={{colors.primary.default.hex}}
+line-color={{colors.outline.default.hex}}
+inside-color={{colors.secondary_container.default.hex}}
+separator-color={{colors.primary_container.default.hex}}

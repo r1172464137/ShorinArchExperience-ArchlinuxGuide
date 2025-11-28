@@ -1,136 +1,264 @@
 #!/usr/bin/env bash
 
-# 作用：更改gtk文件夹颜色
-# 逻辑：png图片由magick更改为灰色然后适应matugen颜色。svg图标已事先获取svg内的目标色，根据光影逻辑用sed适配matugen色。修改后的图标文件保存到~/.local/share/icons目录下，取名为Adwaita-Matugen，fallback是Adwaita。保存为A和B两份，在AB之间切换做到瞬间切换的效果。
 # ==============================================================================
-# 1. 颜色配置 (由 Matugen 填充)
-# ==============================================================================
-
-# [组 A] 文件夹与 Mimetype 使用的主色系 
-COLOR_FOLDER_MAIN="{{colors.secondary_fixed_dim.default.hex}}"
-COLOR_FOLDER_HIGHLIGHT="{{colors.secondary.default.hex}}"
-COLOR_FOLDER_SHADOW="{{colors.secondary_container.default.hex}}"
-
-# [组 B] 功能图标 (网络/垃圾桶) 使用的强调色系 
-COLOR_ACCENT_MAIN="{{colors.tertiary.default.hex}}"
-COLOR_ACCENT_LIGHT="{{colors.tertiary_fixed_dim.default.hex}}"
-COLOR_ACCENT_DARK="{{colors.tertiary_container.default.hex}}"
-COLOR_TRASH_PAPER="{{colors.tertiary_container.default.hex}}"
-
-# ==============================================================================
-# 2. 路径配置与 A/B 切换逻辑
+# Adwaita-Matugen Icon Generator V6 (扁平化配置版)
+# 逻辑：每一组 SVG 文件的颜色变量直接在顶部定义，方便用户微调。
 # ==============================================================================
 
-TEMPLATE_DIR="$HOME/.config/matugen/templates/gtk-folder/Adwaita-Matugen"
+# ==============================================================================
+# [一] 颜色变量配置区 (用户修改此处)
+# ==============================================================================
+MAIN_COLOR="{{colors.secondary_fixed_dim.default.hex}}"
+MAIN_SHADOW="{{colors.secondary_container.default.hex}}"
+MAIN_DARKER_SHADOW="{{colors.on_secondary.default.hex}}"
+MAIN_HILIGHT="{{colors.secondary.default.hex}}"
+INVERSE_MAIN_COLOR="{{colors.tertiary_fixed_dim.default.hex}}"
+INVERSE_MAIN_HIGHLT="{{colors.tertiary.default.hex}}"
+INVERSE_MAIN_SHADOW="{{colors.tertiary_container.default.hex}}" 
+PAPER_COLOR="#fafafa" 
+PAPER_FOLE_COLOR="#deddda"
+# ------------------------------------------------------------------------------
+# [1] 文件夹 (folder*.svg / user-home.svg ...)
+# ------------------------------------------------------------------------------
+# 文件夹保持使用 Secondary (次色系)，为了不刺眼使用 dim 版本作为主体
+COLOR_FOLDER_BODY=$MAIN_COLOR      # 主体 (原 #a4caee)
+COLOR_FOLDER_TOP=$MAIN_HILIGHT                 # 顶部高光/符号 (原 #afd4ff)
+COLOR_FOLDER_SHADOW=$MAIN_SHADOW    # 阴影/渐变暗部 (原 #438de6)
 
-# 获取当前正在使用的主题名称，用于决定下一棒交给 A 还是 B
-CURRENT_THEME_NAME=$(gsettings get org.gnome.desktop.interface icon-theme | tr -d "'")
+# ------------------------------------------------------------------------------
+# [2] 网络与垃圾桶 (network*.svg / user-trash*.svg)
+# ------------------------------------------------------------------------------
+# 使用 Tertiary (第三色系) 作为强调色
+COLOR_ACCENT_BODY=$INVERSE_MAIN_COLOR                # 主体 (原 #1c71d8/垃圾桶身)
+COLOR_ACCENT_LIGHT=$INVERSE_MAIN_HIGHLT         # 亮部 (原 #62a0ea/垃圾桶盖亮面)
+COLOR_ACCENT_DARK=$INVERSE_MAIN_SHADOW       # 暗部 (原 #1a5fb4/垃圾桶内侧)
+COLOR_TRASH_PAPER="{{colors.on_tertiary_container.default.hex}}"    # 废纸团颜色
 
-if [[ "$CURRENT_THEME_NAME" == "Adwaita-Matugen-A" ]]; then
-    TARGET_THEME_NAME="Adwaita-Matugen-B"
-else
-    TARGET_THEME_NAME="Adwaita-Matugen-A"
-fi
+# ------------------------------------------------------------------------------
+# [3] 脚本与可执行文件 (text-x-script.svg / application-x-executable.svg)
+# ------------------------------------------------------------------------------
+# 重点修正：防止偏淡，主体使用 Primary Default (最鲜艳的主色)
+# 对应 Adwaita 原版光影逻辑：
+COLOR_SCRIPT_BODY=$MAIN_SHADOW                  # 主体 (原 #3584e4 - 基准蓝)
+COLOR_SCRIPT_HIGHLIGHT=$MAIN_HILIGHT       # 高光 (原 #99c1f1 - 亮蓝)
+COLOR_SCRIPT_MID="#f0f0f0"         # 侧面/次亮 (原 #62a0ea)
+COLOR_SCRIPT_SHADOW=$MAIN_SHADOW      # 阴影 (原 #1c71d8)
+COLOR_SCRIPT_GEAR=$MAIN_DARKER_SHADOW    # 齿轮/最深色 
+COLOR_SCRIPT_PALE="ffffff"           # 极亮部 (原 #d7e8fc)
 
-TARGET_DIR="$HOME/.local/share/icons/$TARGET_THEME_NAME"
+# ------------------------------------------------------------------------------
+# [4] 网页地球仪 (text-html.svg)
+# ------------------------------------------------------------------------------
+# [新增] 极高光/反光 (原 #b3d3f9, #d7e8fc) 
+# 建议：使用 secondary_fixed (通常比 dim 更亮) 或 surface_bright
+COLOR_HTML_PALE="#f0f0f0"
+COLOR_HTML_HIGHLIGHT=$MAIN_HILIGHT              # 中间向左上一级左上反光 (原 #99c1f1)
+COLOR_HTML_BODY=$MAIN_SHADOW                     # 球体中间 (原 #62a0ea)
+COLOR_HTML_MID=$MAIN_SHADOW # 球体中间向右下一级 (原 #3584e4)
+COLOR_HTML_SHADOW=$MAIN_DARKER_SHADOW     # 右下 (原 #1c71d8)
+COLOR_HTML_DEEP="{{colors.surface_container.default.hex}}"  # 最右下 (原 #1a5fb4)
+# [新增] 纸张背景 (原 #f6f5f4, #deddda) - 
+COLOR_DOC_PAPER=$PAPER_COLOR                     
+COLOR_DOC_FOLD=$PAPER_FOLE_COLOR                      
+
+# ------------------------------------------------------------------------------
+# [5] 插件图标 (application-x-addon.svg)
+# ------------------------------------------------------------------------------
+# 你的要求：必须和 Folder (Secondary) 颜色一致
+COLOR_ADDON_BODY=$MAIN_COLOR       # 主体 (原 #3584e4 -> 对应 Folder Body)
+COLOR_ADDON_HIGHLIGHT=$MAIN_HILIGHT            # 高光 (原 #98c1f1 -> 对应 Folder Top)
+COLOR_ADDON_SHADOW=$MAIN_SHADOW     # 阴影 (原 #1c71d8 -> 对应 Folder Shadow)
+COLOR_ADDON_DEEP=$MAIN_DARKER_SHADOW    # 轮廓 (原 #1a5fb4 -> 对应 Folder Deep)
+
+# ------------------------------------------------------------------------------
+# [6] 字体文件 (font-x-generic.svg)
+# ------------------------------------------------------------------------------
+COLOR_FONT_A=$MAIN_SHADOW                    # 字母 "A" (原 #3584e4)
+COLOR_FONT_BASE=$MAIN_DARKER_SHADOW          # 底座/阴影 (原 #1a5fb4)
+
+# ------------------------------------------------------------------------------
+# [7] Office 文档 (x-office-document.svg)
+# ------------------------------------------------------------------------------
+COLOR_DOC_PAPER=$PAPER_COLOR                                         # 纸张白
+COLOR_DOC_FOLD=$PAPER_FOLE_COLOR                                            # 折角灰
+# 绿色渐变 -> 映射为 Tertiary (强调色)
+COLOR_DOC_GRAD_ACCENT_START=$INVERSE_MAIN_COLOR       # 原 #50db81
+COLOR_DOC_GRAD_ACCENT_END=$INVERSE_MAIN_COLOR   # 原 #8ff0a4
+# 蓝色阴影 -> 映射为 Primary (主色)
+COLOR_DOC_GRAD_SHADE_START=$MAIN_COLOR         # 原 #4a86cf
+COLOR_DOC_GRAD_SHADE_END=$INVERSE_MAIN_COLOR # 原 #87bae1
+
+# ------------------------------------------------------------------------------
+# [8] Office 演示文稿 (x-office-presentation.svg)
+# ------------------------------------------------------------------------------
+# 你的要求：饼图蓝色变 Folder 色，绿色变 Accent 色
+COLOR_PRES_CHART_BLUE=$MAIN_COLOR  # 饼图-蓝 (Folder Body)
+COLOR_PRES_CHART_BLUE_DEEP=$MAIN_SHADOW # 饼图-深蓝 (Folder Shadow)
+COLOR_PRES_CHART_GREEN=$INVERSE_MAIN_COLOR            # 饼图-绿 (Accent Body)
+COLOR_PRES_CHART_GREEN_DEEP=$INVERSE_MAIN_SHADOW # 饼图-深绿 (Accent Dark)
+# 支架颜色 (保持中性灰或微调)
+COLOR_PRES_STAND_DARK="{{colors.outline.default.hex}}"
+COLOR_PRES_STAND_LIGHT="{{colors.outline.default.hex}}"
+
 
 # ==============================================================================
-# 3. 预编译 Sed 替换规则
-#    (将复杂的正则预定义为变量，减少主循环开销，提升可读性)
+# [二] 核心逻辑与 Sed 规则生成
 # ==============================================================================
 
-# 规则集：文件夹 (Folders)
-# 将 Adwaita 原版蓝色的各个层级映射到 Primary 色系
-SED_CMD_FOLDERS="
-s/#a4caee/$COLOR_FOLDER_MAIN/g;
+# 1. 文件夹规则
+CMD_FOLDER="
+s/#a4caee/$COLOR_FOLDER_BODY/g;
 s/#438de6/$COLOR_FOLDER_SHADOW/g;
 s/#62a0ea/$COLOR_FOLDER_SHADOW/g;
-s/#afd4ff/$COLOR_FOLDER_HIGHLIGHT/g;
-s/#c0d5ea/$COLOR_FOLDER_HIGHLIGHT/g"
+s/#afd4ff/$COLOR_FOLDER_TOP/g;
+s/#c0d5ea/$COLOR_FOLDER_TOP/g"
 
-# 规则集：网络 (Network)
-# 将 Adwaita 复杂的 14 色蓝灰光影映射到 Tertiary 色系
-SED_CMD_NETWORK="
+# 2. 网络规则
+CMD_NETWORK="
 s/#62a0ea/$COLOR_ACCENT_LIGHT/g;
-s/#1c71d8/$COLOR_ACCENT_MAIN/g;
-s/#c0bfbc/$COLOR_ACCENT_MAIN/g;
+s/#1c71d8/$COLOR_ACCENT_BODY/g;
+s/#c0bfbc/$COLOR_ACCENT_BODY/g;
 s/#1a5fb4/$COLOR_ACCENT_DARK/g;
 s/#14498a/$COLOR_ACCENT_DARK/g;
 s/#9a9996/$COLOR_ACCENT_DARK/g;
 s/#77767b/$COLOR_FOLDER_SHADOW/g;
 s/#241f31/$COLOR_FOLDER_SHADOW/g;
-s/#3d3846/$COLOR_FOLDER_SHADOW/g;
-s/#434348/$COLOR_FOLDER_SHADOW/g;
-s/#4e475a/$COLOR_FOLDER_SHADOW/g;
-s/#716881/$COLOR_FOLDER_SHADOW/g;
-s/#79718e/$COLOR_FOLDER_SHADOW/g;
-s/#847a96/$COLOR_FOLDER_SHADOW/g"
+s/#3d3846/$COLOR_FOLDER_SHADOW/g"
 
-# 规则集：垃圾桶 (Trash)
-# 将绿色系映射到 Tertiary 色系，并处理废纸颜色
-SED_CMD_TRASH="
-s/#2ec27e/$COLOR_ACCENT_MAIN/g;
-s/#33d17a/$COLOR_ACCENT_MAIN/g;
+
+# 3. 垃圾桶规则
+CMD_TRASH="
+s/#2ec27e/$COLOR_ACCENT_BODY/g;
+s/#33d17a/$COLOR_ACCENT_BODY/g;
 s/#26a269/$COLOR_ACCENT_DARK/g;
 s/#26a168/$COLOR_ACCENT_DARK/g;
 s/#9a9996/$COLOR_ACCENT_DARK/g;
 s/#c3c2bc/$COLOR_ACCENT_DARK/g;
 s/#42d390/$COLOR_ACCENT_LIGHT/g;
-s/#ffffff/$COLOR_TRASH_PAPER/g;
+s/#ffffff/$COLOR_FOLDER_SHADOW/g;
 s/#deddda/$COLOR_TRASH_PAPER/g;
 s/#f6f5f4/$COLOR_TRASH_PAPER/g;
-s/#e8e7e8/$COLOR_TRASH_PAPER/g;
-s/#eeedec/$COLOR_TRASH_PAPER/g;
-s/#efeeed/$COLOR_TRASH_PAPER/g;
 s/#77767b/$COLOR_FOLDER_SHADOW/g"
 
+# 4. 脚本/可执行文件规则 (核心光影修正)
+CMD_SCRIPT="
+s/#3584e4/$COLOR_SCRIPT_BODY/g;
+s/#99c1f1/$COLOR_SCRIPT_HIGHLIGHT/g;
+s/#98c1f1/$COLOR_SCRIPT_HIGHLIGHT/g;
+s/#62a0ea/$COLOR_SCRIPT_MID/g;
+s/#1c71d8/$COLOR_SCRIPT_SHADOW/g;
+s/#1a5fb4/$COLOR_SCRIPT_GEAR/g;
+s/#d7e8fc/$COLOR_SCRIPT_PALE/g;
+s/#b3d3f9/$COLOR_SCRIPT_PALE/g"
+
+# 5. 网页地球仪规则 (已补全所有 Hex)
+CMD_HTML="
+s/#f6f5f4/$COLOR_DOC_PAPER/g;
+s/#deddda/$COLOR_DOC_FOLD/g;
+s/#b3d3f9/$COLOR_HTML_PALE/g;
+s/#d7e8fc/$COLOR_HTML_PALE/g;
+s/#62a0ea/$COLOR_HTML_BODY/g;
+s/#3584e4/$COLOR_HTML_MID/g;
+s/#99c1f1/$COLOR_HTML_HIGHLIGHT/g;
+s/#1c71d8/$COLOR_HTML_SHADOW/g;
+s/#1a5fb4/$COLOR_HTML_DEEP/g"
+
+# 6. Addon (拼图) 规则
+CMD_ADDON="
+s/#3584e4/$COLOR_ADDON_BODY/g;
+s/#62a0ea/$COLOR_ADDON_HIGHLIGHT/g;
+s/#98c1f1/$COLOR_ADDON_HIGHLIGHT/g;
+s/#1c71d8/$COLOR_ADDON_SHADOW/g;
+s/#1a5fb4/$COLOR_ADDON_DEEP/g"
+
+# 7. Font (字体) 规则
+CMD_FONT="
+s/#3584e4/$COLOR_FONT_A/g;
+s/#1a5fb4/$COLOR_FONT_BASE/g"
+
+# 8. Document (文档) 规则
+CMD_DOC="
+s/#f6f5f4/$COLOR_DOC_PAPER/g;
+s/#deddda/$COLOR_DOC_FOLD/g;
+s/#50db81/$COLOR_DOC_GRAD_ACCENT_START/g;
+s/#8ff0a4/$COLOR_DOC_GRAD_ACCENT_END/g;
+s/#4a86cf/$COLOR_DOC_GRAD_SHADE_START/g;
+s/#87bae1/$COLOR_DOC_GRAD_SHADE_END/g;
+s/#d7e8fc/$COLOR_SCRIPT_PALE/g; 
+s/#b3d3f9/$COLOR_SCRIPT_PALE/g"
+
+# 9. Presentation (PPT) 规则
+CMD_PRES="
+s/#4a86cf/$COLOR_PRES_CHART_BLUE/g;
+s/#1a5fb4/$COLOR_PRES_CHART_BLUE_DEEP/g;
+s/#50db81/$COLOR_PRES_CHART_GREEN/g;
+s/#26a269/$COLOR_PRES_CHART_GREEN_DEEP/g;
+s/#f6f5f4/$COLOR_DOC_PAPER/g;
+s/#ffffff/$COLOR_DOC_PAPER/g;
+s/#414140/$COLOR_PRES_STAND_DARK/g;
+s/#949390/$COLOR_PRES_STAND_LIGHT/g;
+s/#d7e8fc/$COLOR_SCRIPT_PALE/g"
+
 # ==============================================================================
-# 4. 执行核心流程 (极致性能优化)
+# [三] 执行核心流程
 # ==============================================================================
 
-# [步骤 1] 极速 IO 重置
-# 使用 mkdir -p 避免检查逻辑
-# 使用 --reflink=auto 利用文件系统的写时复制特性 (CoW)，实现瞬间零拷贝
+TEMPLATE_DIR="$HOME/.config/matugen/templates/gtk-folder/Adwaita-Matugen"
+CURRENT_THEME=$(gsettings get org.gnome.desktop.interface icon-theme | tr -d "'")
+
+if [[ "$CURRENT_THEME" == "Adwaita-Matugen-A" ]]; then
+    TARGET_THEME="Adwaita-Matugen-B"
+else
+    TARGET_THEME="Adwaita-Matugen-A"
+fi
+TARGET_DIR="$HOME/.local/share/icons/$TARGET_THEME"
+
+# 1. 准备目录
 mkdir -p "$TARGET_DIR"
 cp -rf --reflink=auto --no-preserve=mode,ownership "$TEMPLATE_DIR/"* "$TARGET_DIR/"
-sed -i "s/Name=.*/Name=$TARGET_THEME_NAME/" "$TARGET_DIR/index.theme"
+sed -i "s/Name=.*/Name=$TARGET_THEME/" "$TARGET_DIR/index.theme"
 
-# [步骤 2] PNG 批量处理 (CPU 密集型)
-# 使用 xargs -P0 自动检测 CPU 核心数，满载多进程并发处理
-# 避免使用 while read 循环，减少 shell 解释器开销
+# 2. 处理 PNG (统一使用文件夹颜色)
 find "$TARGET_DIR" -name "*.png" -print0 | xargs -0 -P0 -I {} magick "{}" \
-    -channel RGB \
-    -colorspace gray \
-    -sigmoidal-contrast 10,50% \
-    +level-colors "$COLOR_FOLDER_SHADOW","$COLOR_FOLDER_MAIN" \
-    +channel \
-    "{}"
+    -channel RGB -colorspace gray -sigmoidal-contrast 10,50% \
+    +level-colors "$COLOR_FOLDER_SHADOW","$COLOR_FOLDER_BODY" \
+    +channel "{}"
 
-# [步骤 3] SVG 批量处理 (IO/CPU 混合型)
-# 使用 xargs 批量传递文件名给 sed，大幅减少 sed 进程启动次数 (O(N) -> O(1))
-# 文件夹策略: 包含常规文件夹、用户目录、以及 Mimetype 目录
+# 3. 处理 SVG (分模块并行处理)
+
+# [Group 1] Folders
 find "$TARGET_DIR/scalable" \
-    \( -name "folder*.svg" \
-    -o -name "user-home*.svg" \
-    -o -name "user-desktop*.svg" \
-    -o -name "user-bookmarks*.svg" \
-    -o -name "inode-directory*.svg" \) \
-    -print0 | xargs -0 -P0 sed -i "$SED_CMD_FOLDERS"
+    \( -name "folder*.svg" -o -name "user-home*.svg" -o -name "user-desktop*.svg" -o -name "user-bookmarks*.svg" -o -name "inode-directory*.svg" \) \
+    -print0 | xargs -0 -P0 sed -i "$CMD_FOLDER"
 
-# 网络图标策略
-find "$TARGET_DIR/scalable" -name "network*.svg" \
-    -print0 | xargs -0 -P0 sed -i --follow-symlinks "$SED_CMD_NETWORK"
+# [Group 2] Network
+find "$TARGET_DIR/scalable" -name "network*.svg" -print0 | xargs -0 -P0 sed -i --follow-symlinks "$CMD_NETWORK"
 
-# 垃圾桶策略
-find "$TARGET_DIR/scalable" -name "user-trash*.svg" \
-    -print0 | xargs -0 -P0 sed -i --follow-symlinks "$SED_CMD_TRASH"
+# [Group 3] Trash
+find "$TARGET_DIR/scalable" -name "user-trash*.svg" -print0 | xargs -0 -P0 sed -i --follow-symlinks "$CMD_TRASH"
 
-# [步骤 4] 原子化切换
-# 直接修改 GSettings，GTK 会自动检测到主题变更并瞬间重绘
-gsettings set org.gnome.desktop.interface icon-theme "$TARGET_THEME_NAME"
+# [Group 4] Mimetypes - Script & Executable
+find "$TARGET_DIR/scalable/mimetypes" \
+    \( -name "text-x-script*.svg" -o -name "application-x-executable*.svg" \) \
+    -print0 | xargs -0 -P0 sed -i "$CMD_SCRIPT"
 
-# 2. [新增] 同步 Flatpak 图标设置 (动态更新 override)
-# 这会告诉所有 Flatpak 程序：现在的图标主题是这个 A 或 B
-flatpak override --user --env=ICON_THEME="$TARGET_THEME_NAME"
+# [Group 5] Mimetypes - Addon
+find "$TARGET_DIR/scalable/mimetypes" -name "application-x-addon*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_ADDON"
+
+# [Group 6] Mimetypes - HTML
+find "$TARGET_DIR/scalable/mimetypes" -name "text-html*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_HTML"
+
+# [Group 7] Mimetypes - Font
+find "$TARGET_DIR/scalable/mimetypes" -name "font-x-generic*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_FONT"
+
+# [Group 8] Mimetypes - Document
+find "$TARGET_DIR/scalable/mimetypes" -name "x-office-document*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_DOC"
+
+# [Group 9] Mimetypes - Presentation
+find "$TARGET_DIR/scalable/mimetypes" -name "x-office-presentation*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_PRES"
+
+# 4. 应用变更
+gsettings set org.gnome.desktop.interface icon-theme "$TARGET_THEME"
+flatpak override --user --env=ICON_THEME="$TARGET_THEME" 2>/dev/null || true
 
 exit 0

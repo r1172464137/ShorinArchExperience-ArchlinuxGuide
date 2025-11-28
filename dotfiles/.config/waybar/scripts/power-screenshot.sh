@@ -7,7 +7,7 @@ set -euo pipefail
 
 NIRI_CONFIG="$HOME/.config/niri/config.kdl"   # niri 配置文件
 
-SHOTEDITOR_DEFAULT="swappy"                   # 默认截图编辑器：swappy 或 satty
+SHOTEDITOR_DEFAULT="satty"                   # 默认截图编辑器：swappy 或 satty
 COPY_CMD="wl-copy"                            # 复制到剪贴板的命令
 
 # 菜单程序，按你实际使用的启动器改
@@ -85,13 +85,19 @@ else
 fi
 
 ########################
-# 持久化配置路径
+# 持久化配置路径 (已修改为 .cache 目录)
 ########################
 
-CONFIG_DIR="$HOME/.config/waybar/waybar-shot"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+# 旧路径: CONFIG_DIR="$HOME/.config/waybar/waybar-shot"
+CONFIG_DIR="$XDG_CACHE_HOME/waybar-power-screenshot-sh"
+
 BACKEND_FILE="$CONFIG_DIR/backend"
 EDITOR_FILE="$CONFIG_DIR/editor"
 EDIT_MODE_FILE="$CONFIG_DIR/edit_mode"   # yes / no
+
+# 确保新的缓存目录存在
+mkdir -p "$CONFIG_DIR"
 
 ########################
 # 通用工具函数
@@ -126,7 +132,7 @@ load_backend_mode() {
 
 save_backend_mode() {
     local mode="$1"
-    mkdir -p "$CONFIG_DIR"
+    # 由于脚本开始时已创建，这里只需要保证文件写入成功
     printf '%s\n' "$mode" >"$BACKEND_FILE"
 }
 
@@ -150,7 +156,7 @@ load_editor() {
 
 save_editor() {
     local ed="$1"
-    mkdir -p "$CONFIG_DIR"
+    # 由于脚本开始时已创建，这里只需要保证文件写入成功
     printf '%s\n' "$ed" >"$EDITOR_FILE"
 }
 
@@ -168,7 +174,7 @@ load_edit_mode() {
 
 save_edit_mode() {
     local v="$1"
-    mkdir -p "$CONFIG_DIR"
+    # 由于脚本开始时已创建，这里只需要保证文件写入成功
     printf '%s\n' "$v" >"$EDIT_MODE_FILE"
 }
 
