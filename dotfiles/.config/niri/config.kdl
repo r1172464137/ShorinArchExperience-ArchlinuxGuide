@@ -327,7 +327,7 @@ spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "awww-daemon"
 spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
-spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome &"
+spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & systemctl --user start xdg-desktop-portal-gnome &"
 spawn-at-startup "mako"
 spawn-at-startup "waybar"
 spawn-at-startup "fcitx5" 
@@ -432,6 +432,7 @@ window-rule {
     match title="日历"
     match title="图片和视频"
     match title="视频播放器"
+    match app-id="btrfs-assistant"
     open-floating true
 }
 
