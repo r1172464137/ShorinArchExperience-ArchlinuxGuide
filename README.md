@@ -52,18 +52,16 @@
 
 - 长截图脚本
 
-    <video controls src="videos/长截图脚本.mp4" title="Title"></video>
+    <video src="videos/长截图脚本.mp4" controls="controls" width="100%" style="max-width: 700px;">
+</video>
     
-
 - Niri自动设置blur版overview壁纸
 
     <video controls src="videos/Niri自动更换bluroverview背景.mp4" title="Title"></video>
 
-
 - Niri自动切换blur壁纸
 
     <video controls src="videos/Niri自动blur背景.mp4" title="Title"></video>
-
 
 - matugen基于壁纸生成主题颜色
 
@@ -72,7 +70,6 @@
     ![](pictures/WM-images2.png)
 
     ![](pictures/WM-iamges4.png)
-
 
 - fastfetch老婆生成器
 
