@@ -64,17 +64,19 @@
 
 
 - Niri自动切换blur壁纸
-
-    
+  
+    [Niri自动blur背景.webm](https://github.com/user-attachments/assets/f875c7ce-e5c5-4866-a804-2f2e28214f4e)
 
 - matugen基于壁纸生成主题颜色
 
-    <video controls src="videos/matugen基于壁纸生成主题.mp4" title="Title"></video>
+    https://github.com/user-attachments/assets/85e75a2d-54ac-4aa9-8dad-c4f9145e2b02
 
     ![](pictures/WM-images2.png)
 
     ![](pictures/WM-iamges4.png)
 
 - fastfetch老婆生成器
+  
+    https://github.com/user-attachments/assets/6f2af77c-a4f2-46ea-b85f-e3329a80e5fc
 
-    <video controls src="videos/fastfetch老婆生成器.mp4" title="Title"></video>
+    
