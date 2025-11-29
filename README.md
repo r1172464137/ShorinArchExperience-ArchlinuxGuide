@@ -1,4 +1,7 @@
-![alt text](pictures/shorinarchlogo.png)
+<div align="center">
+  <img src="pictures/shorinarchlogo.png" alt="SHORiNのARCH Logo" width="500" />
+</div>
+
 ---
 
 本文是我使用Archlinux的经历，所有操作我都实践验证过，所以可以当作教程来看，以我个人用着舒服为标准。
