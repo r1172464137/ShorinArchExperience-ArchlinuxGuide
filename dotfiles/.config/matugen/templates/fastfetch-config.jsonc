@@ -6,7 +6,7 @@
     "width": 25,
     // "height":20,
     "padding": {
-      "top": 2, // Top padding
+      "top": 1, // Top padding
       "left": 2, // Left padding
       "right": 2 // Right padding
     },
