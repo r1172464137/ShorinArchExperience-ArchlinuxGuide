@@ -326,6 +326,7 @@ layout {
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "awww-daemon"
+spawn-at-startup "waypaper" "--random"
 spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & systemctl --user start xdg-desktop-portal-gnome &"
 spawn-at-startup "mako"

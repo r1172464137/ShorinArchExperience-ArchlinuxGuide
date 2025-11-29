@@ -17,7 +17,7 @@ WALL_DIR="$HOME/Pictures/Wallpapers/"   # ← 这里改成你的壁纸文件夹
 
 # --- 浮动窗口例外设置 ---
 FLOAT_BYPASS_ENABLED="true"   # 开启: 仅有少量浮动窗口时不模糊
-FLOAT_BYPASS_THRESHOLD="3"    # 阈值: 浮动窗口数量 <= 此值且无平铺窗口时，保持原图
+FLOAT_BYPASS_THRESHOLD="1"    # 阈值: 浮动窗口数量 <= 此值且无平铺窗口时，保持原图
 
 # --- 视觉参数 ---
 BLUR_ARG="0x15"

@@ -114,3 +114,7 @@ post_hook = 'systemctl restart --user swayosd &'
 [templates.swaylock-effects]
 input_path = '~/.config/matugen/templates/swaylock-colors'
 output_path = '~/.config/swaylock/config'
+
+[templates.fastfetch]
+input_path = '~/.config/matugen/templates/fastfetch-config.jsonc'
+output_path = '~/.config/fastfetch/config.jsonc'
