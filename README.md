@@ -52,8 +52,7 @@
 
 - 长截图脚本
 
-    <video src="videos/长截图脚本.mp4" controls="controls" width="100%" style="max-width: 700px;">
-</video>
+    <video controls src="videos/长截图脚本.mp4" title="Title"></video>
     
 - Niri自动设置blur版overview壁纸
 
