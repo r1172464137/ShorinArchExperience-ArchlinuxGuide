@@ -52,8 +52,8 @@
 
 - 长截图脚本
 
-    <video src="videos/长截图脚本.mp4" controls="controls" width="100%" style="max-width: 700px;">
-</video>
+    [长截图脚本.webm](https://github.com/user-attachments/assets/c387354d-9926-4580-b69d-1f5694818a2e)
+
     
 - Niri自动设置blur版overview壁纸
 
