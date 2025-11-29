@@ -57,11 +57,15 @@
     
 - Niri自动设置blur版overview壁纸
 
-    <video controls src="videos/Niri自动更换bluroverview背景.mp4" title="Title"></video>
+    
+
+https://github.com/user-attachments/assets/78688d4c-eacf-4899-b833-283a745dd35a
+
+
 
 - Niri自动切换blur壁纸
 
-    <video controls src="videos/Niri自动blur背景.mp4" title="Title"></video>
+    
 
 - matugen基于壁纸生成主题颜色
 
