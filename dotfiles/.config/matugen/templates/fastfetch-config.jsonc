@@ -15,8 +15,8 @@
     "separator": " ", // Separator between keys and values
     "color": {
       //"keys": "{{colors.secondary.default.hex}}", // Key color module名字的颜色
-      "title": "{{colors.secondary_fixed_dim.default.hex}}", // Title color 主机名的颜色
-      "output": "{{colors.secondary_fixed_dim.default.hex}}"
+      "title": "{{colors.on_surface_variant.default.hex}}", // Title color 主机名的颜色
+      "output": "{{colors.on_surface_variant.default.hex}}"
     },
   },
   "modules": [
@@ -26,25 +26,25 @@
       "key": "OS", //module名字的显示
       // "keyColor": "#00ff00",      //module名字颜色
       // "format": "{name} {version}",    //具体内容
-      "keyColor": "{{colors.error.default.hex}}",
+      "keyColor": "{{colors.primary.default.hex}}",
    
     },
     {
       "type": "kernel",
       "key": " ├   KER ",
-      "keyColor": "{{colors.error.default.hex}}",
+      "keyColor": "{{colors.primary.default.hex}}",
 
     },
     {
       "type": "packages",
       "key": " ├   PAK ",
       "format": "{all}",
-      "keyColor": "{{colors.error.default.hex}}",
+      "keyColor": "{{colors.primary.default.hex}}",
     },
     {
       "type": "title",
       "key": " └   USR ",
-      "keyColor": "{{colors.error.default.hex}}",
+      "keyColor": "{{colors.primary.default.hex}}",
     },
     "break",
     "break",
@@ -82,39 +82,39 @@
     {
       "type": "host",
       "key": "PC ",
-      "keyColor": "{{colors.primary.default.hex}}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
       //"outputColor": "{{colors.secondary_fixed_dim.default.hex}}"
     },
     {
       "type": "cpu",
       "key": " ├   CPU ",
-      "keyColor": "{{colors.primary.default.hex}}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
       //"outputColor": "{{colors.secondary_fixed_dim.default.hex}}"
     },
     {
       "type": "memory",
       "key": " ├   MEM ",
-      "keyColor": "{{colors.primary.default.hex}}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
       //"outputColor": "{{colors.secondary_fixed_dim.default.hex}}"
     },
     {
       "type": "gpu",
       "key": " ├ 󰢮  GPU ",
       "format": "{1} {2}",
-      "keyColor": "{{colors.primary.default.hex}}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
       //"outputColor": "{{colors.secondary_fixed_dim.default.hex}}"
     },
     {
       "type": "display",
       "key": " ├   MON ",
       "format": "{name} {width}x{height}@{refresh-rate} ",
-      "keyColor": "{{colors.primary.default.hex}}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
       //"outputColor": "{{colors.secondary_fixed_dim.default.hex}}"
     },
     {
       "type": "disk",
       "key": " └ 󰋊  DIS ",
-      "keyColor": "{{colors.primary.default.hex}}",
+      "keyColor": "{{colors.secondary_fixed.default.hex}}",
       //"outputColor": "{{colors.secondary_fixed_dim.default.hex}}"
     },
     "break",

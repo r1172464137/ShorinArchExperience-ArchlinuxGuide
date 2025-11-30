@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# 脚本功能：
+# 从随机老婆图片生成api下载图片，存在.cache/fastfetch_waifu目录，上限50张。
+# 运行时如果库存不足20张会下载10张，festfetch随机使用其中一张，然后把那张图删掉
+
+
 # --- 1. 配置区域 ---
 CACHE_DIR="$HOME/.cache/fastfetch_waifu"
 LOCK_FILE="/tmp/fastfetch_waifu.lock"
