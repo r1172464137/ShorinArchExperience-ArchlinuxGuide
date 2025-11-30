@@ -326,7 +326,7 @@ window#waybar.empty #window {
 #custom-separator.1 {
     background-color: @surface_container_high;
     color: @tertiary;
-    padding: 0px 0.28em; /* 5px */
+    padding: 0px 0.33em; /* 5px */
 }
 
 #backlight {
