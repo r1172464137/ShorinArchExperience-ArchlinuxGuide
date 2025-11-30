@@ -14,10 +14,10 @@ require('base16-colorscheme').setup({
   base09 = '{{colors.tertiary.default.hex}}',
   base0A = '{{colors.secondary.default.hex}}',
   base0B = '{{colors.primary.default.hex}}',
-  base0C = '{{colors.tertiary_container.default.hex}}',
+  base0C = '{{colors.tertiary_fixed_dim.default.hex}}',
   base0D = '{{colors.primary_container.default.hex}}',
-  base0E = '{{colors.secondary_container.default.hex}}',
-  base0F = '{{colors.error_container.default.hex}}',
+  base0E = '{{colors.secondary_fixed_dim.default.hex}}',
+  base0F = '{{colors.error.default.hex}}',
 })
 
 
