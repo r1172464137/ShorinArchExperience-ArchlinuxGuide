@@ -175,7 +175,7 @@
   },
   //logo+程序启动器
   "custom/applauncher": {
-    "tooltip-format": "Click to Open Applauncher or Right-Click to Select Wallpaper",
+    "tooltip-format": "Click to Open Applauncher or Right-Click to Select Wallpaper or Middle-Click to toggle blur bg",
     "format": "󰣇",
     "on-click": "fuzzel",
     "on-click-right": "waypaper",
