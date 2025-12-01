@@ -65,6 +65,7 @@ window-rule {
     match title="日历"
     match title="重命名"
     match app-id="btrfs-assistant"
+    match app-id="markpix"
     open-floating true
 }
 window-rule {
