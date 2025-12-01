@@ -27,4 +27,8 @@ end
 
 thefuck --alias | source
 
-abbr f 'fastfetch'
+function f 
+
+    command bash $HOME/.config/scripts/fastfetch-random-wife.sh
+
+   end
