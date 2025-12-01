@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # 脚本功能：
-# 从随机老婆图片生成api下载图片，存在.cache/fastfetch_waifu目录，上限50张。
-# 运行时如果库存不足20张会下载10张，festfetch随机使用其中一张，然后把那张图删掉
+# 从随机老婆图片生成api下载图片，存在.cache/fastfetch_waifu目录。
+# 运行时如果库存不足，会在后台补货；如果库存超限，会清理旧图。
 
-
-# --- 1. 配置区域 ---
+# --- 1. 配置区域 (在此修改数值) ---
 CACHE_DIR="$HOME/.cache/fastfetch_waifu"
 LOCK_FILE="/tmp/fastfetch_waifu.lock"
+
+# [修改点 1 & 3] 设置为环境变量，方便调节
+DOWNLOAD_BATCH_SIZE=10   # 每次补货下载多少张
+MAX_CACHE_LIMIT=100      # 最大库存上限
+MIN_TRIGGER_LIMIT=60     # 库存少于多少张时开始补货
+
 mkdir -p "$CACHE_DIR"
 
 # --- 2. 核心函数 ---
@@ -57,22 +62,25 @@ background_job() {
         # 1. 补货检查
         CURRENT_COUNT=$(find "$CACHE_DIR" -maxdepth 1 -name "*.jpg" 2>/dev/null | wc -l)
 
-        # [修改点] 只有库存 < 20 时，才开始补货
-        if [ "$CURRENT_COUNT" -lt 20 ]; then
-            # [修改点] 每次下载 10 张
-            for i in {1..10}; do
+        # 只有库存 < 触发线(20) 时，才开始补货
+        if [ "$CURRENT_COUNT" -lt "$MIN_TRIGGER_LIMIT" ]; then
+            # [修改点 2] 使用变量控制循环次数
+            for ((i=1; i<=DOWNLOAD_BATCH_SIZE; i++)); do
                 download_one_image
                 sleep 0.5
             done
         fi
 
-        # 2. 清理逻辑 (>50张)
+        # 2. 清理逻辑
         FINAL_COUNT=$(find "$CACHE_DIR" -maxdepth 1 -name "*.jpg" 2>/dev/null | wc -l)
         
-        # [修改点] 超过 50 张时清理
-        if [ "$FINAL_COUNT" -gt 50 ]; then
-             # 删除第 51 张以后的旧图
-             ls -tp "$CACHE_DIR"/*.jpg 2>/dev/null | tail -n +51 | xargs -I {} rm -- "{}"
+        # [修改点 2] 超过上限(100) 时清理
+        if [ "$FINAL_COUNT" -gt "$MAX_CACHE_LIMIT" ]; then
+             # 计算需要从第几行开始删除 (上限+1)
+             DELETE_START_LINE=$((MAX_CACHE_LIMIT + 1))
+             
+             # 删除旧图 (保留最新的 MAX_CACHE_LIMIT 张)
+             ls -tp "$CACHE_DIR"/*.jpg 2>/dev/null | tail -n +$DELETE_START_LINE | xargs -I {} rm -- "{}"
         fi
         
         # --- 结束 ---
