@@ -12,9 +12,8 @@
 
 ## 懒人必备：一键配置桌面环境
 
-我的一键配置脚本做好啦，功能是为刚刚安装好的archlinux系统一键安装桌面环境，具体看git仓库：https://github.com/SHORiN-KiWATA/shorin-arch-setup
+我的一键配置脚本做好啦，功能是用我的配置文件为刚刚安装好的archlinux系统一键安装桌面环境，具体看git仓库：https://github.com/SHORiN-KiWATA/shorin-arch-setup
 
-目前只做了我的niri的自动配置，后续可能会加入kde plasma、gnome、mangowc作为可选项。
 
 ## 视频
 
