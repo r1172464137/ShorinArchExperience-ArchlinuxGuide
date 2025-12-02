@@ -7,6 +7,7 @@ screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d %H-%M-%S.png"
 
 environment {
     LC_MESSAGES "zh_CN.UTF-8"
+    LC_TIME "zh_CN.UTF-8"
     XMODIFIERS "@im=fcitx"
     QT_QPA_PLATFORMTHEME "qt6ct"
     GSK_RENDERER "ql"
