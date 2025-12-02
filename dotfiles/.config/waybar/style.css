@@ -131,9 +131,8 @@ window#waybar.empty #window {
 }
 
 #network {
-    padding: 0px 0.42em; /* 7px */
+    padding: 0px 0.34em; /* 7px */
     font-size: 1.2em; /* 22px */
-
 }
 
 #custom-settings {
@@ -142,13 +141,13 @@ window#waybar.empty #window {
 }
 
 #custom-screenshot {
-    padding: 0 0.39em; /* 7px */
+    padding: 0 0.4em; /* 7px */
     font-size: 1.28em; /* 22px */
 }
 
 /* wf-recoder脚本 */
 #custom-wfrec {
-  padding: 0 0.35em; /* 7px */
+  padding: 0 0.3em; /* 7px */
   font-size: 1.1em;
 }
 
@@ -194,7 +193,7 @@ window#waybar.empty #window {
 #power-profiles-daemon.performance {
     color: @on_error;
     font-size: 1.28em; /* 23px */
-    padding: 0px 0.42em 0px 0.35em; /* 9px 8px */
+    padding: 0px 0.32em 0px 0.45em; /* 9px 8px */
 }
 
 #power-profiles-daemon.balanced {
@@ -245,7 +244,7 @@ window#waybar.empty #window {
 /*中间右边第二级*/
 
 #clock {
-    padding: 0px 0.44em; /* 8px */
+    padding: 0px 0.45em 0em 0.45em; /* 8px */
 }
 
 #clock {
@@ -275,7 +274,7 @@ window#waybar.empty #window {
 #custom-right_div.3 {
 
     color: @surface_container_high;
-    padding: 0px;
+    padding: 0px 0.2em 0px 0px ;
     font-size: 1.39em; /* 25px */
 }
 #custom-right_div.4 {
