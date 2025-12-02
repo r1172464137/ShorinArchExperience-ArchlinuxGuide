@@ -10,9 +10,9 @@
 
 ## [Wiki-文档本体在这里](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki)
 
-## 懒人必备：一键配置桌面环境
+## [懒人必备：一键配置桌面环境]()
 
-我的一键配置脚本做好啦，功能是用我的配置文件为刚刚安装好的archlinux系统一键安装桌面环境，具体看git仓库：https://github.com/SHORiN-KiWATA/shorin-arch-setup
+我的一键配置脚本做好啦，功能是用我的配置文件为刚刚安装好的archlinux系统一键安装桌面环境。我的桌面是什么样，你用完这个脚本就是什么样。
 
 
 ## 视频
