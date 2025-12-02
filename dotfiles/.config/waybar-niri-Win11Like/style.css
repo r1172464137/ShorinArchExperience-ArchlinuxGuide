@@ -321,7 +321,9 @@ window#waybar.empty #window {
     background-color: @surface_container_high;
     color: @secondary;
 }
-
+#battery{
+    font-size:1.1em;
+}
 #idle_inhibitor {
     padding: 0px 5px 0px 10px;
     margin: 5px 0px 5px 5px;
