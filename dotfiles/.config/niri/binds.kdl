@@ -16,8 +16,8 @@ binds {
     Mod+Alt+W hotkey-overlay-title="切换壁纸" {spawn "waypaper";}
     Mod+F10 hotkey-overlay-title="随机切换壁纸" {spawn "waypaper" "--random";}
     Mod+F1 hotkey-overlay-title="开关输入法" {spawn-sh "pkill fcitx5 || fcitx5 ";}
-    Mod+F2 hotkey-overlay-title="顶部waybar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar/config.jsonc -s /home/shorin/.config/waybar/style.css ";}
-    Mod+F3  hotkey-overlay-title="底部waybar" {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c /home/shorin/.config/waybar-niri-Win11Like/config.jsonc -s /home/shorin/.config/waybar-niri-Win11Like/style.css ";}
+    Mod+F2 hotkey-overlay-title="顶部waybar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
+    Mod+F3  hotkey-overlay-title="底部waybar" {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar-niri-Win11Like/config.jsonc -s $HOME/.config/waybar-niri-Win11Like/style.css ";}
     Mod+M {spawn "gnome-text-editor";}
 
 
