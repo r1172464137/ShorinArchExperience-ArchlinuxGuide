@@ -51,9 +51,9 @@ INPUT_FILE="$1"
 # 自动获取当前壁纸（若未指定）
 # 逻辑：从 *主* swww 实例获取当前清晰壁纸，以便生成模糊版本
 if [ -z "$INPUT_FILE" ]; then
-    if command -v swww &> /dev/null; then
+    if command -v "$WALLPAPER_BACKEND" &> /dev/null; then
         # 注意：这里不加 -n overview，因为我们需要读取的是"主桌面"的原始壁纸
-        INPUT_FILE=$(swww query 2>/dev/null | head -n1 | grep -oP 'image: \K.*')
+        INPUT_FILE=$("$WALLPAPER_BACKEND" query 2>/dev/null | head -n1 | grep -oP 'image: \K.*')
     fi
 fi
 
