@@ -6,6 +6,7 @@ layer-rule{
     match namespace="hyprpaper"
     match namespace="wallpaper"
     match namespace="awww-daemon"
+    match namespace="swww-daemonoverview"
      place-within-backdrop true
 }
 window-rule {

@@ -269,6 +269,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "swww-daemon"
+spawn-sh-at-startup "swww-daemon -n overview"
 spawn-at-startup "awww-daemon"
 spawn-at-startup "waypaper" "--random"
 spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
