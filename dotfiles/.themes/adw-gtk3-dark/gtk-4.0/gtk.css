@@ -58,4 +58,4 @@
   ); --active-toggle-bg-color: rgb(255 255 255 / 20%); --active-toggle-fg-color: #ffffff; --overview-bg-color: #28282c; --overview-fg-color: #ffffff; }
 @import 'libadwaita.css';
 @import 'libadwaita-tweaks.css';
-@import url("/home/shorin/.config/gtk-4.0/colors.css");
+@import 'colors.css';
