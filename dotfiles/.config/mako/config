@@ -1,4 +1,4 @@
-include=/home/shorin/.config/mako/colors.conf
+include=~/.config/mako/colors.conf
 border-size=2
 border-radius=8
 icon-border-radius=8
