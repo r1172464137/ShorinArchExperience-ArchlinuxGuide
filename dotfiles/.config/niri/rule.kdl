@@ -33,7 +33,6 @@ window-rule {
 window-rule {
     match app-id="fcitx"
     match app-id="wechat"
-    match title="QQ"
     open-focused false
 }
 window-rule {
