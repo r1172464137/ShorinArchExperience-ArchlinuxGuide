@@ -18,7 +18,8 @@ binds {
     Mod+F1 hotkey-overlay-title="开关输入法" {spawn-sh "pkill fcitx5 || fcitx5 ";}
     Mod+F2 hotkey-overlay-title="顶部waybar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
     Mod+F3  hotkey-overlay-title="底部waybar" {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar-niri-Win11Like/config.jsonc -s $HOME/.config/waybar-niri-Win11Like/style.css ";}
-    Mod+F4 hotkey-overlay-title="隐藏waybar" {spawn-sh "killall -SIGUSR1 waybar";}
+    //Mod+F4 hotkey-overlay-title="隐藏waybar" {spawn-sh "killall -SIGUSR1 waybar";}
+    Mod+F4 hotkey-overlay-title="开关waybar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
     Mod+M {spawn "gnome-text-editor";}
 
 
