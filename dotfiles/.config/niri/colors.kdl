@@ -1,15 +1,13 @@
-// 聚焦窗口边框颜色
 layout{
     focus-ring{
-        active-gradient from="#99ccfacc" to="#d2bfe7cc" angle=135
+        active-gradient from="#eec06dcc" to="#b3cea6cc" angle=135
         urgent-color "#ffb4ab"
 
         }
 }
-
 recent-windows {    
     highlight {
-        active-color "#36393e"
+        active-color "#3e382f"
         urgent-color "#ffb4ab"
     }
 }
