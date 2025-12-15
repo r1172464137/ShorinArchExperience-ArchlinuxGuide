@@ -29,22 +29,42 @@ function f
    end
 
 function pac --description "Fuzzy search and install packages (Official Repo first)"
-    # 1. 定义预览命令
+    # --- 配置区域 ---
+    # 1. 定义颜色 (ANSI 标准色，兼容 Matugen)
+    set color_official  "\033[34m"   
+    set color_aur       "\033[35m"   
+    set color_reset     "\033[0m"
+
+    # 2. AUR 净化过滤器 (正则)
+    # 修复点：这里必须用单引号 ''，否则正则表达式末尾的 $ 会被 fish 误判为变量
+    set aur_filter      '^(mingw-|lib32-|cross-|.*-debug$)'
+
+    # --- 逻辑区域 ---
     set preview_cmd 'yay -Si {2}'
 
-    # 2. 生成列表并搜索
-    # 关键修改：加入了 --tiebreak=index
-    set packages (begin; pacman -Sl; yay -Sl aur; end | \
-        fzf --multi --preview $preview_cmd --preview-window=right:60%:wrap \
-            --height=90% --layout=reverse --border \
-            --tiebreak=index \
-            --header 'Tab:多选 | Enter:安装 | Esc:退出' \
-            --query "$argv" | \
-        awk '{print $2}')
+    # 生成列表 -> 过滤 -> 上色 -> fzf
+    set packages (begin
+        # 1. 官方源：蓝色前缀
+        pacman -Sl | awk -v c=$color_official -v r=$color_reset \
+            '{printf "%s%-10s%s %-30s %s\n", c, $1, r, $2, $3}'
 
-    # 3. 执行安装
+        # 2. AUR 源：紫色前缀 + 过滤垃圾包
+        yay -Sl aur | grep -vE "$aur_filter" | awk -v c=$color_aur -v r=$color_reset \
+            '{printf "%s%-10s%s %-30s %s\n", c, $1, r, $2, $3}'
+    end | \
+    fzf --multi --ansi \
+        --preview $preview_cmd --preview-window=right:60%:wrap \
+        --height=95% --layout=reverse --border \
+        --tiebreak=index \
+        --nth=2 \
+        --header 'Tab:多选 | Enter:安装 | Esc:退出' \
+        --query "$argv" | \
+    awk '{print $2}') # 直接提取纯净包名
+
+    # --- 执行安装 ---
     if test -n "$packages"
         echo "正在准备安装: $packages"
+        # 修复点：直接使用 $packages 列表，不要再用 awk 处理，否则多选会失效
         yay -S $packages
     end
 end
