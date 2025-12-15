@@ -2,6 +2,7 @@
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
 
+// 放进overview里的壁纸程序
 layer-rule{
     match namespace="hyprpaper"
     match namespace="wallpaper"
@@ -9,34 +10,37 @@ layer-rule{
     match namespace="swww-daemonoverview"
      place-within-backdrop true
 }
+// 全局窗口规则
 window-rule {
+    // 圆角
     geometry-corner-radius 12
+    // 去掉超出圆角的窗口内容
     clip-to-geometry true
+    // 全局透明度
     opacity 0.97
+    // 禁止边框画到背景里
     draw-border-with-background false
 }
+// 以浮动模式打开imv（一个轻量化图片预览程序）且不自动聚焦
 window-rule {
     match app-id="imv"
     open-focused false
     open-floating true
     }
-window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
-}
+// steam好友列表宽度
 window-rule {
     match title="好友列表"
      max-width 450
 }
+// 取消打开自动聚焦
 window-rule {
     match app-id="fcitx"
     match app-id="wechat"
     open-focused false
 }
+
 // Open the Firefox picture-in-picture player as floating by default.
+// 以浮动模式打开
 window-rule {
     // This app-id regular expression will work for both:
     // - host Firefox (app-id is "firefox")
@@ -63,6 +67,7 @@ window-rule {
     match app-id="markpix"
     open-floating true
 }
+// waydroid调整
 window-rule {
     match title="gsr ui"
     match app-id="waydroid"
@@ -75,6 +80,7 @@ window-rule {
     off
     }
 }
+// 取消图片预览、视频播放器之类的透明度，并且以浮动模式打开
 window-rule {
     match title="图片查看器"
     match title="画中画"
@@ -87,6 +93,15 @@ window-rule {
     match app-id="mpv"
     match app-id="celluloid"
     opacity 1.0 
+}
+
+
+window-rule {
+    // This regular expression is intentionally made as specific as possible,
+    // since this is the default config, and we want no false positives.
+    // You can get away with just app-id="wezterm" if you want.
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
 }
 /-window-rule {
     // This app-id regular expression will work for both:

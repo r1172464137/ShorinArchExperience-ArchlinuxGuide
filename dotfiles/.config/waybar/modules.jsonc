@@ -335,7 +335,7 @@
   //隐私
   "privacy": {
     "icon-spacing": 10,
-    "icon-size": 18,
+    "icon-size": 16,
     "transition-duration": 250,
     "modules": [
       {
