@@ -28,27 +28,32 @@ function f
 
    end
 
-function pac --description "Fuzzy search and install packages with yay"
-    # 1. 定义预览命令：当光标移动时，用 yay -Si 显示详细信息
-    # {2} 代表 fzf 传入行的第 2 列（包名）
+function pac --description "Fuzzy search and install packages (Official Repo first)"
+    # 1. 定义预览命令
     set preview_cmd 'yay -Si {2}'
 
-    # 2. 生成包列表并传递给 fzf
-    # pacman -Sl 列出官方库，yay -Sl aur 列出 AUR
-    # fzf 参数解释：
-    # -m: 开启多选 (Tab键)
-    # --preview: 显示预览窗
-    # --nth=2: 搜索时主要匹配第2列（包名）
+    # 2. 生成列表并搜索
+    # 关键修改：加入了 --tiebreak=index
     set packages (begin; pacman -Sl; yay -Sl aur; end | \
         fzf --multi --preview $preview_cmd --preview-window=right:60%:wrap \
             --height=90% --layout=reverse --border \
+            --tiebreak=index \
             --header 'Tab:多选 | Enter:安装 | Esc:退出' \
             --query "$argv" | \
-        awk '{print $2}') # 使用 awk 提取包名
+        awk '{print $2}')
 
-    # 3. 如果用户选中了包（变量不为空），则执行安装
+    # 3. 执行安装
     if test -n "$packages"
         echo "正在准备安装: $packages"
         yay -S $packages
+    end
+end
+function pacr --description "Fuzzy find and remove packages"
+    # yay -Q: 列出已安装包
+    set packages (yay -Q | fzf --multi --preview 'yay -Qi {1}' --layout=reverse --header 'Select packages to REMOVE' | awk '{print $1}')
+
+    if test -n "$packages"
+        # -Rns: 递归删除配置文件和不再需要的依赖
+        yay -Rns $packages
     end
 end
