@@ -6,14 +6,6 @@ set relativenumber
 set cursorline
 "语法高亮
 syntax on 
-" 设置 Tab 键的宽度为 4 个空格
-set tabstop=4
-
-" 设置自动缩进和 >> << 命令的宽度为 4 个空格
-set shiftwidth=4
-
-" 将 Tab 键自动转换为空格。这是现代编程的推荐实践。
-set expandtab
 
 " 开启自动缩进，新的一行会自动与上一行对齐
 set autoindent
@@ -32,5 +24,12 @@ set smartcase
 set undofile
 
 " undo目录
-silent !mkdir -p ~/.vim/undo
-set undodir=~/.vim/undo
+silent !mkdir -p ~/.cache/vim/undo
+set undodir=~/.cache/vim/undo
+
+" 剪贴板 gvim的功能
+set clipboard=unnamedplus
+
+" 接管鼠标事件
+set mouse=a
+
