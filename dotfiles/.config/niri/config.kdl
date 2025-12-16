@@ -26,7 +26,7 @@ environment {
     // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题
     GSK_RENDERER "ql"
     // 默认文本编辑器
-    EDITOR "nvim"
+    EDITOR "vim"
 }
 
 // 光标配置

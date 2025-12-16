@@ -119,7 +119,7 @@ output_path = '~/.config/swaylock/config'
 input_path = '~/.config/matugen/templates/fastfetch-config.jsonc'
 output_path = '~/.config/fastfetch/config.jsonc'
 
-[templates.neovim]
-input_path = '~/.config/matugen/templates/neovim/template.lua'
-output_path = '~/.config/nvim/generated.lua'
-post_hook = 'pkill -SIGUSR1 nvim'
+#[templates.neovim]
+#input_path = '~/.config/matugen/templates/neovim/template.lua'
+#output_path = '~/.config/nvim/generated.lua'
+#post_hook = 'pkill -SIGUSR1 nvim'
