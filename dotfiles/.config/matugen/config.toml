@@ -71,8 +71,8 @@ output_path = '~/.config/gtk-4.0/colors.css'
 
 [templates.ghostty]
 input_path = '~/.config/matugen/templates/ghostty-colors.conf'
-output_path = '~/.config/ghostty/themes/colors.conf'
-#post_hook = 'wtype -M ctrl -M shift -P comma -p comma -m ctrl -m shift &'
+output_path = '~/.config/ghostty/themes/Matugen'
+post_hook = 'pkill -SIGUSR2 ghostty'
 
 [templates.qt5ct]
 input_path = '~/.config/matugen/templates/qtct-colors.conf'
