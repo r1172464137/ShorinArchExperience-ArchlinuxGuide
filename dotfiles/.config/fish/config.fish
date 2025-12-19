@@ -21,13 +21,13 @@ function ls
 end
 
 thefuck --alias | source
-
+# fa运行fastfetch
+abbr fa fastfetch
+# f运行带二次元美少女的fastfetch
 function f 
-
     command bash $HOME/.config/scripts/fastfetch-random-wife.sh
-
    end
-
+# fzf安装软件包
 function pac --description "Fuzzy search and install packages (Official Repo first)"
     # --- 配置区域 ---
     # 1. 定义颜色 (ANSI 标准色，兼容 Matugen)
@@ -68,6 +68,7 @@ function pac --description "Fuzzy search and install packages (Official Repo fir
         yay -S $packages
     end
 end
+# fzf卸载软件包
 function pacr --description "Fuzzy find and remove packages (UI matched with pac)"
     # --- 配置区域 ---
     # 1. 定义颜色 (保持与 pac 一致)
