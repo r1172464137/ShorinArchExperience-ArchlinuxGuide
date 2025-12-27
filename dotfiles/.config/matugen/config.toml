@@ -63,7 +63,7 @@ post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings s
 [templates.gtk4]
 input_path ='~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
-#post_hook = 'nautilus -q &'
+post_hook = 'nautilus -q &'
 #[templates.swaync]
 #input_path = '~/.config/matugen/templates/swaync-colors.css'
 #output_path = '~/.config/swaync/colors.css'
