@@ -30,6 +30,7 @@ window-rule {
 // steam好友列表宽度
 window-rule {
     match title="好友列表"
+    match title="Friends List"
      max-width 450
 }
 // 取消打开自动聚焦

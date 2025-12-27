@@ -318,6 +318,8 @@ spawn-at-startup "waypaper" "--random"
 spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
+// GNOME tracker修复
+spawn-sh-at-startup "systemctl --user set-environment XDG_SESSION_CLASS=user"
 // 通知程序
 spawn-at-startup "mako"
 // 任务栏
