@@ -312,7 +312,7 @@
   "custom/cava": {
     "tooltip": false,
     "format": "{}",
-    "exec": "/home/shorin/.config/waybar-niri-Win11Like/scripts/cava.sh",
+    "exec": "$HOME/.config/waybar-niri-Win11Like/scripts/cava.sh",
   },
   //禁止熄屏
   "idle_inhibitor": {
