@@ -26,6 +26,7 @@ binds {
     Mod+F1 hotkey-overlay-title="开关输入法 Toggle fcitx" {spawn-sh "pkill fcitx5 || fcitx5 ";}
     Mod+F2 hotkey-overlay-title="顶部任务栏 Top bar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
     Mod+F3  hotkey-overlay-title="底部任务栏 Bottom bar" {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar-niri-Win11Like/config.jsonc -s $HOME/.config/waybar-niri-Win11Like/style.css ";}
+    Mod+F5 hotkey-overlay-title="快速存档 Quick save" {spawn "~/.config/scripts/quicksave.sh";}
     // 这一行是用waybar自己支持的信号功能隐藏waybar，但进程没有退出，资源占用依旧有
     //Mod+F4 hotkey-overlay-title="隐藏waybar" {spawn-sh "killall -SIGUSR1 waybar";}
     // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
