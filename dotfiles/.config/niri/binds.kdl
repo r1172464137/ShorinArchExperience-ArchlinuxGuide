@@ -20,6 +20,8 @@ binds {
     // alt+tab切换窗口
     Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
     Mod+Alt+W hotkey-overlay-title="切换壁纸 Change wallpaper" {spawn "waypaper";}
+    Mod+Alt+M hotkey-overlay-title="切换颜色策略 Change color strategy" {spawn "~/.config/scripts/matugen-select-type.sh";}
+    Mod+Alt+T hotkey-overlay-title="切换颜色策略 Change color strategy" {spawn "~/.config/scripts/matugen-select-type.sh";}
     Mod+F10 hotkey-overlay-title="随机切换壁纸 Random wallpaper" {spawn "waypaper" "--random";}
     Mod+F1 hotkey-overlay-title="开关输入法 Toggle fcitx" {spawn-sh "pkill fcitx5 || fcitx5 ";}
     Mod+F2 hotkey-overlay-title="顶部任务栏 Top bar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
@@ -34,8 +36,6 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="终端 Terminal" { spawn "kitty"; }
-    // 不要问我为什么有两个打开不同终端的快捷键
-    Mod+Alt+T hotkey-overlay-title=null { spawn "ghostty"; }
     // 文档管理器。如果有thunar的话会优先打开thunar，没有的话会打开nautilus，不要问我为什么（）
     Mod+E hotkey-overlay-title="文档管理器 Filemanager" { spawn-sh "thunar || env GSK_RENDERER=gl GTK_IM_MODULE=fcitx  nautilus"; }
     // 另一个打开nautilus的快捷键，主要是为了在同时安装thunar和nautilus的情况下打开naultilus
