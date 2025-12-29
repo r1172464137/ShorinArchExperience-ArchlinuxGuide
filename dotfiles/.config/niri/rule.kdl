@@ -49,6 +49,7 @@ window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     match app-id="steam" title="Friends List"
     match app-id="blueberry.py" title="蓝牙"
+    match app-id="blueman-manager"
     match app-id="flameshot"
     match app-id="com.github.hluk.copyq" 
     match app-id="be.alexandervanhee.gradia"
@@ -65,9 +66,17 @@ window-rule {
     match title="重命名"
     match app-id="btrfs-assistant"
     match app-id="markpix"
+    match title="Steam 设置" 
     open-floating true
 }
-// waydroid调整
+window-rule{
+    match app-id="bluetui"
+    min-width 500 
+    min-height 600
+	open-floating true
+}
+
+    // waydroid调整
 window-rule {
     match title="gsr ui"
     match app-id="waydroid"
