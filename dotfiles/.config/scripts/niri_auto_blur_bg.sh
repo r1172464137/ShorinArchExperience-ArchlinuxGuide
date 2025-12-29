@@ -303,3 +303,9 @@ niri msg event-stream | grep --line-buffered -E "^(Window|Workspace|Overview)" |
         *"active window changed to None"*) [[ "$IS_OVERVIEW" == "true" && "$OVERVIEW_FORCE_CLEAR" == "false" ]] && switch_to_clear "noderect" ;;
     esac
 done
+
+
+
+
+
+
