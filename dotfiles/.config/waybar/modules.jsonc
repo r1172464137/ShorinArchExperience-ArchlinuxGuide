@@ -312,8 +312,9 @@
       "activated": "",
       "deactivated": "",
     },
-    "tooltip-format-activated": "idle Enabled",
-    "tooltip-format-deactivated": "idle Disabled",
+    "tooltip-format-activated": "idle Disabled",
+    "tooltip-format-deactivated": "idle Enabled",
+    "on-click-right":"~/.config/scripts/matugen-select-type.sh"
   },
   //分隔符󰇝 󱋱
   "custom/separator#1": {
