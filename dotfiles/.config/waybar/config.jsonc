@@ -15,7 +15,7 @@
        // "ext/workspaces",
         "niri/workspaces",
         "custom/right_div#5",
-       // "cffi/niri-taskbar",
+        "cffi/niri-taskbar",
         "niri/window",
         //"dwl/window",
         // "hyprland/window",
