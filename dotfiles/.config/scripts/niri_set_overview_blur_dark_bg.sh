@@ -41,7 +41,7 @@ DEPENDENCIES=("magick" "notify-send" "$WALLPAPER_BACKEND")
 
 for cmd in "${DEPENDENCIES[@]}"; do
     if ! command -v "$cmd" &> /dev/null; then
-        notify-send -u critical "Blur Error" "缺少依赖: $cmd"
+        notify-send -u critical "Blur Error" "缺少依赖: $cmd，请检查是否安装imagemagick"
         exit 1
     fi
 done
