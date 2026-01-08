@@ -27,9 +27,8 @@ fi
 # -s : 静默模式，不显示进度条 (如果想看进度可以去掉 -s)
 echo "正在从 API 下载随机图片..."
 
-if curl -L -s -o "$FULL_PATH" "$API_URL"; then
+if notify-send "Downloading Wallpaper ..." && curl -L -s -o "$FULL_PATH" "$API_URL"; then
     echo "下载成功: $FULL_PATH"
-    
     # 检查文件大小，避免下载到空文件或错误页面
     FILE_SIZE=$(du -k "$FULL_PATH" | cut -f1)
     if [ "$FILE_SIZE" -lt 10 ]; then
