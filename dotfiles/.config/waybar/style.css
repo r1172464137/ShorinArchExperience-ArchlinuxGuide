@@ -262,7 +262,7 @@ window#waybar.empty #window {
 #custom-cava {
     background-color: @surface_container_high;
     color: @primary;
-    padding: 0px 0.39em; /* 7px */
+    padding: 0px 0.35em; /* 7px */
 }
 
 #mpris {
