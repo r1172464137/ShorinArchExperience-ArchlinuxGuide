@@ -24,8 +24,8 @@ environment {
     XMODIFIERS "@im=fcitx"
     // qt主题
     QT_QPA_PLATFORMTHEME "qt6ct"
-    // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题
-    GSK_RENDERER "ql"
+    // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题，amd或者intel单显卡可以删除此行
+    GSK_RENDERER "gl"
     // 默认文本编辑器
     EDITOR "vim"
 }
