@@ -16,6 +16,7 @@ include "output.kdl"
 screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d %H-%M-%S.png"
 
 // 环境变量
+
 environment {
     //LC_CTYPE "zh_CN.UTF-8" 会导致输入法出现漏字
     // 设置界面语言
@@ -24,7 +25,7 @@ environment {
     XMODIFIERS "@im=fcitx"
     // qt主题
     QT_QPA_PLATFORMTHEME "qt6ct"
-    // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题，amd或者intel单显卡可以删除此行
+    // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题，AMD或Intel单显卡不需要这行设置可以注释掉
     GSK_RENDERER "gl"
     // 默认文本编辑器
     EDITOR "vim"
