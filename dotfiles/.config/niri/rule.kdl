@@ -27,13 +27,6 @@ window-rule {
     open-focused false
     open-floating true
     }
-// steam好友列表宽度
-window-rule {
-    match title="好友列表"
-    match title="Friends List"
-     max-width 450
-}
-
 // Open the Firefox picture-in-picture player as floating by default.
 // 以浮动模式打开
 window-rule {
