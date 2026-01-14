@@ -33,11 +33,6 @@ window-rule {
     match title="Friends List"
      max-width 450
 }
-// 取消打开自动聚焦
-window-rule {
-    match app-id="wechat"
-    open-focused false
-}
 
 // Open the Firefox picture-in-picture player as floating by default.
 // 以浮动模式打开
