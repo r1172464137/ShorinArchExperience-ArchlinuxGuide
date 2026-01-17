@@ -198,21 +198,29 @@
     "tooltip": false,
     "format": "󰐥",
     "on-click": "wlogout",
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   "custom/lockscreen": {
     "tooltip": false,
     "format": "",
     "on-click": "swaylock || hyprlock",
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   "custom/reboot": {
     "tooltip": false,
     "format": "",
     "on-click": "systemctl reboot",
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   "custom/logout": {
     "format": "󰈆",
     "on-click": "niri msg action quit",
     "tooltip": false,
+    "on-scroll-up":"true",
+    "on-scroll-down":"true"
   },
   //内屏亮度
   "backlight/slider": {
@@ -301,9 +309,9 @@
   },
   //音频可视化
   "custom/cava": {
-    "tooltip": false,
+   "tooltip": false,
     "format": "{}",
-    "exec": "~/.config/waybar/scripts/cava.sh",
+   "exec": "~/.config/waybar/scripts/cava.sh",
   },
   //禁止熄屏
   "idle_inhibitor": {
