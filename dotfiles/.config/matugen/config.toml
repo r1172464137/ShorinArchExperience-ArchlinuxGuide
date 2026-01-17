@@ -108,9 +108,9 @@ input_path = '~/.config/matugen/templates/colors.css'
 output_path = '~/.config/swayosd/colors.css'
 post_hook = 'pkill swayosd && swayosd-server &'
 
-[templates.swaylock-effects]
-input_path = '~/.config/matugen/templates/swaylock-colors'
-output_path = '~/.config/swaylock/config'
+#[templates.swaylock-effects]
+#input_path = '~/.config/matugen/templates/swaylock-colors'
+#output_path = '~/.config/swaylock/config'
 
 [templates.fastfetch]
 input_path = '~/.config/matugen/templates/fastfetch-config.jsonc'
@@ -119,4 +119,8 @@ output_path = '~/.config/fastfetch/config.jsonc'
 #[templates.neovim]
 #input_path = '~/.config/matugen/templates/neovim/template.lua'
 #output_path = '~/.config/nvim/generated.lua'
+
 #post_hook = 'pkill -SIGUSR1 nvim'
+[templates.hyprlock]
+input_path = '~/.config/matugen/templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/colors.conf'
