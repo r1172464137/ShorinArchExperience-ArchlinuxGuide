@@ -310,14 +310,20 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // 自动启动设置
-// 询问管理员权限功能（身份验证）
-spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 桌面壁纸的守护进程
 spawn-at-startup "swww-daemon"
+// 恢复上一次的壁纸
+spawn-at-startup "swww" "restore"
 // 总览界面背景壁纸的守护进程
 spawn-sh-at-startup "swww-daemon -n overview"
-// 启动niri时ss随机更换一张壁纸
-spawn-at-startup "waypaper" "--random"
+// 恢复上一次的壁纸
+spawn-at-startup "swww" "restore" "-n" "overview"
+// 随机更换一张壁纸
+//spawn-at-startup "waypaper" "--random"
+// 开启niri立刻锁屏
+spawn-at-startup "hyprlock"
+// 询问管理员权限功能（身份验证）
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 有聚焦窗口时桌面自动模糊的脚本
 spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置

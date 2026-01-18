@@ -30,7 +30,7 @@ if [ -z "$WALLPAPER" ] || [ ! -f "$WALLPAPER" ]; then
     notify-send "Matugen Error" "无法找到壁纸路径。"
     exit 1
 fi
-
+ln -sf "$WALLPAPER" "$HOME/.cache/.current_wallpaper"
 # --- 2. 读取策略 (Type) ---
 if [ -f "$TYPE_FILE" ]; then
     STRATEGY=$(cat "$TYPE_FILE")

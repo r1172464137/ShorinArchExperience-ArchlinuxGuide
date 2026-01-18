@@ -1,5 +1,5 @@
 {
-    //这个waybar因为大该过一次布局，所以箭头已经的位置和名字已经完全对不上了，从左到右看吧。
+    //这个waybar因为大改过一次布局，所以箭头的位置和名字已经完全对不上了，从左到右看吧。
     "include": [
         "modules.jsonc",
         "modules-dividers.jsonc"
