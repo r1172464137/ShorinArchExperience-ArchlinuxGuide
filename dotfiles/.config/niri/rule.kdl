@@ -55,15 +55,16 @@ window-rule {
     match app-id="btrfs-assistant"
     match app-id="markpix"
     match title="Steam 设置" 
+    match title="另存为"
     open-floating true
 }
 window-rule{
     match app-id="bluetui"
-    min-width 500 
-    min-height 600
+	match app-id="clipse"
+    min-width 600 
+    min-height 750
 	open-floating true
 }
-
     // waydroid调整
 window-rule {
     match title="gsr ui"
