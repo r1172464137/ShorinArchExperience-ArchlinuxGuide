@@ -312,16 +312,10 @@ layout {
 // 自动启动设置
 // 桌面壁纸的守护进程
 spawn-at-startup "swww-daemon"
-// 恢复上一次的壁纸
-spawn-at-startup "swww" "restore"
 // 总览界面背景壁纸的守护进程
 spawn-sh-at-startup "swww-daemon -n overview"
-// 恢复上一次的壁纸
-spawn-at-startup "swww" "restore" "-n" "overview"
 // 随机更换一张壁纸
-//spawn-at-startup "waypaper" "--random"
-// 开启niri立刻锁屏
-spawn-at-startup "hyprlock"
+spawn-at-startup "waypaper" "--random"
 // 询问管理员权限功能（身份验证）
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 有聚焦窗口时桌面自动模糊的脚本
