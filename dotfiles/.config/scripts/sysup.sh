@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # ==============================================================================
-# sysup - Arch Linux 更新辅助工具 (Arch News + System Update)
-# 功能：自动检测中英文环境，获取对应新闻，高亮“手动干预”警告，然后执行 yay/paru
+# sysup - Arch Linux System Update Utility
+# Description: Checks Arch news for manual interventions, then runs yay/paru.
 # ==============================================================================
 
-# 1. 检查 AUR 助手
+# 1. Check AUR Helper
 UPDATE_CMD=""
 if command -v yay >/dev/null 2>&1; then
     UPDATE_CMD="yay"
@@ -16,52 +16,30 @@ else
     exit 1
 fi
 
-# 2. 语言环境检测 (检测 locale 输出是否包含 zh_CN)
-IS_ZH=0
-if locale 2>/dev/null | grep -q "zh_CN"; then
-    IS_ZH=1
-fi
+# 2. Configuration (English Only)
+NEWS_URL="https://archlinux.org/feeds/news/"
+MSG_PREPARING="==> Preparing to update system with $UPDATE_CMD..."
+MSG_FETCHING="==> Fetching latest Arch Linux news..."
+MSG_CONFIRM="Read above. Proceed with $UPDATE_CMD? [Y/n] "
+MSG_EXECUTING="==> Executing $UPDATE_CMD..."
+MSG_CANCEL="==> Update cancelled."
+MSG_ERR_FETCH="!!! WARNING: Failed to fetch news (Network/Source error) !!!"
+MSG_FORCE_ASK="Force update ignoring news? [y/N] "
+MSG_FORCING="==> Forcing update..."
+MSG_EXIT="==> Safe exit."
+PY_HEADER=">>> Recent {} Arch Linux news items:"
 
-# 3. 定义本地化文本
-if [ "$IS_ZH" -eq 1 ]; then
-    # --- 中文配置 ---
-    NEWS_URL="https://www.archlinuxcn.org/category/news/feed/"
-    MSG_PREPARING="==> 准备使用 $UPDATE_CMD 更新系统..."
-    MSG_FETCHING="==> 正在获取 Arch Linux 中文社区最新新闻..."
-    MSG_CONFIRM="请确认无重大问题。是否继续执行 $UPDATE_CMD? [Y/n] "
-    MSG_EXECUTING="==> 执行 $UPDATE_CMD 更新..."
-    MSG_CANCEL="==> 更新已取消。"
-    MSG_ERR_FETCH="!!! 警告: 无法获取新闻 (可能是网络或源的问题) !!!"
-    MSG_FORCE_ASK="是否**强制**忽略新闻并继续更新? [y/N] "
-    MSG_FORCING="==> 正在强制更新..."
-    MSG_EXIT="==> 安全退出。"
-    PY_HEADER=">>> 最近 {} 条 Arch 中文新闻:"
-else
-    # --- 英文配置 ---
-    NEWS_URL="https://archlinux.org/feeds/news/"
-    MSG_PREPARING="==> Preparing to update system with $UPDATE_CMD..."
-    MSG_FETCHING="==> Fetching latest Arch Linux news..."
-    MSG_CONFIRM="Read above. Proceed with $UPDATE_CMD? [Y/n] "
-    MSG_EXECUTING="==> Executing $UPDATE_CMD..."
-    MSG_CANCEL="==> Update cancelled."
-    MSG_ERR_FETCH="!!! WARNING: Failed to fetch news (Network/Source error) !!!"
-    MSG_FORCE_ASK="Force update ignoring news? [y/N] "
-    MSG_FORCING="==> Forcing update..."
-    MSG_EXIT="==> Safe exit."
-    PY_HEADER=">>> Recent {} Arch Linux news items:"
-fi
-
-# 4. 设定显示数量 (优先读取参数 $1，否则默认为 5)
+# 3. Set Display Limit (Default 15, or use $1)
 COUNT_LIMIT=15
 if [ -n "$1" ]; then
     COUNT_LIMIT="$1"
 fi
 
-# 5. 执行逻辑
+# 4. Execution Logic
 printf "\n\033[1;36m%s\033[0m\n" "$MSG_PREPARING"
 printf "\033[1;36m%s\033[0m\n" "$MSG_FETCHING"
 
-# Python 脚本嵌入
+# Embedded Python Script
 PYTHON_SCRIPT=$(cat <<'EOF'
 import sys
 import xml.etree.ElementTree as ET
@@ -70,7 +48,7 @@ try:
     limit = int(sys.argv[1])
     header_template = sys.argv[2]
     
-    # 强制 UTF-8 读取
+    # Force UTF-8 reading
     sys.stdin.reconfigure(encoding='utf-8')
     raw_data = sys.stdin.read()
     
@@ -88,8 +66,8 @@ try:
         date_str = pub_date[:16]
 
         check_text = title.lower()
-        # 双语关键词检测
-        if any(x in check_text for x in ['intervention', '手动干预', '干预']):
+        # Highlight 'intervention' or 'manual'
+        if any(x in check_text for x in ['intervention', 'manual']):
             color = '\033[1;31m' # Red
             prefix = '!!! '
         else:
@@ -104,10 +82,10 @@ except Exception as e:
 EOF
 )
 
-# 使用 curl 获取并传给 python
+# Fetch news and pipe to python
 if curl -sS -L --connect-timeout 15 -A "Mozilla/5.0" "$NEWS_URL" | python -c "$PYTHON_SCRIPT" "$COUNT_LIMIT" "$PY_HEADER"; then
     
-    # === A. 获取成功，等待确认 ===
+    # === A. Success Branch ===
     printf "\n"
     printf "%s" "$MSG_CONFIRM"
     read -r confirm
@@ -124,7 +102,7 @@ if curl -sS -L --connect-timeout 15 -A "Mozilla/5.0" "$NEWS_URL" | python -c "$P
     esac
 
 else
-    # === B. 获取失败，询问是否强制更新 ===
+    # === B. Failure Branch ===
     printf "\n\033[1;31m%s\033[0m\n" "$MSG_ERR_FETCH"
     
     printf "%s" "$MSG_FORCE_ASK"
