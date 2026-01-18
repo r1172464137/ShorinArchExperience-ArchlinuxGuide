@@ -357,6 +357,9 @@ binds {
     Mod+Alt+A  hotkey-overlay-title="选取区域截图 Select screenshot"  {screenshot;}
     Mod+Alt+Ctrl+A  hotkey-overlay-title="截取聚焦窗口 Focus-window screenshot" { screenshot-window; }
     Mod+Alt+Ctrl+Shift+A  hotkey-overlay-title="截取显示器 Monitor screenshot" { screenshot-screen; }
+    Print { screenshot; }
+    Ctrl+Print { screenshot-window; }
+    Shift+Print { screenshot-screen; }
     //Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
     Mod+Shift+S  hotkey-overlay-title="截图后按下此键进行编辑 Edit the image after screenshot" { spawn-sh "wl-paste | satty -f -";}
 
