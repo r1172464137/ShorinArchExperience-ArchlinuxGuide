@@ -80,6 +80,22 @@ except Exception as e:
         read -l -P "$msg_confirm" confirm
         switch $confirm
             case Y y ''
+                # --- Keyring Check Logic Start ---
+                echo -e "\n\033[1;34m==> Checking/Updating keyrings first...\033[0m"
+                set -l keyring_targets archlinux-keyring
+                # Check if archlinuxcn-keyring is installed
+                if pacman -Qq archlinuxcn-keyring >/dev/null 2>&1
+                    set -a keyring_targets archlinuxcn-keyring
+                end
+                
+                # -Sy: Sync DB. --needed: Only reinstall if newer. --noconfirm: Automated.
+                if sudo pacman -Sy --needed --noconfirm $keyring_targets
+                    echo -e "\033[1;32m==> Keyrings verified.\033[0m"
+                else
+                    echo -e "\033[1;31m!!! Warning: Keyring update encountered issues. Proceeding...\033[0m"
+                end
+                # --- Keyring Check Logic End ---
+
                 echo -e "\n\033[1;36m$msg_executing\033[0m"
                 $update_cmd
             case '*'
@@ -93,6 +109,20 @@ except Exception as e:
         read -l -P "$msg_force_ask" force_confirm
         switch $force_confirm
             case Y y
+                # --- Keyring Check Logic Start (Duplicate for force update) ---
+                echo -e "\n\033[1;34m==> Checking/Updating keyrings first...\033[0m"
+                set -l keyring_targets archlinux-keyring
+                if pacman -Qq archlinuxcn-keyring >/dev/null 2>&1
+                    set -a keyring_targets archlinuxcn-keyring
+                end
+                
+                if sudo pacman -Sy --needed --noconfirm $keyring_targets
+                    echo -e "\033[1;32m==> Keyrings verified.\033[0m"
+                else
+                    echo -e "\033[1;31m!!! Warning: Keyring update encountered issues. Proceeding...\033[0m"
+                end
+                # --- Keyring Check Logic End ---
+
                 echo -e "\n\033[1;31m$msg_forcing\033[0m"
                 $update_cmd
             case '*'
