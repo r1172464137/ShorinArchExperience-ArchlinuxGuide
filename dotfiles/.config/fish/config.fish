@@ -28,7 +28,7 @@ abbr fa fastfetch
 function f 
     command bash $HOME/.config/scripts/fastfetch-random-wife.sh
    end
-
+abbr reboot 'systemctl reboot'
 function 滚
 	sysup 
 end
