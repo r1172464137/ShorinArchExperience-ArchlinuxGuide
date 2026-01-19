@@ -92,8 +92,8 @@ if curl -sS -L --connect-timeout 15 -A "Mozilla/5.0" "$NEWS_URL" | python -c "$P
     
     case "$confirm" in
         [Yy]*|"" )
-            # --- Keyring Check Logic Start ---
-            printf "\n\033[1;34m==> Checking/Updating keyrings first...\033[0m\n"
+            # --- Step 1: Sync DB & Keyring ---
+            printf "\n\033[1;34m==> [Step 1/3] Syncing DB & Updating keyrings...\033[0m\n"
             KEYRING_TARGETS="archlinux-keyring"
             
             # Check if archlinuxcn-keyring is installed
@@ -102,16 +102,22 @@ if curl -sS -L --connect-timeout 15 -A "Mozilla/5.0" "$NEWS_URL" | python -c "$P
             fi
             
             # -Sy: Sync DB. --needed: Only reinstall if newer. --noconfirm: Automated.
-            # We use $KEYRING_TARGETS unquoted to allow multiple args
             if sudo pacman -Sy --needed --noconfirm $KEYRING_TARGETS; then
-                printf "\033[1;32m==> Keyrings verified.\033[0m\n"
+                printf "\033[1;32m==> Keyrings & DB synced.\033[0m\n"
             else
                 printf "\033[1;31m!!! Warning: Keyring update encountered issues. Proceeding...\033[0m\n"
             fi
-            # --- Keyring Check Logic End ---
+            
+            # --- Step 2: System Update (Optimized) ---
+            printf "\n\033[1;36m==> [Step 2/3] Upgrading system...\033[0m\n"
+            # 使用 -Su 而不是默认的 -Syu，因为第一步已经 -Sy 过了
+            $UPDATE_CMD -Su
 
-            printf "\n\033[1;36m%s\033[0m\n" "$MSG_EXECUTING"
-            $UPDATE_CMD
+            # --- Step 3: Flatpak Update ---
+            if command -v flatpak >/dev/null 2>&1; then
+                printf "\n\033[1;35m==> [Step 3/3] Checking Flatpak updates...\033[0m\n"
+                flatpak update
+            fi
             ;;
         * )
             printf "\n\033[1;33m%s\033[0m\n" "$MSG_CANCEL"
@@ -128,7 +134,7 @@ else
     
     case "$force_confirm" in
         [Yy]* )
-            # --- Keyring Check Logic Start (Duplicate for force update) ---
+            # --- Step 1: Sync DB & Keyring ---
             printf "\n\033[1;34m==> Checking/Updating keyrings first...\033[0m\n"
             KEYRING_TARGETS="archlinux-keyring"
             
@@ -141,10 +147,16 @@ else
             else
                 printf "\033[1;31m!!! Warning: Keyring update encountered issues. Proceeding...\033[0m\n"
             fi
-            # --- Keyring Check Logic End ---
-
+            
+            # --- Step 2: System Update (Optimized) ---
             printf "\n\033[1;31m%s\033[0m\n" "$MSG_FORCING"
-            $UPDATE_CMD
+            $UPDATE_CMD -Su
+
+            # --- Step 3: Flatpak Update ---
+            if command -v flatpak >/dev/null 2>&1; then
+                printf "\n\033[1;35m==> Checking Flatpak updates...\033[0m\n"
+                flatpak update
+            fi
             ;;
         * )
             printf "\n\033[1;33m%s\033[0m\n" "$MSG_EXIT"
