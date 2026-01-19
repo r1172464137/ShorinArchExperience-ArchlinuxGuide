@@ -20,9 +20,6 @@ function ls
 	command eza $argv
 end
 
-function 滚
-	sysup 
-end
 
 thefuck --alias | source
 # fa运行fastfetch
@@ -31,5 +28,28 @@ abbr fa fastfetch
 function f 
     command bash $HOME/.config/scripts/fastfetch-random-wife.sh
    end
-# fzf安装软件包
 
+function 滚
+	sysup 
+end
+function 更新
+	sysup 
+end
+function 清理
+	command yay -Scc 
+end
+function 安装
+	command yay -S $argv
+end
+function 卸载
+	command yay -Rns $argv
+end
+function clean
+	command yay -Scc 
+end
+function install
+	command yay -S $argv
+end
+function remove 
+	command yay -Rns $argv
+end
