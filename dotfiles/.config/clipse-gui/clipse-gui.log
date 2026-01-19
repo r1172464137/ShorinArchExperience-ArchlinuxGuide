@@ -4790,3 +4790,8 @@
 2025-11-28 11:10:38 - [1;34mclipse_gui.controller[0m - [1;32mINFO[0m - Quitting application.
 2025-11-28 11:10:38 - clipse_gui.app - DEBUG - Application org.d7om.ClipseGUI shutting down.
 2025-11-28 11:10:38 - [1;34m__main__[0m - [1;32mINFO[0m - Application exited with status 0.
+2026-01-19 14:41:56 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2026-01-19 14:42:00 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2026-01-19 14:42:03 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2026-01-19 14:42:12 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
+2026-01-19 14:42:20 - [1;34m__main__[0m - [1;32mINFO[0m - Logging initialized - Console: INFO, File: DEBUG. Log file: /home/shorin/.config/clipse-gui/clipse-gui.log
