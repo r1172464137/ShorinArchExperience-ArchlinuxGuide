@@ -3,7 +3,6 @@ if status is-interactive
 end
 set fish_greeting ""
 
-
 starship init fish | source
 zoxide init fish --cmd cd | source
 
@@ -27,6 +26,9 @@ abbr fa fastfetch
 # f运行带二次元美少女的fastfetch
 function f 
     command bash $HOME/.config/scripts/fastfetch-random-wife.sh
+   end
+function fnswf
+    command env NSFW=1 bash $HOME/.config/scripts/fastfetch-random-wife.sh
    end
 abbr reboot 'systemctl reboot'
 function 滚
