@@ -20,6 +20,10 @@ function ls
 	command eza $argv
 end
 
+function 滚
+	sysup 
+end
+
 thefuck --alias | source
 # fa运行fastfetch
 abbr fa fastfetch
