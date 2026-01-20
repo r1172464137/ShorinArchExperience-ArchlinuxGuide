@@ -27,7 +27,7 @@ abbr fa fastfetch
 function f 
     command bash $HOME/.config/scripts/fastfetch-random-wife.sh
    end
-function fnswf
+function fnsfw
     command env NSFW=1 bash $HOME/.config/scripts/fastfetch-random-wife.sh
    end
 abbr reboot 'systemctl reboot'
