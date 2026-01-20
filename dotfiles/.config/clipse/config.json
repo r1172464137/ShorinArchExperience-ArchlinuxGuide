@@ -6,7 +6,7 @@
     "logFile": "~/.cache/clipse/clipse.log",
     "pollInterval": 50,
     "maxEntryLength": 65,
-    "themeFile": "custom_theme.json",
+    "themeFile": "~/.cache/clipse/custom_theme.json",
     "tempDir": "~/.cache/clipse/tmp_files",
     "keyBindings": {
         "choose": "enter",
@@ -31,7 +31,7 @@
         "yankFilter": "ctrl+s"
     },
     "imageDisplay": {
-        "type": "clipse",
+        "type": "kitty",
         "scaleX": 9,
         "scaleY": 9,
         "heightCut": 2
