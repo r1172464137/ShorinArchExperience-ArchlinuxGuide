@@ -1,6 +1,6 @@
 {
     "allowDuplicates": false,
-    "historyFile": "~/.cache/clipse/clipboard_history.json",
+    "historyFile": "clipboard_history.json",
     "maxHistory": 100,
     "deleteAfter": 0,
     "logFile": "~/.cache/clipse/clipse.log",
