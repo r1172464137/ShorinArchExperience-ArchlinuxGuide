@@ -61,8 +61,8 @@ window-rule {
 window-rule{
     match app-id="bluetui"
 	match app-id="clipse"
-    min-width 600 
-    min-height 750
+    min-width 500 
+    min-height 600
 	open-floating true
 }
     // waydroid调整
