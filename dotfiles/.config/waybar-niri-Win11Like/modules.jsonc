@@ -8,7 +8,7 @@
     "format": "{icon}",
     "format-charging": "󰂄 {capacity}% ",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂂", "󰁹"],
-    "tooltip-format": " {capacity}% | -{power} | Time:{timeTo}",
+    "tooltip-format": "{capacity}% | -{power} | Time:{timeTo}",
   },
   //时钟
   "clock": {
@@ -16,7 +16,7 @@
     "format": "{:%H:%M}",
     //"format-alt": "{:%Y/%m/%d %A}",
    // "tooltip":false,
-    "tooltip-format": "{:%Y/%m/%d %A}",
+    "tooltip-format": "{:%Y/%m/%d %A}\n---\n左键：打开时钟\n右键：打开日历",
     "max-length": 25,
     "on-click": "gnome-clocks",
     "on-click-right": "gnome-calendar",
@@ -80,21 +80,21 @@
       "ethernet": "󰈀",
     },
     //鼠标悬浮在wifi图标上会显示wifi名称、信号强度、ip地址、设备名
-    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} : {ipaddr}",
-    "tooltip-format-ethernet": "{ifname} : {ipaddr} | Click to Open GUI",
-    "tooltip-format-disconnected": "Disconnected | Click to open GUI",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} : {ipaddr}\n---\n左键：打开面板\n右键：打开高级网络配置工具",
+    "tooltip-format-ethernet": "{ifname} : {ipaddr}\n---\n左键：打开面板\n右键：打开高级网络配置工具",
+    "tooltip-format-disconnected": "网络未连接\n---\n左键：打开面板\n右键：打开高级网络配置工具",
     "on-click": "kitty -e nmtui",
     "on-click-right": "nm-connection-editor",
   },
   "bluetooth": {
     //蓝牙关闭状态下的图标和鼠标悬浮时的提示
     "format-disabled": "󰂲",
-    "tooltip-format-disabled": "Click to enable",
+    "tooltip-format-disabled": "左键：开启蓝牙",
     "format": "󰂯",
-    "tooltip-format-on": " 󰂯 Click to disable or Right click to open GUI",
+    "tooltip-format-on": "左键：禁用蓝牙\n右键：打开面板",
     //连接状态下的图标和提示
     "format-connected": "󰂱",
-    "tooltip-format-connected": "󰂱 {device_alias}Richt click to open GUI",
+    "tooltip-format-connected": "󰂱 {device_alias}\n---\n右键：打开面板",
     //点击功能
     "on-click": "~/.config/waybar/scripts/toggle-bluetooth.sh",
     "on-click-right": "kitty --class bluetui -e bluetui",
@@ -102,7 +102,7 @@
   //左键循环切换性能模式
   "power-profiles-daemon": {
     "format": "{icon}",
-    "tooltip-format": "Performance mode:{profile}",
+    "tooltip-format": "当前性能模式：{profile}\n---\n左键：切换性能模式",
     "tooltip": true,
     "format-icons": {
       "performance": "󱐋",
@@ -121,7 +121,7 @@
   //截图
    "custom/screenshot" :{
     "format": "",
-    "tooltip-format": "Click to easy Screenshot Right Click to power screenshot Middle Click to longshot",
+    "tooltip-format": "左键：快速截图（仅保存到剪贴板）\n右键：打开菜单\n中键：打开长截图菜单",
     "on-click":"~/.config/waybar/scripts/screenshot.sh",
     "on-click-right": "~/.config/waybar/scripts/power-screenshot.sh",
     "on-click-middle":"~/.config/waybar/scripts/longshot-sh/longshot.sh"
@@ -147,7 +147,7 @@
     "modules": ["pulseaudio", "pulseaudio/slider"],
   },
   "pulseaudio": {
-    "tooltip-format": "Click to Mute | Right-Click to Mute Mic | Mid-Click to Open Pavucontrol",
+    "tooltip-format": "左键：静音\n右键：关闭麦克风\n中键：打开面板",
     "format": "{icon}{volume}% {format_source}",
     //"format-bluetooth": "{volume}% {format_source}",
     "format-source": "{volume}%",
@@ -185,7 +185,7 @@
   },
   //logo+程序启动器
   "custom/applauncher": {
-    "tooltip-format": "Click to Open Applauncher or Right-Click to Select Wallpaper or Middle-Click to toggle blur bg",
+    "tooltip-format": "左键：打开软件启动器\n右键：选择壁纸\n中键：启用/禁用Niri背景自动模糊",
     "format": "󰣇",
     "on-click": "fuzzel",
     "on-click-right": "waypaper",
@@ -239,9 +239,10 @@
     "orientation": "horizontal",
   },
   "backlight": {
-    "tooltip": false,
+    "tooltip": true,
     "format": "{icon}",
     "format-icons": ["", "", "", "", "", "", "", "", ""],
+    "tooltip-format":"内屏亮度"
   },
   //调节外接屏幕亮度
   "group/ddcutil": {
@@ -259,21 +260,21 @@
     ],
   },
   "custom/ddcutil-day": {
-    "tooltip-format": "Ex.Monitor 100% brightness",
+    "tooltip-format": "左键：100%外接显示器亮度",
     "format": "󰃠",
     "on-click": "ddcutil --display 1 setvcp 10 100 ",
     "on-scroll-up":"true",
     "on-scroll-down":"true"
   },
   "custom/ddcutil-night": {
-    "tooltip-format": "Ex.Monitor 65% brightness",
+    "tooltip-format": "左键：65%外接显示器亮度",
     "format": "󰃟",
     "on-click": "ddcutil --display 1 setvcp 10 65 ",
     "on-scroll-up":"true",
     "on-scroll-down":"true"
   },
   "custom/ddcutil-sleep": {
-    "tooltip-format": "Ex.Monitor 5% brightness",
+    "tooltip-format": "左键：5%外接显示器亮度",
     "format": "󰃞",
     "on-click": "ddcutil --display 1 setvcp 10 5 ",
     "on-scroll-up":"true",
@@ -312,9 +313,10 @@
   },
   //获取屏幕颜色colorpicker
   "custom/colorpicker": {
-    "tooltip": false,
+    "tooltip": true,
     "format": "󱏜",
     "on-click": "hyprpicker | wl-copy",
+    "tooltip-format":"左键：提取颜色",
   },
   //音频可视化
   "custom/cava": {
@@ -329,8 +331,8 @@
       "activated": "",
       "deactivated": "",
     },
-        "tooltip-format-activated": "idle Disabled",
-    "tooltip-format-deactivated": "idle Enabled",
+        "tooltip-format-activated": "自动熄屏已禁用",
+    "tooltip-format-deactivated": "自动熄屏已开启",
     "on-click-right":"~/.config/scripts/matugen-select-type.sh"
   },
   //分隔符󰇝 󱋱
