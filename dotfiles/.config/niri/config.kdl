@@ -59,9 +59,10 @@ recent-windows {
         corner-radius 12
     }
 
+	//设置缩略图大小
     previews {
         max-height 480
-        max-scale 0.5
+        max-scale 0.2
     }
 
     binds {
@@ -92,7 +93,7 @@ input {
         }
 
         // Enable numlock on startup, omitting this setting disables it.
-        numlock
+        //numlock
     }
 
     // Next sections include libinput settings.
@@ -337,7 +338,7 @@ spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
 // 大写锁定键的osd显示
 spawn-at-startup "swayosd-server"
 // alt+tab切换器（这是一个第三方，无缩略图显示的切换器）
-spawn-at-startup "niriswitcher"
+//spawn-at-startup "niriswitcher"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
