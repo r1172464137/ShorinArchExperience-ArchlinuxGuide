@@ -274,7 +274,7 @@ window#waybar.empty #window {
 #custom-right_div.3 {
 
     color: @surface_container_high;
-    padding: 0px 0.2em 0px 0px ;
+    padding: 0px 0.1em 0px 0px ;
     font-size: 1.39em; /* 25px */
 }
 #custom-right_div.4 {
