@@ -8,7 +8,7 @@ if env | grep -q "zh_CN"; then
     TXT_BOTH="全系统恢复"
     TXT_ROOT="仅恢复root"
     TXT_HOME="仅恢复home"
-    TXT_CANCEL="取消"
+    TXT_CANCEL="取消" 
     
     MSG_TITLE="系统恢复"
     MSG_START="正在进行恢复，请勿关闭电脑..."
