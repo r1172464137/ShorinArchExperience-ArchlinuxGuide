@@ -37,6 +37,7 @@ window-rule {
     match app-id="nm-connection-editor"
     match app-id="notebook"
     match app-id="quickterminal"
+    match app-id="niri-quick-switch"
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     match app-id="steam" title="Friends List"
     match app-id="blueberry.py" title="蓝牙"

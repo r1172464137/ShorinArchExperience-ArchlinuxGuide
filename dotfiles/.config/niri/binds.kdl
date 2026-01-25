@@ -17,7 +17,7 @@ binds {
     Mod+Shift+Slash hotkey-overlay-title="快捷键教程 Keybind tutorial" { show-hotkey-overlay; }
 
     // alt+tab切换窗口
-    Alt+Tab hotkey-overlay-title="快速切换窗口菜单 Quick window switch menu" {spawn "~/.config/scripts/niri-quick-switch.py";}
+    Alt+Tab hotkey-overlay-title="快速切换窗口菜单 Quick window switch menu" {spawn "~/.config/scripts/niri-quick-switch-fuzzel.py";}
     Mod+Alt+W hotkey-overlay-title="切换壁纸 Change wallpaper" {spawn "waypaper";}
     Mod+Alt+M hotkey-overlay-title="切换颜色策略 Change color strategy" {spawn "~/.config/scripts/matugen-select-type.sh";}
     Mod+Alt+T hotkey-overlay-title="切换颜色策略 Change color strategy" {spawn "~/.config/scripts/matugen-select-type.sh";}
