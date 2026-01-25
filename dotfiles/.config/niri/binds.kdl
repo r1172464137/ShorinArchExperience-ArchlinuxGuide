@@ -31,7 +31,7 @@ binds {
     Mod+F8 hotkey-overlay-title="快速读档 Quick load" {spawn "~/.config/scripts/quickload.sh";}
 
     // 这一行是用waybar自己支持的信号功能隐藏waybar，但进程没有退出，资源占用依旧有
-    //Mod+F4 hotkey-overlay-title="隐藏waybar" {spawn-sh "killall -SIGUSR1 waybar";}
+    Mod+Shift+F4 hotkey-overlay-title="隐藏任务栏" {spawn-sh "killall -SIGUSR1 waybar";}
     // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
     Mod+F4 hotkey-overlay-title="开关任务栏 toggle bar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
     // gnome的文本编辑器
