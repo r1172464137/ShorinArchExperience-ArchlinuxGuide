@@ -3,14 +3,14 @@
 # ==============================================================================
 # Shorin-Niri Updater Utility
 # ==============================================================================
-# 功能：备份 -> 更新(本地优先) -> 智能链接 -> 重载 Niri
+# 功能：备份 -> 更新(本地优先) -> 智能链接
 # ==============================================================================
 
 # --- 配置 ---
 DOTFILES_REPO="$HOME/.local/share/shorin-niri"
 BACKUP_ROOT="$HOME/.local/state/shorin-niri-backups"
 # 必须包含 scripts 以便自我更新
-TARGET_DIRS=("dotfiles" "wallpapers" "scripts") 
+TARGET_DIRS=("dotfiles" "wallpapers") 
 BRANCH="main"
 
 # --- 颜色与日志 ---
@@ -94,7 +94,7 @@ if [ -n "$(git status --porcelain)" ]; then
     HAS_LOCAL_CHANGES=true
 fi
 
-# 刷新稀疏检出白名单 (确保 scripts 目录被包含)
+# 刷新稀疏检出白名单
 git config core.sparseCheckout true
 SPARSE_FILE=".git/info/sparse-checkout"
 truncate -s 0 "$SPARSE_FILE"
