@@ -118,7 +118,7 @@ link_recursive "$DOTFILES_REPO/dotfiles" "$HOME"
 # 4. 清理
 log "清理仓库..."
 git reflog expire --expire=now --all
-git gc --prune=now --aggressive 2>/dev/null
+git gc --prune=now 2>/dev/null
 
 echo ""
 echo -e "${H_GREEN}更新完成${NC}"
