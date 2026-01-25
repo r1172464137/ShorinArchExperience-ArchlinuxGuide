@@ -32,4 +32,4 @@ set clipboard=unnamedplus
 
 " 接管鼠标事件
 set mouse=a
-" 2222222
+" 3333333
