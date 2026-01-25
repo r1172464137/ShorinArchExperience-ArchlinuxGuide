@@ -18,10 +18,10 @@ BRANCH="main"
 # --- 颜色与日志 ---
 H_RED='\033[1;31m'; H_GREEN='\033[1;32m'; H_YELLOW='\033[1;33m'; H_BLUE='\033[1;34m'; NC='\033[0m'
 
-log() { echo -e "${H_BLUE}[Log]${NC} $1"; }
-success() { echo -e "${H_GREEN}[Success]${NC} $1"; }
-warn() { echo -e "${H_YELLOW}[Warn]${NC} $1"; }
-error() { echo -e "${H_RED}[Error]${NC} $1"; exit 1; }
+log() { echo -e "${H_BLUE}[LOG]${NC} $1"; }
+success() { echo -e "${H_GREEN}[SUCCESS]${NC} $1"; }
+warn() { echo -e "${H_YELLOW}[WARN]${NC} $1"; }
+error() { echo -e "${H_RED}[ERROR]${NC} $1"; exit 1; }
 
 # --- 核心函数: 智能递归链接 ---
 link_recursive() {
