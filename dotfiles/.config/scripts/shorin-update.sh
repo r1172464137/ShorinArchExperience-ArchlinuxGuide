@@ -60,11 +60,23 @@ fi
 
 cd "$DOTFILES_REPO" || exit 1
 
-# 1. 备份
+# 1. 备份 (修改：询问用户，默认 N)
 mkdir -p "$BACKUP_ROOT"
-log "正在创建备份..."
-tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
-success "备份完成"
+BACKUP_DONE=false
+
+# 使用 echo -ne 不换行打印，方便用户在同一行输入
+echo -ne "${H_YELLOW}[询问]${NC} 是否创建当前状态的备份? [y/N]: "
+read -r OPT_BACKUP
+
+# 只有输入 y 或 Y 才执行备份，其他情况（包括回车）都跳过
+if [[ "$OPT_BACKUP" =~ ^[yY]$ ]]; then
+    log "正在创建备份..."
+    tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
+    success "备份完成"
+    BACKUP_DONE=true
+else
+    log "已跳过备份"
+fi
 
 # 2. 更新
 log "检查更新..."
@@ -122,4 +134,8 @@ git gc --prune=now 2>/dev/null
 
 echo ""
 echo -e "${H_GREEN}更新完成${NC}"
-echo -e "${H_BLUE}备份路径:${NC} $BACKUP_FILE"
+
+# 只有执行了备份才显示路径
+if [ "$BACKUP_DONE" = true ]; then
+    echo -e "${H_BLUE}备份路径:${NC} $BACKUP_FILE"
+fi
