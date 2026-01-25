@@ -16,9 +16,7 @@ binds {
     // 显示快捷键教程
     Mod+Shift+Slash hotkey-overlay-title="快捷键教程 Keybind tutorial" { show-hotkey-overlay; }
 
-    // 我添加的快捷键
     // alt+tab切换窗口
-    Alt+Tab repeat=false {spawn "niriswitcherctl" "show" "--window";}
     Mod+Alt+W hotkey-overlay-title="切换壁纸 Change wallpaper" {spawn "waypaper";}
     Mod+Alt+M hotkey-overlay-title="切换颜色策略 Change color strategy" {spawn "~/.config/scripts/matugen-select-type.sh";}
     Mod+Alt+T hotkey-overlay-title="切换颜色策略 Change color strategy" {spawn "~/.config/scripts/matugen-select-type.sh";}
