@@ -1,27 +1,23 @@
 #!/bin/bash
 
 # ==============================================================================
-# Shorin-Niri 更新工具 (全量备份版)
+# Shorin-Niri 更新工具 (极简体积版)
 # ==============================================================================
 
 # --- 配置区域 ---
 DOTFILES_REPO="$HOME/.local/share/shorin-niri"
-# 备份路径：使用缓存目录
 BACKUP_ROOT="$HOME/.cache/shorin-niri-update"
-# 备份文件名：固定名称，每次覆盖
 BACKUP_FILE="$BACKUP_ROOT/backup.tar.gz"
-
-# 必须包含 scripts 目录以便自我更新
 TARGET_DIRS=("dotfiles" "wallpapers") 
 BRANCH="main"
 
 # --- 颜色与日志 ---
 H_RED='\033[1;31m'; H_GREEN='\033[1;32m'; H_YELLOW='\033[1;33m'; H_BLUE='\033[1;34m'; NC='\033[0m'
 
-log() { echo -e "${H_BLUE}[LOG]${NC} $1"; }
-success() { echo -e "${H_GREEN}[SUCCESS]${NC} $1"; }
-warn() { echo -e "${H_YELLOW}[WARN]${NC} $1"; }
-error() { echo -e "${H_RED}[ERROR]${NC} $1"; exit 1; }
+log() { echo -e "${H_BLUE}[信息]${NC} $1"; }
+success() { echo -e "${H_GREEN}[成功]${NC} $1"; }
+warn() { echo -e "${H_YELLOW}[注意]${NC} $1"; }
+error() { echo -e "${H_RED}[错误]${NC} $1"; exit 1; }
 
 # --- 核心函数: 智能递归链接 ---
 link_recursive() {
@@ -66,20 +62,21 @@ log "正在启动 Shorin-Niri 更新程序..."
 cd "$DOTFILES_REPO" || exit 1
 
 # ------------------------------------------------------------------------------
-# 步骤 1: 物理备份 (Backup)
+# 步骤 1: 物理备份
 # ------------------------------------------------------------------------------
 mkdir -p "$BACKUP_ROOT"
-
-log "正在创建全量安全备份（包含 Git 历史）..."
-# 修改点：去掉了 --exclude='.git'，备份整个目录
+log "正在创建安全备份..."
 tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
 success "备份已完成"
 
 # ------------------------------------------------------------------------------
-# 步骤 2: Git 更新 (Rebase + 自动身份修正)
+# 步骤 2: Git 更新 (浅克隆 + 本地优先)
 # ------------------------------------------------------------------------------
 log "正在检查远程更新..."
-git fetch origin "$BRANCH"
+
+# [修改点] 使用 --depth 1 只获取最新的 1 个提交
+# 这会将你的仓库转换为"浅仓库"(Shallow Repository)
+git fetch --depth 1 origin "$BRANCH"
 
 LOCAL_HASH=$(git rev-parse HEAD)
 REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
@@ -87,49 +84,41 @@ REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
 if [ "$LOCAL_HASH" == "$REMOTE_HASH" ]; then
     success "当前已是最新版本，无需更新。"
 else
-    # 检测本地修改
     HAS_LOCAL_CHANGES=false
     if [ -n "$(git status --porcelain)" ]; then
         HAS_LOCAL_CHANGES=true
-        warn "检测到本地有修改，正在应用智能合并策略（保留您的修改）..."
+        warn "检测到本地有修改，正在应用智能合并策略..."
         
-        # 自动配置 Git 身份，防止 commit 失败
         if [ -z "$(git config user.email)" ]; then
-            log "未检测到 Git 身份信息，正在设置临时身份以完成更新..."
+            log "未检测到 Git 身份信息，正在设置临时身份..."
             git config user.email "updater@shorin.local"
             git config user.name "Shorin Updater"
         fi
         
-        # 1. 创建临时提交
         git add -A
         if ! git commit -m "TEMP_AUTO_UPDATE_SAVE" --quiet; then
              error "无法创建临时提交，请手动检查 git 状态。"
         fi
     fi
 
-    # 刷新稀疏检出
     git config core.sparseCheckout true
     SPARSE_FILE=".git/info/sparse-checkout"
     truncate -s 0 "$SPARSE_FILE"
     for item in "${TARGET_DIRS[@]}"; do echo "$item" >> "$SPARSE_FILE"; done
 
-    # 2. 执行 Rebase 更新
     log "正在下载并合并核心文件..."
+    # [修改点] 即使是浅克隆，rebase 也是依然有效的
     if git pull --rebase -Xtheirs origin "$BRANCH"; then
         success "核心文件更新成功。"
     else
         git rebase --abort 2>/dev/null
-        error "更新过程中发生冲突。已自动还原变更，请手动检查。"
+        error "更新冲突，已自动还原。请手动检查。"
     fi
 
-    # 3. 恢复现场
     if [ "$HAS_LOCAL_CHANGES" = true ]; then
         log "正在恢复您的本地修改..."
-        
-        # 撤销那个临时的提交，保留文件内容
         git reset --soft HEAD~1
         git reset
-        
         success "您的本地修改已重新应用。"
     fi
 fi
@@ -139,6 +128,20 @@ fi
 # ------------------------------------------------------------------------------
 log "正在验证并刷新配置文件链接..."
 link_recursive "$DOTFILES_REPO/dotfiles" "$HOME"
+
+# ------------------------------------------------------------------------------
+# 步骤 4: 强力瘦身 (Aggressive Cleaning)
+# ------------------------------------------------------------------------------
+log "正在执行仓库强力瘦身（只保留最新版本）..."
+
+# [修改点] 强力清理指令
+# 1. expire=now: 立即让所有历史记录过期
+# 2. prune=now: 立即删除所有过期的数据
+# 3. aggressive: 即使花费更多 CPU 时间，也要压缩到最小
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive 2>/dev/null
+
+success "仓库维护完成，体积已最小化。"
 
 echo ""
 echo -e "${H_GREEN}========================================${NC}"
