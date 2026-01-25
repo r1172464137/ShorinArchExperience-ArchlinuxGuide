@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # ==============================================================================
-# Shorin-Niri 更新工具 (中文优化版)
+# Shorin-Niri 更新工具 (全量备份版)
 # ==============================================================================
 
 # --- 配置区域 ---
 DOTFILES_REPO="$HOME/.local/share/shorin-niri"
-# 修改点1：备份路径改为 .cache 下
+# 备份路径：使用缓存目录
 BACKUP_ROOT="$HOME/.cache/shorin-niri-update"
-# 修改点1：固定备份文件名，不带时间戳
+# 备份文件名：固定名称，每次覆盖
 BACKUP_FILE="$BACKUP_ROOT/backup.tar.gz"
 
 # 必须包含 scripts 目录以便自我更新
@@ -18,7 +18,6 @@ BRANCH="main"
 # --- 颜色与日志 ---
 H_RED='\033[1;31m'; H_GREEN='\033[1;32m'; H_YELLOW='\033[1;33m'; H_BLUE='\033[1;34m'; NC='\033[0m'
 
-# 修改点2：提示语改为中文
 log() { echo -e "${H_BLUE}[信息]${NC} $1"; }
 success() { echo -e "${H_GREEN}[成功]${NC} $1"; }
 warn() { echo -e "${H_YELLOW}[注意]${NC} $1"; }
@@ -71,9 +70,9 @@ cd "$DOTFILES_REPO" || exit 1
 # ------------------------------------------------------------------------------
 mkdir -p "$BACKUP_ROOT"
 
-log "正在创建安全备份..."
-# 使用 tar 排除 .git 目录，直接覆盖旧备份
-tar --exclude='.git' -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
+log "正在创建全量安全备份（包含 Git 历史）..."
+# 修改点：去掉了 --exclude='.git'，备份整个目录
+tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
 success "备份已完成"
 
 # ------------------------------------------------------------------------------
@@ -141,12 +140,11 @@ fi
 log "正在验证并刷新配置文件链接..."
 link_recursive "$DOTFILES_REPO/dotfiles" "$HOME"
 
-# 修改点3：打印备份位置
 echo ""
 echo -e "${H_GREEN}========================================${NC}"
 echo -e "${H_GREEN}          更新全部完成！                ${NC}"
 echo -e "${H_GREEN}========================================${NC}"
-echo -e "${H_BLUE}[备份信息]${NC} 备份文件位置: $BACKUP_FILE"
+echo -e "${H_BLUE}[备份信息]${NC} 全量备份文件位置: $BACKUP_FILE"
 if [ "$HAS_LOCAL_CHANGES" = true ]; then
     echo -e "${H_YELLOW}[提示]${NC} 您的本地修改已保留在工作区中。"
 fi
