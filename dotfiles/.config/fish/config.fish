@@ -2,7 +2,7 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 set fish_greeting ""
-
+set -p PATH ~/.local/bin
 starship init fish | source
 zoxide init fish --cmd cd | source
 
@@ -38,7 +38,15 @@ function 更新
 	sysup 
 end
 function 清理
-	command yay -Scc 
+    command yay -Scc
+    if test -d /var/cache/pacman/pkg/
+        set -l targets /var/cache/pacman/pkg/download-*/
+        if count $targets > /dev/null
+            echo "正在清理残留的下载目录..."
+            sudo rm -rf $targets
+        end
+    end
+    echo "清理完成！"
 end
 function 安装
 	command yay -S $argv
@@ -47,7 +55,15 @@ function 卸载
 	command yay -Rns $argv
 end
 function clean
-	command yay -Scc 
+    command yay -Scc
+    if test -d /var/cache/pacman/pkg/
+        set -l targets /var/cache/pacman/pkg/download-*/
+        if count $targets > /dev/null
+            echo "正在清理残留的下载目录..."
+            sudo rm -rf $targets
+        end
+    end
+    echo "清理完成！"
 end
 function install
 	command yay -S $argv
