@@ -35,7 +35,7 @@ binds {
     // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
     Mod+F4 hotkey-overlay-title="开关任务栏 toggle bar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
     // gnome的文本编辑器
-    Mod+M hotkey-overlay-title="记事本 Notebook" {spawn "gnome-text-editor";}
+    Mod+M hotkey-overlay-title="记事本 Notebook" {spawn-sh "kitty --class notebook -e vim";}
     Mod+B hotkey-overlay-title="浏览器 Browser" { spawn "firefox"; }        
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
@@ -340,7 +340,8 @@ binds {
     // 切换浮动模式
     Mod+V   hotkey-overlay-title="切换浮动 Toggle floating"    { toggle-window-floating; }
     // 在浮动模式和非浮动模式之间切换聚焦
-    Mod+Shift+V hotkey-overlay-title="切换浮动聚焦 Change focus to floating" { switch-focus-between-floating-and-tiling; }
+    Mod+Shift+V hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
+    Mod+N hotkey-overlay-title="切换浮动聚焦 Change focus to floating" { switch-focus-between-floating-and-tiling; }
 
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
