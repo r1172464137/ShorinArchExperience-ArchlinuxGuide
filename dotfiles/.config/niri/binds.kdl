@@ -378,6 +378,7 @@ binds {
     Mod+Shift+E hotkey-overlay-title="退出niri Quit niri" { quit; }
     Ctrl+Alt+Delete hotkey-overlay-title="电源菜单 Powermenu" { spawn "wlogout"; }
     // Powers off the monitors. To turn them back on, do any input like
+
     // moving the mouse or pressing any other key.
     Mod+Shift+P  hotkey-overlay-title="关闭显示器 Turn off monitors" { power-off-monitors; }
 
