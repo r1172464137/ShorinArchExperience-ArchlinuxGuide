@@ -34,8 +34,12 @@ binds {
     Mod+Shift+F4 hotkey-overlay-title="隐藏任务栏" {spawn-sh "killall -SIGUSR1 waybar";}
     // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
     Mod+F4 hotkey-overlay-title="开关任务栏 toggle bar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
-    // gnome的文本编辑器
+    // 临时打开一个文本编辑器
     Mod+M hotkey-overlay-title="记事本 Notebook" {spawn-sh "kitty --class notebook -e vim";}
+    // 临时开一个浮动终端
+    Mod+Slash hotkey-overlay-title="临时终端 Quick Terminal" {spawn "kitty" "--class" "quickterminal";}
+    Mod+F12 hotkey-overlay-title=null {spawn "kitty" "--class" "quickterminal";}
+    //打开浏览器
     Mod+B hotkey-overlay-title="浏览器 Browser" { spawn "firefox"; }        
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
