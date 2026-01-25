@@ -1,39 +1,41 @@
 #!/bin/bash
 
-# 1. 获取脚本绝对路径 (pkexec 需要)
+# 1. 获取脚本绝对路径
 SCRIPT_PATH=$(realpath "$0")
 
 # ==================== 本地化配置 (Localization) ====================
-# 使用 env 命令检查环境变量中是否有任何变量包含 zh_CN
 if env | grep -q "zh_CN"; then
     # 中文文案
     TXT_PROMPT="快速读档 > "
-    TXT_BOTH="全系统恢复 (Root + Home)"
-    TXT_ROOT="仅恢复系统 (Root)"
-    TXT_HOME="仅恢复数据 (Home)"
-    TXT_CANCEL="取消"
+    # 加上了醒目的警告
+    TXT_BOTH="🔄 全系统恢复 (⚠️ 自动重启)"
+    TXT_ROOT="💻 仅恢复系统 (⚠️ 自动重启)"
+    TXT_HOME="🏠 仅恢复数据 (⚠️ 自动重启)"
+    TXT_CANCEL="❌ 取消"
     
     MSG_TITLE="系统恢复"
-    MSG_SUCCESS="恢复成功，请立即重启电脑。"
+    MSG_START="正在进行恢复，请勿关闭电脑..."
+    MSG_SUCCESS="恢复成功！3秒后自动重启..."
     MSG_FAIL="恢复失败，请检查日志。"
     MSG_NO_SNAP="未找到 quicksave 快照："
     MSG_MAP_FAIL="无法映射快照 ID："
 else
     # English Strings
     TXT_PROMPT="Quickload > "
-    TXT_BOTH="Full Restore (Root + Home)"
-    TXT_ROOT="Restore Root Only"
-    TXT_HOME="Restore Home Only"
-    TXT_CANCEL="Cancel"
+    TXT_BOTH="🔄 Full Restore (⚠️ Auto Reboot)"
+    TXT_ROOT="💻 Restore Root Only (⚠️ Auto Reboot)"
+    TXT_HOME="🏠 Restore Home Only (⚠️ Auto Reboot)"
+    TXT_CANCEL="❌ Cancel"
 
     MSG_TITLE="System Restore"
-    MSG_SUCCESS="Restore successful. Please REBOOT now."
+    MSG_START="Restoring in progress, do not turn off..."
+    MSG_SUCCESS="Success! Rebooting in 3s..."
     MSG_FAIL="Restore failed. Check logs."
     MSG_NO_SNAP="No quicksave found for:"
     MSG_MAP_FAIL="Map failed for:"
 fi
 
-# ==================== ROOT WORKER (核心逻辑 - 只有 Root 身份会进这里) ====================
+# ==================== ROOT WORKER (核心逻辑) ====================
 if [ "$1" == "--internal-run-as-root" ]; then
     MODE="$2"
     
@@ -63,21 +65,27 @@ fi
 
 # ==================== 用户交互界面 (UI) ====================
 
-# 1. 弹出 Fuzzel 菜单
+# 1. 弹出 Fuzzel 菜单 (带警告)
 SELECTION=$(printf "$TXT_BOTH\n$TXT_ROOT\n$TXT_HOME\n$TXT_CANCEL" | fuzzel -d -p "$TXT_PROMPT")
 
-# 2. 解析选择结果 -> 转换为内部模式
+# 2. 解析选择结果
 case "$SELECTION" in
     "$TXT_BOTH") TARGET_MODE="both" ;;
     "$TXT_ROOT") TARGET_MODE="root" ;;
     "$TXT_HOME") TARGET_MODE="home" ;;
-    *) exit 0 ;; # 取消或无效输入直接退出
+    *) exit 0 ;; 
 esac
 
-# 3. 提权并调用自身
-# 使用 $SCRIPT_PATH 确保 pkexec 能找到脚本
+# 3. 发送开始通知
+notify-send "$MSG_TITLE" "$MSG_START"
+
+# 4. 提权并执行
 if pkexec "$SCRIPT_PATH" --internal-run-as-root "$TARGET_MODE"; then
+    # 成功逻辑
     notify-send -u critical "$MSG_TITLE" "$MSG_SUCCESS"
+    sleep 3
+    systemctl reboot
 else
+    # 失败逻辑
     notify-send -u critical "$MSG_TITLE" "$MSG_FAIL"
 fi
