@@ -3,9 +3,7 @@
 # ==============================================================================
 # pac - Fuzzy search and install packages (Localized & Non-blocking)
 # ==============================================================================
-
 set -o pipefail
-
 # --- 1. Pre-Configuration ---
 ORIGINAL_LANG="${LC_ALL:-${LC_MESSAGES:-${LANG}}}"
 SHOW_HELP=false
