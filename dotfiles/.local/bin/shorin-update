@@ -39,6 +39,7 @@ MSG_FEAT_3        | - Auto Link: Smart recursive symlinking                    |
 MSG_FEAT_4        | - Self-Healing: Sparse checkout & conflict recovery        | - 自我修复：稀疏检出重置与冲突回滚
 MSG_ASK_BACKUP    | [QUERY] Create a backup of current state? [Y/n]:           | [询问] 是否创建当前状态的备份? [Y/n]: 
 MSG_BACKUP_ING    | Creating backup...                                         | 正在创建备份...
+MSG_QUICKSAVE	  | Qucik snapper saving...				                       | 正在快速快照存档...
 MSG_BACKUP_DONE   | Backup completed.                                          | 备份完成
 MSG_BACKUP_SKIP   | Backup skipped.                                            | 已跳过备份
 MSG_CHECK_UPDATE  | Checking for updates...                                    | 检查更新...
@@ -172,7 +173,7 @@ OPT_BACKUP=${OPT_BACKUP:-Y}
 if [[ "$OPT_BACKUP" =~ ^[yY] ]]; then
     log "$MSG_BACKUP_ING"
     if quicksave; then
-	log "Quicksaved"
+	log "$MSG_QUICKSAVE"
     fi
     tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
     success "$MSG_BACKUP_DONE"
