@@ -3,7 +3,7 @@
 # ==============================================================================
 # pacr - Fuzzy find and remove packages (Localized & Non-blocking)
 # ==============================================================================
-
+# tset
 set -o pipefail
 
 # --- 1. Pre-Configuration ---
