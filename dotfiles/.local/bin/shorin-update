@@ -171,6 +171,9 @@ OPT_BACKUP=${OPT_BACKUP:-Y}
 
 if [[ "$OPT_BACKUP" =~ ^[yY] ]]; then
     log "$MSG_BACKUP_ING"
+    if quicksave; then
+	log "Quicksaved"
+    fi
     tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
     success "$MSG_BACKUP_DONE"
     BACKUP_DONE=true
