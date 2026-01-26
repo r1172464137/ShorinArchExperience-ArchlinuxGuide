@@ -6,7 +6,7 @@ output "eDP-1"{
 
 }
 output "DP-2"{
-	//主显示器DP-2
+	//主要显示器DP-2
 	mode "2560x1440@180"
 	scale 1
 	position x=0 y=0
