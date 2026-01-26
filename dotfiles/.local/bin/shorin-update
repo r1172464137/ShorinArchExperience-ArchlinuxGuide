@@ -258,6 +258,7 @@ link_recursive() {
 
         if [[ "$item_name" == ".config" || "$item_name" == ".local" ]]; then
             need_recurse=true
+        # 修改说明：移除 || "$item_name" == "bin"，确保 .local/bin 不会被递归，而是作为目录链接
         elif [[ "$src_dir" == *".local" && "$item_name" == "share" ]]; then
             need_recurse=true
         fi
