@@ -37,7 +37,7 @@ MSG_FEAT_1        | - Safe Update: Git fetch, stash changes, and rebase        |
 MSG_FEAT_2        | - Backup: Optional tarball backup before update            | - 备份机制：更新前可选创建压缩包备份
 MSG_FEAT_3        | - Auto Link: Smart recursive symlinking                    | - 自动链接：智能递归软链接管理
 MSG_FEAT_4        | - Self-Healing: Sparse checkout & conflict recovery        | - 自我修复：稀疏检出重置与冲突回滚
-MSG_ASK_BACKUP    | [QUERY] Create a backup of current state? [y/N]:           | [询问] 是否创建当前状态的备份? [y/N]: 
+MSG_ASK_BACKUP    | [QUERY] Create a backup of current state? [Y/n]:           | [询问] 是否创建当前状态的备份? [Y/n]: 
 MSG_BACKUP_ING    | Creating backup...                                         | 正在创建备份...
 MSG_BACKUP_DONE   | Backup completed.                                          | 备份完成
 MSG_BACKUP_SKIP   | Backup skipped.                                            | 已跳过备份
@@ -162,11 +162,14 @@ cd "$DOTFILES_REPO" || exit 1
 mkdir -p "$BACKUP_ROOT"
 BACKUP_DONE=false
 
-# Use localized string for prompt
+# Use localized string for prompt (Now defaults to Y)
 echo -ne "${H_YELLOW}${MSG_ASK_BACKUP}${NC} "
 read -r OPT_BACKUP
 
-if [[ "$OPT_BACKUP" =~ ^[yY]$ ]]; then
+# Set default to Y if input is empty
+OPT_BACKUP=${OPT_BACKUP:-Y}
+
+if [[ "$OPT_BACKUP" =~ ^[yY] ]]; then
     log "$MSG_BACKUP_ING"
     tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
     success "$MSG_BACKUP_DONE"
