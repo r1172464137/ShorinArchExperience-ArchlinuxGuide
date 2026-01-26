@@ -12,4 +12,53 @@
 	<startup-notify/>
 	<directories/>
 </action>
+<action>
+	<icon></icon>
+	<name>多媒体信息</name>
+	<submenu></submenu>
+	<unique-id>1769424941490550-1</unique-id>
+	<command>media-info -f %f -t %n</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<audio-files/>
+	<video-files/>
+</action>
+<action>
+	<icon></icon>
+	<name>粘贴为链接</name>
+	<submenu></submenu>
+	<unique-id>1769427857102992-1</unique-id>
+	<command>sh -c &apos;wl-paste -t text/uri-list | python3 -c &quot;
+import sys, os, urllib.parse
+dest_dir = sys.argv[1]
+
+# 逐行读取剪贴板里的文件
+for line in sys.stdin:
+    # 1. 清理路径：解码URL并去掉 file:// 前缀
+    src = urllib.parse.unquote(line.strip()).replace(\&quot;file://\&quot;, \&quot;\&quot;)
+    
+    # 2. 基础检查
+    if not src or not os.path.exists(src): continue
+    
+    # 3. 计算目标文件名
+    filename = os.path.basename(src)
+    target = os.path.join(dest_dir, filename)
+    
+    # 4. 重名检测循环：如果有同名文件，变成 \&quot;文件名 (1).后缀\&quot;
+    root, ext = os.path.splitext(filename)
+    counter = 1
+    while os.path.exists(target):
+        target = os.path.join(dest_dir, f\&quot;{root} ({counter}){ext}\&quot;)
+        counter += 1
+        
+    # 5. 创建链接
+    try: os.symlink(src, target)
+    except: pass
+&quot; %f&apos;</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+</action>
 </actions>
