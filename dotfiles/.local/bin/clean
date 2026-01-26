@@ -1,0 +1,237 @@
+#!/bin/bash
+
+# ==============================================================================
+# clean - Arch Linux System Cleanup Utility
+# ==============================================================================
+
+set -o pipefail
+
+# --- 1. Pre-Configuration ---
+ORIGINAL_LANG="${LC_ALL:-${LC_MESSAGES:-${LANG}}}"
+ARG_UI_LANG=""
+SKIP_CONFIRM=false
+
+# --- 2. Usage / Help Function ---
+usage() {
+    cat <<EOF
+Usage: clean [options]
+
+Options:
+  --ui-lang zh|en    Force UI language (default: auto-detect)
+  --yes, -y          Skip confirmation prompt (non-interactive mode)
+  --help, -h         Show this help and exit
+
+Description:
+  A safe and automated cleanup utility for Arch Linux.
+EOF
+}
+
+# --- 3. Argument Parsing ---
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --ui-lang)
+            if [[ -n "$2" && ! "$2" =~ ^- ]]; then
+                ARG_UI_LANG="$2"
+                shift 2
+            else
+                echo "Error: --ui-lang requires an argument (zh|en)." >&2
+                exit 1
+            fi
+            ;;
+        --yes|-y)
+            SKIP_CONFIRM=true
+            shift
+            ;;
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# --- 4. Language Logic ---
+if [[ -n "$ARG_UI_LANG" ]]; then
+    UI_LANG="$ARG_UI_LANG"
+else
+    if [[ "$ORIGINAL_LANG" == *"zh_CN"* ]]; then
+        UI_LANG="zh"
+    else
+        UI_LANG="en"
+    fi
+fi
+
+# --- 5. Environment Setup ---
+export LC_ALL=C
+
+# --- 6. Colors ---
+BLUE='\033[34m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+RED='\033[31m'
+NC='\033[0m'
+
+# --- 7. Localization Table (Clean Version) ---
+LANG_TABLE='
+TAG_INFO          | [INFO]                                  | [消息]
+TAG_SUCCESS       | [OK]                                    | [成功]
+TAG_WARN          | [WARN]                                  | [注意]
+TAG_ERROR         | [ERROR]                                 | [错误]
+
+MSG_DESC_TITLE    | This script will perform the following cleanup tasks:      | 本脚本将执行以下清理任务：
+MSG_DESC_1        | 1. Remove orphaned packages                                | 1. 移除孤儿包
+MSG_DESC_2        | 2. Clean package cache                                     | 2. 清理软件包缓存
+MSG_DESC_3        | 3. Vacuum systemd journals                                 | 3. 清理 systemd 系统日志
+MSG_DESC_4        | 4. Empty user Trash and thumbnails                         | 4. 清空回收站及缩略图
+MSG_DESC_5        | 5. Remove unused Flatpak runtimes                          | 5. 移除未使用的 Flatpak 运行时
+MSG_ASK_CONFIRM   | Proceed with cleanup? [Y/n]                                | 确认开始清理吗？[Y/n] 
+MSG_ABORT         | Cleanup aborted by user.                                   | 用户取消清理。
+MSG_DONE          | System cleanup completed!                                  | 系统清理完成！
+
+MSG_NO_HELPER     | No AUR helper found (paru or yay).                         | 未找到 AUR 助手 (需要 paru 或 yay)。
+MSG_HELPER_USE    | Using AUR helper: %s                                       | 使用 AUR 助手: %s
+MSG_STEP_ORPHAN   | Checking for orphaned packages...                          | 正在检查孤儿包...
+MSG_ORPHAN_FOUND  | Detected orphans:                                          | 发现孤儿包：
+MSG_ORPHAN_CLEAN  | Orphans removed.                                           | 孤儿包已清理。
+MSG_ORPHAN_NONE   | No orphaned packages found.                                | 未发现孤儿包。
+MSG_STEP_CACHE    | Cleaning package cache...                                  | 正在清理软件包缓存...
+MSG_CACHE_DONE    | Package cache cleaned.                                     | 软件包缓存已清理。
+MSG_STEP_BROKEN   | Cleaning residual download directories...                  | 正在清理残留的下载目录...
+MSG_BROKEN_DONE   | Residual directories removed.                              | 残留目录已移除。
+MSG_STEP_LOG      | Vacuuming systemd journal logs...                          | 正在清理 systemd 系统日志...
+MSG_LOG_DONE      | Journal logs cleaned.                                      | 系统日志已清理。
+MSG_STEP_TRASH    | Cleaning user junk (Trash & Thumbnails)...                 | 正在清理用户垃圾 (回收站 & 缩略图)...
+MSG_TRASH_DONE    | Trash emptied.                                             | 回收站已清空。
+MSG_THUMB_DONE    | Thumbnails cleaned.                                        | 缩略图已清理。
+MSG_STEP_FLATPAK  | Checking for unused Flatpak runtimes...                    | 正在检查未使用的 Flatpak 运行时...
+MSG_FLATPAK_DONE  | Unused Flatpak runtimes removed.                           | 未使用的 Flatpak 运行时已移除。
+'
+
+while IFS='|' read -r v e c; do
+    v=$(printf '%s' "$v" | sed 's/^ *//;s/ *$//')
+    e=$(printf '%s' "$e" | sed 's/^ *//;s/ *$//')
+    c=$(printf '%s' "$c" | sed 's/^ *//;s/ *$//')
+    [ -z "$v" ] && continue
+    case "$v" in \#*) continue ;; esac
+    
+    if [ "$UI_LANG" = "zh" ]; then
+        eval "$v=\"$c\""
+    else
+        eval "$v=\"$e\""
+    fi
+done <<EOF
+$LANG_TABLE
+EOF
+
+# --- 8. Helper Functions ---
+log() { echo -e "${BLUE}${TAG_INFO}${NC} $1"; }
+success() { echo -e "${GREEN}${TAG_SUCCESS}${NC} $1"; }
+warn() { echo -e "${YELLOW}${TAG_WARN}${NC} $1"; }
+error() { echo -e "${RED}${TAG_ERROR}${NC} $1"; exit 1; }
+
+# --- 9. Main Logic ---
+
+# Detect Helper
+AUR_HELPER=""
+if command -v paru >/dev/null 2>&1; then
+    AUR_HELPER="paru"
+elif command -v yay >/dev/null; then
+    AUR_HELPER="yay"
+else
+    error "$MSG_NO_HELPER"
+fi
+
+# Print Summary & Confirm (Unless -y is passed)
+if [ "$SKIP_CONFIRM" = false ]; then
+    echo -e "\n${BLUE}==============================================================${NC}"
+    echo -e "${MSG_DESC_TITLE}"
+    echo -e "${NC}${MSG_DESC_1}"
+    echo -e "${NC}${MSG_DESC_2}"
+    echo -e "${NC}${MSG_DESC_3}"
+    echo -e "${NC}${MSG_DESC_4}"
+    echo -e "${NC}${MSG_DESC_5}"
+    echo -e "${BLUE}==============================================================${NC}"
+
+    printf "${YELLOW}${MSG_ASK_CONFIRM} ${NC}"
+    read -r confirm
+    case "$confirm" in
+        [yY][eE][sS]|[yY]|"") 
+            ;;
+        *)
+            echo "$MSG_ABORT"
+            exit 0
+            ;;
+    esac
+fi
+
+# --- 10. Execution ---
+
+log "$(printf "$MSG_HELPER_USE" "$AUR_HELPER")"
+
+# Keep Sudo Alive
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+# [Step 1] Orphans
+log "$MSG_STEP_ORPHAN"
+if ORPHANS=$(pacman -Qtdq); then
+    echo -e "${YELLOW}$MSG_ORPHAN_FOUND${NC}"
+    echo "$ORPHANS" | xargs echo
+    $AUR_HELPER -Rns $ORPHANS --noconfirm
+    success "$MSG_ORPHAN_CLEAN"
+else
+    success "$MSG_ORPHAN_NONE"
+fi
+
+# [Step 2] Cache
+log "$MSG_STEP_CACHE"
+$AUR_HELPER -Sc --noconfirm
+success "$MSG_CACHE_DONE"
+
+# [Step 3] Broken Downloads
+TARGET_DIR="/var/cache/pacman/pkg"
+if [ -d "$TARGET_DIR" ]; then
+    FOUND_DIRS=$(find "$TARGET_DIR" -maxdepth 1 -type d -name "download-*")
+    if [ -n "$FOUND_DIRS" ]; then
+        log "$MSG_STEP_BROKEN"
+        echo "$FOUND_DIRS" | while read -r dir; do
+            sudo rm -rf "$dir"
+            echo "  Removed: $dir"
+        done
+        success "$MSG_BROKEN_DONE"
+    fi
+fi
+
+# [Step 4] Journal
+log "$MSG_STEP_LOG"
+sudo journalctl --vacuum-time=2weeks >/dev/null 2>&1
+success "$MSG_LOG_DONE"
+
+# [Step 5] Trash & Thumbnails
+log "$MSG_STEP_TRASH"
+TRASH_DIR="$HOME/.local/share/Trash"
+THUMB_DIR="$HOME/.cache/thumbnails"
+
+if [ -d "$TRASH_DIR" ]; then
+    find "$TRASH_DIR" -mindepth 1 -delete
+    success "$MSG_TRASH_DONE"
+fi
+
+if [ -d "$THUMB_DIR" ]; then
+    find "$THUMB_DIR" -type f -atime +30 -delete
+    success "$MSG_THUMB_DONE"
+fi
+
+# [Step 6] Flatpak
+if command -v flatpak >/dev/null 2>&1; then
+    log "$MSG_STEP_FLATPAK"
+    flatpak uninstall --unused -y >/dev/null 2>&1
+    success "$MSG_FLATPAK_DONE"
+fi
+
+echo "----------------------------------------"
+success "$MSG_DONE"

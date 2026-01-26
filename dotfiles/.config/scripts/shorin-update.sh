@@ -4,22 +4,119 @@
 # Shorin-Niri Updater
 # ==============================================================================
 
-# --- 配置 ---
+set -o pipefail
+
+# --- 1. Pre-Configuration (Language) ---
+ORIGINAL_LANG="${LC_ALL:-${LC_MESSAGES:-${LANG}}}"
+SHOW_HELP=false
+
+if [[ "$ORIGINAL_LANG" == *"zh_CN"* ]]; then
+    UI_LANG="zh"
+else
+    UI_LANG="en"
+fi
+
+# Force C locale for git/find consistency
+export LC_ALL=C
+
+# --- 2. Configuration (Original) ---
 DOTFILES_REPO="$HOME/.local/share/shorin-niri"
 BACKUP_ROOT="$HOME/.cache/shorin-niri-update"
 BACKUP_FILE="$BACKUP_ROOT/backup.tar.gz"
 TARGET_DIRS=("dotfiles" "wallpapers") 
 BRANCH="main"
 
-# --- 样式 ---
+# --- 3. Styles ---
 H_RED='\033[1;31m'; H_GREEN='\033[1;32m'; H_YELLOW='\033[1;33m'; H_BLUE='\033[1;34m'; NC='\033[0m'
 
-log() { echo -e "${H_BLUE}[信息]${NC} $1"; }
-success() { echo -e "${H_GREEN}[成功]${NC} $1"; }
-warn() { echo -e "${H_YELLOW}[注意]${NC} $1"; }
-error() { echo -e "${H_RED}[错误]${NC} $1"; exit 1; }
+# --- 4. Localization Table ---
+LANG_TABLE='
+MSG_DESC          | Update Shorin-Niri dotfiles and manage configurations.     | 更新 Shorin-Niri 配置文件并管理系统配置。
+MSG_FEAT_HEAD     | Features:                                                  | 功能特性：
+MSG_FEAT_1        | - Safe Update: Git fetch, stash changes, and rebase        | - 安全更新：Git 拉取、暂存本地修改并变基
+MSG_FEAT_2        | - Backup: Optional tarball backup before update            | - 备份机制：更新前可选创建压缩包备份
+MSG_FEAT_3        | - Auto Link: Smart recursive symlinking                    | - 自动链接：智能递归软链接管理
+MSG_FEAT_4        | - Self-Healing: Sparse checkout & conflict recovery        | - 自我修复：稀疏检出重置与冲突回滚
+MSG_ASK_BACKUP    | [QUERY] Create a backup of current state? [y/N]:           | [询问] 是否创建当前状态的备份? [y/N]: 
+MSG_BACKUP_ING    | Creating backup...                                         | 正在创建备份...
+MSG_BACKUP_DONE   | Backup completed.                                          | 备份完成
+MSG_BACKUP_SKIP   | Backup skipped.                                            | 已跳过备份
+MSG_CHECK_UPDATE  | Checking for updates...                                    | 检查更新...
+MSG_UP_TO_DATE    | Already up to date.                                        | 已是最新版本
+MSG_LOCAL_CHANGE  | Local changes detected, stashing...                        | 检测到本地修改，准备合并...
+MSG_PULLING       | Downloading and merging...                                 | 正在下载并合并...
+MSG_CORE_OK       | Core update successful.                                    | 核心更新成功
+MSG_CONFLICT      | Update conflict. Aborted and rolled back.                  | 更新冲突，已还原，请手动检查。
+MSG_RESTORE       | Restoring local changes...                                 | 恢复本地修改...
+MSG_RESTORE_OK    | Local changes restored.                                    | 本地修改已恢复
+MSG_LINKING       | Refreshing config links...                                 | 刷新配置链接...
+MSG_CLEANING      | Cleaning up repository...                                  | 清理仓库...
+MSG_ALL_DONE      | Update Completed.                                          | 更新完成
+MSG_BACKUP_PATH   | Backup Path:                                               | 备份路径:
+MSG_ERR_REPO      | Repository not found:                                      | 未找到仓库:
+MSG_ERR_COMMIT    | Failed to create temp commit.                              | 无法创建临时提交
+'
 
-# --- 链接函数 ---
+while IFS='|' read -r v e c; do
+    v=$(printf '%s' "$v" | sed 's/^ *//;s/ *$//')
+    e=$(printf '%s' "$e" | sed 's/^ *//;s/ *$//')
+    c=$(printf '%s' "$c" | sed 's/^ *//;s/ *$//')
+    [ -z "$v" ] && continue
+    case "$v" in \#*) continue ;; esac
+    
+    if [ "$UI_LANG" = "zh" ]; then
+        eval "$v=\"$c\""
+    else
+        eval "$v=\"$e\""
+    fi
+done <<EOF
+$LANG_TABLE
+EOF
+
+# --- 5. Helper Functions ---
+log() { echo -e "${H_BLUE}[INFO]${NC} $1"; }
+success() { echo -e "${H_GREEN}[OK]${NC} $1"; }
+warn() { echo -e "${H_YELLOW}[WARN]${NC} $1"; }
+error() { echo -e "${H_RED}[ERROR]${NC} $1"; exit 1; }
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [options]
+
+Options:
+  --help, -h    Show this help and exit
+
+Description:
+  $MSG_DESC
+
+$MSG_FEAT_HEAD
+  $MSG_FEAT_1
+  $MSG_FEAT_2
+  $MSG_FEAT_3
+  $MSG_FEAT_4
+EOF
+}
+
+# --- 6. Argument Parsing ---
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# ==============================================================================
+# Core Logic (Strictly Preserved)
+# ==============================================================================
+
+# --- Link Function (Original) ---
 link_recursive() {
   local src_dir="$1"
   local dest_dir="$2"
@@ -50,48 +147,45 @@ link_recursive() {
   done
 }
 
-# ==============================================================================
-# 主流程
-# ==============================================================================
+# --- Main Execution Flow ---
 
 if [ ! -d "$DOTFILES_REPO/.git" ]; then
-    error "未找到仓库: $DOTFILES_REPO"
+    error "$MSG_ERR_REPO $DOTFILES_REPO"
 fi
 
 cd "$DOTFILES_REPO" || exit 1
 
-# 1. 备份 (修改：询问用户，默认 N)
+# 1. Backup (Interactive)
 mkdir -p "$BACKUP_ROOT"
 BACKUP_DONE=false
 
-# 使用 echo -ne 不换行打印，方便用户在同一行输入
-echo -ne "${H_YELLOW}[询问]${NC} 是否创建当前状态的备份? [y/N]: "
+# Use localized string for prompt
+echo -ne "${H_YELLOW}${MSG_ASK_BACKUP}${NC} "
 read -r OPT_BACKUP
 
-# 只有输入 y 或 Y 才执行备份，其他情况（包括回车）都跳过
 if [[ "$OPT_BACKUP" =~ ^[yY]$ ]]; then
-    log "正在创建备份..."
+    log "$MSG_BACKUP_ING"
     tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
-    success "备份完成"
+    success "$MSG_BACKUP_DONE"
     BACKUP_DONE=true
 else
-    log "已跳过备份"
+    log "$MSG_BACKUP_SKIP"
 fi
 
-# 2. 更新
-log "检查更新..."
+# 2. Update Logic (Git Management)
+log "$MSG_CHECK_UPDATE"
 git fetch --depth 1 origin "$BRANCH"
 
 LOCAL_HASH=$(git rev-parse HEAD)
 REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
 
 if [ "$LOCAL_HASH" == "$REMOTE_HASH" ]; then
-    success "已是最新版本"
+    success "$MSG_UP_TO_DATE"
 else
     HAS_LOCAL_CHANGES=false
     if [ -n "$(git status --porcelain)" ]; then
         HAS_LOCAL_CHANGES=true
-        warn "检测到本地修改，准备合并..."
+        warn "$MSG_LOCAL_CHANGE"
         
         if [ -z "$(git config user.email)" ]; then
             git config user.email "updater@shorin.local"
@@ -99,7 +193,7 @@ else
         fi
         
         git add -A
-        git commit -m "TEMP_SAVE" --quiet || error "无法创建临时提交"
+        git commit -m "TEMP_SAVE" --quiet || error "$MSG_ERR_COMMIT"
     fi
 
     git config core.sparseCheckout true
@@ -107,35 +201,34 @@ else
     truncate -s 0 "$SPARSE_FILE"
     for item in "${TARGET_DIRS[@]}"; do echo "$item" >> "$SPARSE_FILE"; done
 
-    log "正在下载并合并..."
+    log "$MSG_PULLING"
     if git pull --rebase -Xtheirs origin "$BRANCH"; then
-        success "核心更新成功"
+        success "$MSG_CORE_OK"
     else
         git rebase --abort 2>/dev/null
-        error "更新冲突，已还原，请手动检查。"
+        error "$MSG_CONFLICT"
     fi
 
     if [ "$HAS_LOCAL_CHANGES" = true ]; then
-        log "恢复本地修改..."
+        log "$MSG_RESTORE"
         git reset --soft HEAD~1
         git reset
-        success "本地修改已恢复"
+        success "$MSG_RESTORE_OK"
     fi
 fi
 
-# 3. 链接
-log "刷新配置链接..."
+# 3. Linking
+log "$MSG_LINKING"
 link_recursive "$DOTFILES_REPO/dotfiles" "$HOME"
 
-# 4. 清理
-log "清理仓库..."
+# 4. Cleanup
+log "$MSG_CLEANING"
 git reflog expire --expire=now --all
 git gc --prune=now 2>/dev/null
 
 echo ""
-echo -e "${H_GREEN}更新完成${NC}"
+echo -e "${H_GREEN}${MSG_ALL_DONE}${NC}"
 
-# 只有执行了备份才显示路径
 if [ "$BACKUP_DONE" = true ]; then
-    echo -e "${H_BLUE}备份路径:${NC} $BACKUP_FILE"
+    echo -e "${H_BLUE}${MSG_BACKUP_PATH}${NC} $BACKUP_FILE"
 fi
