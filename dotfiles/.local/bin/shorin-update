@@ -59,9 +59,10 @@ MSG_ERR_COMMIT    | Failed to create temp commit.                              |
 '
 
 while IFS='|' read -r v e c; do
-    v=$(printf '%s' "$v" | sed 's/^ *//;s/ *$//')
-    e=$(printf '%s' "$e" | sed 's/^ *//;s/ *$//')
-    c=$(printf '%s' "$c" | sed 's/^ *//;s/ *$//')
+    v=$(printf '%s' "$v" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    e=$(printf '%s' "$e" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    c=$(printf '%s' "$c" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    
     [ -z "$v" ] && continue
     case "$v" in \#*) continue ;; esac
     
