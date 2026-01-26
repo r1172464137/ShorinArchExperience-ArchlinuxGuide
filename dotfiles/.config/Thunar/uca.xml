@@ -61,4 +61,15 @@ for line in sys.stdin:
 	<patterns>*</patterns>
 	<directories/>
 </action>
+<action>
+	<icon></icon>
+	<name>粘贴剪贴板图片</name>
+	<submenu></submenu>
+	<unique-id>1769429285959977-2</unique-id>
+	<command>sh -c &apos;d=&quot;%f&quot;; [ -d &quot;$d&quot; ] || d=&quot;$(dirname &quot;$d&quot;)&quot;; cd &quot;$d&quot; &amp;&amp; wl-paste --type image/png &gt; &quot;img_$(date -Iseconds | cut -d+ -f1 | tr T _ | tr : -).png&quot;&apos;</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+</action>
 </actions>

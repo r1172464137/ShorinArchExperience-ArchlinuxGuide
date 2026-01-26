@@ -4,22 +4,18 @@ import subprocess
 import json
 import sys
 import shutil
-import os
+import time  # <--- 新增：用于等待窗口关闭生效
 
 # ================= Configuration =================
-# 排除列表：把 fuzzel 自己也加进去，防止套娃
 EXCLUDE_APPS = ["fuzzel", "quick-switch", "niri-quick-switch"]
-
-# Fuzzel 参数配置
-# --dmenu: 必须，表示读取标准输入
-# --index: 关键！让 fuzzel 返回选中的行号，而不是文本
 FUZZEL_ARGS = [
     "--dmenu",
     "--index",              
-    "--width", "60",        # 宽度字符数
-    "--lines", "15",        # 显示行数
+    "--width", "60",        
+    "--lines", "15",        
     "--prompt", "Switch: ", 
-    "--placeholder", "Search windows..."
+    # 修改了这里：提示 Ctrl+L 跳转，Ctrl+H 关闭
+    "--placeholder", "Search... [Ctrl+J/K: Move | Ctrl+L: Switch | Ctrl+J: Close]"
 ]
 # =================================================
 
@@ -40,98 +36,96 @@ def get_active_workspace_id():
     return None
 
 def get_window_sort_key(w):
-    """
-    核心视觉排序逻辑 (与 FZF 版一致)
-    """
-    # 浮动窗口沉底
     if w.get("is_floating"):
         return (99999, 0, w.get("id"))
-
     try:
         layout = w.get("layout", {})
         if not layout: return (9999, 0, w.get("id"))
-        
-        # 读取 pos_in_scrolling_layout [列, 行]
         pos = layout.get("pos_in_scrolling_layout")
         if pos and isinstance(pos, list) and len(pos) >= 2:
             return (pos[0], pos[1], w.get("id"))
-            
     except Exception:
         pass
-
     return (9999, 0, w.get("id"))
 
 def main():
     if not shutil.which("fuzzel"):
-        # 如果没装 fuzzel，弹个窗提示一下
-        subprocess.run(["notify-send", "Error", "Fuzzel not found"])
+        print("Error: Fuzzel not found")
         sys.exit(1)
 
-    ws_id = get_active_workspace_id()
-    if ws_id is None: sys.exit(1)
+    # === 核心改动：开启死循环 ===
+    while True:
+        # 1. 每次循环都重新获取最新的 Workspace ID (防止工作区变动)
+        ws_id = get_active_workspace_id()
+        if ws_id is None: break
 
-    windows = run_cmd("niri msg -j windows")
-    if not windows: sys.exit(0)
+        # 2. 每次循环都重新获取最新的窗口列表 (因为刚才可能关掉了一个)
+        windows = run_cmd("niri msg -j windows")
+        if not windows: break
 
-    # 1. 筛选
-    current_windows = []
-    for w in windows:
-        if w.get("workspace_id") != ws_id:
-            continue
-        
-        app_id = w.get("app_id") or ""
-        if app_id in EXCLUDE_APPS:
-            continue
+        current_windows = []
+        for w in windows:
+            if w.get("workspace_id") != ws_id: continue
+            app_id = w.get("app_id") or ""
+            if app_id in EXCLUDE_APPS: continue
+            current_windows.append(w)
+
+        # 如果没有窗口了，直接退出
+        if not current_windows: break
+
+        current_windows.sort(key=get_window_sort_key)
+
+        input_str = ""
+        for w in current_windows:
+            app_id = w.get("app_id") or "Wayland"
+            title = w.get("title", "No Title").replace("\n", " ")
+            display_str = f"[{app_id}] {title}"
+            line = f"{display_str}\0icon\x1f{app_id}"
+            input_str += f"{line}\n"
+
+        try:
+            # 3. 启动 Fuzzel
+            proc = subprocess.Popen(
+                ["fuzzel"] + FUZZEL_ARGS,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                text=True
+            )
+            stdout, _ = proc.communicate(input=input_str)
             
-        current_windows.append(w)
+            return_code = proc.returncode
+            raw_output = stdout.strip()
 
-    if not current_windows: sys.exit(0)
+            # 情况 A: 用户按 ESC 取消 -> 退出循环
+            if return_code not in [0, 10] or not raw_output:
+                break
 
-    # 2. 排序 (Visual Sort)
-    current_windows.sort(key=get_window_sort_key)
+            try:
+                selected_idx = int(raw_output)
+            except ValueError:
+                break
 
-    # 3. 构建列表
-    input_str = ""
-    # 我们不需要 mapping 字典了，因为 fuzzel --index 返回的索引
-    # 直接对应 current_windows 列表的下标
-    
-    for w in current_windows:
-        app_id = w.get("app_id") or "Wayland"
-        title = w.get("title", "No Title").replace("\n", " ")
-        
-        # 格式: [AppID] Title
-        display_str = f"[{app_id}] {title}"
-        
-        # Fuzzel 图标魔法: \0icon\x1f + 图标名
-        # 这样 fuzzel 就会自动去系统里找 app_id 对应的图标显示在左侧
-        line = f"{display_str}\0icon\x1f{app_id}"
-        
-        input_str += f"{line}\n"
-
-    # 4. 运行 Fuzzel
-    try:
-        proc = subprocess.Popen(
-            ["fuzzel"] + FUZZEL_ARGS,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            text=True
-        )
-        stdout, _ = proc.communicate(input=input_str)
-
-        if stdout.strip():
-            # 获取索引 (例如 "2")
-            selected_idx = int(stdout.strip())
-            
-            # 安全检查
             if 0 <= selected_idx < len(current_windows):
                 target_window = current_windows[selected_idx]
                 target_id = target_window.get("id")
                 
-                # 切换窗口
-                subprocess.run(["niri", "msg", "action", "focus-window", "--id", str(target_id)])
+                if return_code == 0:
+                    # 动作: 切换窗口 -> 任务完成，退出循环
+                    subprocess.run(["niri", "msg", "action", "focus-window", "--id", str(target_id)])
+                    break 
+                
+                elif return_code == 10:
+                    # 动作: 关闭窗口 -> 执行关闭，然后 CONTINUE (继续循环)
+                    subprocess.run(["niri", "msg", "action", "close-window", "--id", str(target_id)])
+                    
+                    # 关键：稍微等一下，让 niri 有时间处理关闭动作，
+                    # 否则立刻刷新列表可能还会看到那个已经被杀死的窗口
+                    time.sleep(0.1)
+                    continue 
 
-    except Exception:
-        pass
+        except Exception as e:
+            print(f"Error: {e}")
+            break
 
 if __name__ == "__main__":
     main()

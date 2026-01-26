@@ -354,7 +354,7 @@
     },
     "exec-if": "which waybar-module-pacman-updates",
     "exec": "waybar-module-pacman-updates --no-zero-output",
-    "on-click": "kitty -e ~/.config/scripts/sysup.sh",
+    "on-click": "kitty -e sysup",
   },
   //隐私
   "privacy": {

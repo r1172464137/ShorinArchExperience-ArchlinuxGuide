@@ -1,62 +1,48 @@
 #!/bin/bash
 
 # ===============================================================
-#  Thunar Media Info v6.0 (Emoji Style + i18n Fix + Help)
+#  Thunar Media Info v6.2 (Pixel Perfect Alignment)
 # ===============================================================
 
 # --- 1. 配置区域 ---
 KITTY_CLASS="thunar_media_info_popup"
 
-# --- 2. 帮助信息函数 (-h) ---
+# --- 2. 帮助信息 ---
 show_help() {
     echo "用法: $(basename "$0") [选项] <文件路径>"
-    echo ""
-    echo "选项:"
-    echo "  -f <文件>   指定输入文件 (Thunar 兼容模式)"
-    echo "  -h          显示此帮助信息"
-    echo ""
-    echo "示例:"
-    echo "  $(basename "$0") video.mp4"
-    echo "  $(basename "$0") -f video.mp4"
+    echo "  -f <文件>    指定输入文件"
+    echo "  -h           显示帮助"
 }
 
-# --- 3. 语言检测修复版 ---
-# 不再依赖 locale 命令，直接读取环境变量，这是最稳妥的方式
-# 优先级: LC_ALL > LC_MESSAGES > LANG
+# --- 3. 语言检测 ---
 DETECTED_LANG="${LC_ALL:-${LC_MESSAGES:-$LANG}}"
+[[ "$DETECTED_LANG" == *"zh"* ]] && UI_LANG="zh" || UI_LANG="en"
 
-if [[ "$DETECTED_LANG" == *"zh"* ]]; then
-    UI_LANG="zh"
-else
-    UI_LANG="en"
-fi
-
-# --- 4. 本地化字典 (带 Emoji 的视觉风格) ---
-# 格式: 变量名 | 英文内容 | 中文内容
+# --- 4. 本地化字典 (核心修复：使用全角空格对齐) ---
+# 注意：中文的"路　径"和"时　长"中间现在是一个全角空格
+# 这样它们就被 printf 视为3个字符，与"文件名"完美对齐
 LANG_TABLE='
-STR_ERR_INPUT    | Error: No input file.               | 错误：未检测到输入文件。
-STR_ERR_FFMPEG   | Error: ffmpeg not found.            | 错误：未找到 ffmpeg 命令。
-STR_ERR_KITTY    | Error: Kitty not found.             | 错误：未找到 Kitty 终端。
-STR_WIN_TITLE    | Media Info                          | 媒体信息
+STR_ERR_INPUT    | Error: No input file.                | 错误：未检测到输入文件。
+STR_ERR_FFMPEG   | Error: ffmpeg not found.             | 错误：未找到 ffmpeg 命令。
+STR_ERR_KITTY    | Error: Kitty not found.              | 错误：未找到 Kitty 终端。
+STR_WIN_TITLE    | Media Info                           | 媒体信息
 STR_LBL_NAME     |  File    |  文件名
-STR_LBL_PATH     |  Path    |  路  径
-STR_LBL_TIME     |  Time    |  时  长
+STR_LBL_PATH     |  Path    |  路　径
+STR_LBL_TIME     |  Time    |  时　长
 STR_LBL_RATE     |  Rate    |  比特率
 STR_LBL_VID      |  Video   |  视频流
 STR_LBL_AUD      |  Audio   |  音频流
-STR_Unknown      | Unknown                             | 未知
-STR_Image        | (Image)                             | (图片)
-STR_Stereo       | Stereo                              | 双声道
-STR_Mono         | Mono                                | 单声道
-STR_Surround     | Surround                            | 环绕声
-STR_PressKey     | Press any key to close...           | 按任意键关闭窗口...
+STR_Unknown      | Unknown                              | 未知
+STR_Image        | (Image)                              | (图片)
+STR_Stereo       | Stereo                               | 双声道
+STR_Mono         | Mono                                 | 单声道
+STR_Surround     | Surround                             | 环绕声
+STR_PressKey     | Press any key to close...            | 按任意键关闭窗口...
 '
 
 # 解析字典
 while IFS='|' read -r v e c; do
-    v=$(echo "$v" | xargs)
-    e=$(echo "$e" | xargs)
-    c=$(echo "$c" | xargs)
+    v=$(echo "$v" | xargs); e=$(echo "$e" | xargs); c=$(echo "$c" | xargs)
     [ -z "$v" ] && continue
     case "$v" in \#*) continue ;; esac
     [ "$UI_LANG" = "zh" ] && eval "$v=\"$c\"" || eval "$v=\"$e\""
@@ -64,7 +50,7 @@ done <<EOF
 $LANG_TABLE
 EOF
 
-# --- 5. 参数解析 (支持 -h 和 -f) ---
+# --- 5. 参数解析 ---
 FILE=""
 while getopts ":f:h" opt; do
   case $opt in
@@ -73,71 +59,39 @@ while getopts ":f:h" opt; do
     *) ;;
   esac
 done
-
-# 如果没有通过 -f 传参，尝试读取位置参数
-if [ -z "$FILE" ]; then
-    shift $((OPTIND-1))
-    FILE="$1"
-fi
-
-# 检查输入
-if [ -z "$FILE" ]; then
-    echo "$STR_ERR_INPUT"
-    echo "Try '$(basename "$0") -h' for more information."
-    exit 1
-fi
+[ -z "$FILE" ] && shift $((OPTIND-1)) && FILE="$1"
+if [ -z "$FILE" ]; then echo "$STR_ERR_INPUT"; exit 1; fi
 
 FILENAME=$(basename -- "$FILE")
 DIRNAME=$(dirname -- "$FILE")
 
-# 检查依赖
-if ! command -v ffmpeg &> /dev/null; then
-    echo "$STR_ERR_FFMPEG"
-    read -n 1
-    exit 1
-fi
+if ! command -v ffmpeg &> /dev/null; then echo "$STR_ERR_FFMPEG"; read -n 1; exit 1; fi
 
-# --- 6. Kitty 自动启动逻辑 ---
+# --- 6. Kitty 启动逻辑 ---
 if [ "$TERM" != "xterm-kitty" ] || [ "$KITTY_WINDOW_ID" == "" ]; then
     if command -v kitty &> /dev/null; then
-        exec kitty \
-            --class "$KITTY_CLASS" \
-            --title "$STR_WIN_TITLE: $FILENAME" \
-            -o initial_window_width=640 \
-            -o initial_window_height=420 \
-            -- "$0" "$FILE"
+        exec kitty --class "$KITTY_CLASS" --title "$STR_WIN_TITLE: $FILENAME" \
+            -o initial_window_width=640 -o initial_window_height=420 -- "$0" "$FILE"
         exit
     else
-        echo "$STR_ERR_KITTY"
-        read -n 1
-        exit 1
+        echo "$STR_ERR_KITTY"; read -n 1; exit 1
     fi
 fi
 
 # =========================================================
-#                 数据渲染 (复刻截图风格)
+#                   数据渲染
 # =========================================================
 
 RAW_INFO=$(ffmpeg -i "$FILE" 2>&1)
-
-# 定义颜色
-BOLD='\033[1m'
-GRAY='\033[90m'
-CYAN='\033[36m'
-GREEN='\033[32m'
-YELLOW='\033[33m'
-BLUE='\033[34m'
-RESET='\033[0m'
-
+BOLD='\033[1m'; GRAY='\033[90m'; CYAN='\033[36m'; GREEN='\033[32m'; YELLOW='\033[33m'; BLUE='\033[34m'; RESET='\033[0m'
 clear
 
 # --- 头部 ---
-# 使用 printf 保持对齐，模仿截图中的两行紧凑布局
+# 使用 %-9s，因为现在的中文标签全是统一的3字符长度（汉字或全角空格）
 echo ""
-printf " ${CYAN}%-10s${RESET}: ${BOLD}%s${RESET}\n" "$STR_LBL_NAME" "$FILENAME"
-printf " ${CYAN}%-10s${RESET}: %s\n" "$STR_LBL_PATH" "$DIRNAME"
+printf " ${CYAN}%-9s${RESET}: ${BOLD}%s${RESET}\n" "$STR_LBL_NAME" "$FILENAME"
+printf " ${CYAN}%-9s${RESET}: %s\n" "$STR_LBL_PATH" "$DIRNAME"
 
-# 虚线分割
 echo -e "${GRAY}----------------------------------------${RESET}"
 
 # --- 时长与比特率 ---
@@ -147,8 +101,8 @@ if [ -n "$DURATION_LINE" ] && ! echo "$DURATION_LINE" | grep -q "N/A"; then
     BITRATE=$(echo "$DURATION_LINE" | awk -F', ' '{print $3}' | sed 's/bitrate: //')
     
     echo ""
-    printf " ${YELLOW}%-10s${RESET}: ${BOLD}%s${RESET}\n" "$STR_LBL_TIME" "$DUR"
-    printf " ${YELLOW}%-10s${RESET}: %s\n" "$STR_LBL_RATE" "$BITRATE"
+    printf " ${YELLOW}%-9s${RESET}: ${BOLD}%s${RESET}\n" "$STR_LBL_TIME" "$DUR"
+    printf " ${YELLOW}%-9s${RESET}: %s\n" "$STR_LBL_RATE" "$BITRATE"
     echo ""
 fi
 
@@ -160,13 +114,7 @@ if [ -n "$VIDEO_STREAMS" ]; then
         RES=$(echo "$line" | grep -oE "[0-9]{3,5}x[0-9]{3,5}" | head -1)
         FPS=$(echo "$line" | grep -oE "[0-9.]+\s+fps" | head -1)
         
-        # 格式化输出 (模仿截图: 🎬 视频流: hevc | 2560x1440 | 78.98 fps)
-        if [ -n "$FPS" ]; then
-            INFO_STR="$CODEC | $RES | $FPS"
-        else
-            INFO_STR="$CODEC $STR_Image | $RES"
-        fi
-        
+        [ -n "$FPS" ] && INFO_STR="$CODEC | $RES | $FPS" || INFO_STR="$CODEC $STR_Image | $RES"
         printf " ${BLUE}%-9s${RESET}: %s\n" "$STR_LBL_VID" "$INFO_STR"
     done
 fi
@@ -178,17 +126,14 @@ if [ -n "$AUDIO_STREAMS" ]; then
         CODEC=$(echo "$line" | grep -oE "Audio: [a-zA-Z0-9]+" | cut -d' ' -f2)
         HZ=$(echo "$line" | grep -oE "[0-9]+\s+Hz")
         
-        # 声道判断
         CHANNEL="$STR_Unknown"
         if echo "$line" | grep -q "stereo"; then CHANNEL="$STR_Stereo"; 
         elif echo "$line" | grep -q "mono"; then CHANNEL="$STR_Mono"; 
         else 
-             # 提取数字声道
              CH_NUM=$(echo "$line" | grep -oE ", [0-9]+ channels" | tr -d ', a-z')
              [ -n "$CH_NUM" ] && CHANNEL="$CH_NUM $STR_Surround"
         fi
 
-        # 格式化输出
         INFO_STR="$CODEC | $HZ | $CHANNEL"
         printf " ${GREEN}%-9s${RESET}: %s\n" "$STR_LBL_AUD" "$INFO_STR"
     done
@@ -199,7 +144,6 @@ echo ""
 echo -e "${GRAY}----------------------------------------${RESET}"
 echo -e "${BOLD}$STR_PressKey${RESET}"
 
-# 隐藏光标并等待
 tput civis 
 read -n 1 -s -r
 tput cnorm
