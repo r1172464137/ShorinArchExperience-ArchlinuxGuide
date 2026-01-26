@@ -1,60 +1,80 @@
 #!/bin/bash
 
 # ==============================================================================
-# Shorin-Niri Updater
+# Shorin-Niri Updater (Local/Remote Smart Merge)
 # ==============================================================================
 
 set -o pipefail
+set -u
 
-# --- 1. Pre-Configuration (Language) ---
-ORIGINAL_LANG="${LC_ALL:-${LC_MESSAGES:-${LANG}}}"
-SHOW_HELP=false
-
-if [[ "$ORIGINAL_LANG" == *"zh_CN"* ]]; then
-    UI_LANG="zh"
-else
-    UI_LANG="en"
-fi
-
-# Force C locale for git/find consistency
-export LC_ALL=C
-
-# --- 2. Configuration (Original) ---
+# ------------------------------
+# 1. Configuration
+# ------------------------------
 DOTFILES_REPO="$HOME/.local/share/shorin-niri"
 BACKUP_ROOT="$HOME/.cache/shorin-niri-update"
+# 固定备份文件名，每次覆盖
 BACKUP_FILE="$BACKUP_ROOT/backup.tar.gz"
-TARGET_DIRS=("dotfiles" "wallpapers") 
 BRANCH="main"
 
-# --- 3. Styles ---
-H_RED='\033[1;31m'; H_GREEN='\033[1;32m'; H_YELLOW='\033[1;33m'; H_BLUE='\033[1;34m'; NC='\033[0m'
+# ------------------------------
+# 2. Define Colors
+# ------------------------------
+NC='\033[0m'
+H_RED='\033[1;31m'
+H_GREEN='\033[1;32m'
+H_YELLOW='\033[1;33m'
+H_BLUE='\033[1;34m'
 
-# --- 4. Localization Table ---
+# ------------------------------
+# 3. Language Detection
+# ------------------------------
+UI_LANG=$(
+    locale 2>/dev/null |
+    awk -F= '/^LC_MESSAGES=/{print $2}' |
+    grep -q zh_CN && echo zh || echo en
+)
+
+# ------------------------------
+# 4. Localization Logic (Ref: sysup)
+# ------------------------------
 LANG_TABLE='
-MSG_DESC          | Update Shorin-Niri dotfiles and manage configurations.     | 更新 Shorin-Niri 配置文件并管理系统配置。
-MSG_FEAT_HEAD     | Features:                                                  | 功能特性：
-MSG_FEAT_1        | - Safe Update: Git fetch, stash changes, and rebase        | - 安全更新：Git 拉取、暂存本地修改并变基
-MSG_FEAT_2        | - Backup: Optional tarball backup before update            | - 备份机制：更新前可选创建压缩包备份
-MSG_FEAT_3        | - Auto Link: Smart recursive symlinking                    | - 自动链接：智能递归软链接管理
-MSG_FEAT_4        | - Self-Healing: Sparse checkout & conflict recovery        | - 自我修复：稀疏检出重置与冲突回滚
-MSG_ASK_BACKUP    | [QUERY] Create a backup of current state? [y/N]:           | [询问] 是否创建当前状态的备份? [y/N]: 
-MSG_BACKUP_ING    | Creating backup...                                         | 正在创建备份...
-MSG_BACKUP_DONE   | Backup completed.                                          | 备份完成
-MSG_BACKUP_SKIP   | Backup skipped.                                            | 已跳过备份
-MSG_CHECK_UPDATE  | Checking for updates...                                    | 检查更新...
-MSG_UP_TO_DATE    | Already up to date.                                        | 已是最新版本
-MSG_LOCAL_CHANGE  | Local changes detected, stashing...                        | 检测到本地修改，准备合并...
-MSG_PULLING       | Downloading and merging...                                 | 正在下载并合并...
-MSG_CORE_OK       | Core update successful.                                    | 核心更新成功
-MSG_CONFLICT      | Update conflict. Aborted and rolled back.                  | 更新冲突，已还原，请手动检查。
-MSG_RESTORE       | Restoring local changes...                                 | 恢复本地修改...
-MSG_RESTORE_OK    | Local changes restored.                                    | 本地修改已恢复
-MSG_LINKING       | Refreshing config links...                                 | 刷新配置链接...
-MSG_CLEANING      | Cleaning up repository...                                  | 清理仓库...
-MSG_ALL_DONE      | Update Completed.                                          | 更新完成
-MSG_BACKUP_PATH   | Backup Path:                                               | 备份路径:
-MSG_ERR_REPO      | Repository not found:                                      | 未找到仓库:
-MSG_ERR_COMMIT    | Failed to create temp commit.                              | 无法创建临时提交
+MSG_DESC          | Update Shorin-Niri Config (Smart Merge Strategy).              | 更新 Shorin-Niri 配置 (智能合并策略)。
+MSG_FEAT_HEAD     | Features:                                                      | 功能特性：
+MSG_FEAT_1        | - Smart Merge: Auto-detects conflicts                          | - 智能合并：自动检测配置冲突
+MSG_FEAT_2        | - Conflict Choice: Menu to choose Local/Remote                 | - 冲突选择：菜单选择保留本地或使用远程配置
+MSG_FEAT_3        | - Auto Stash: Protects uncommitted work                        | - 自动暂存：保护未提交的工作区修改
+
+MSG_ASK_BACKUP    | [QUERY] Backup current state? [y/N]:                           | [询问] 是否备份当前的配置状态? [y/N]: 
+MSG_BACKUP_ING    | Creating backup...                                             | 正在创建备份...
+MSG_BACKUP_DONE   | Backup completed (Overwritten previous).                       | 备份完成 (已覆盖旧备份)
+MSG_BACKUP_SKIP   | Backup skipped.                                                | 已跳过备份
+
+MSG_CHECK_UPDATE  | Checking for updates...                                        | 正在检查更新...
+MSG_UP_TO_DATE    | Already up to date.                                            | 当前已是最新版本
+
+MSG_STASH_SAVE    | Uncommitted changes detected. Stashing...                      | 检测到未提交的修改，正在临时保存...
+MSG_STASH_POP     | Restoring uncommitted changes...                               | 正在恢复未提交的修改...
+
+MSG_MERGE_NORMAL  | No conflicts. Merging normally...                              | 配置无冲突，正在自动合并...
+MSG_CONFLICT_WARN | [!] Configuration conflict detected!                           | [!] 检测到配置冲突！
+
+MSG_SELECT_TITLE  | Please select how to resolve the conflict:                     | 请选择如何处理冲突：
+MSG_OPT_1         | 1) Keep LOCAL changes (Recommended if you customized)          | 1) 保留【本地】修改 (推荐，如果你自定义了配置)
+MSG_OPT_2         | 2) Use REMOTE version (Overwrite local changes)                | 2) 使用【远程】版本 (覆盖你的本地修改)
+MSG_OPT_3         | 3) Cancel (Manual fix) [Default]                               | 3) 取消操作 (手动处理) [默认]
+MSG_INPUT_PROMPT  | Enter choice [1-3]:                                            | 请输入选项 [1-3]: 
+
+MSG_MERGE_OURS    | Merging: Keeping your LOCAL changes...                         | 正在执行：保留您的本地修改，合并其余更新...
+MSG_MERGE_THEIRS  | Merging: Overwriting with REMOTE version...                    | 正在执行：使用远程版本覆盖本地修改...
+MSG_OP_CANCEL     | Operation cancelled by user.                                   | 用户取消了操作。
+MSG_MERGE_OK      | Merge successful.                                              | 更新合并成功。
+
+MSG_LINKING       | Refreshing config links...                                     | 正在刷新配置文件链接...
+MSG_ALL_DONE      | Update Completed.                                              | 更新完成
+MSG_BACKUP_PATH   | Backup Path:                                                   | 备份文件位置:
+MSG_ERR_REPO      | Repository not found:                                          | 未找到配置仓库:
+MSG_ERR_MERGE     | Merge failed. Please fix manually.                             | 合并失败，请尝试手动修复。
+MSG_ERR_DIRTY     | Stash pop failed. Manual intervention required.                | 无法自动恢复临时修改，请手动检查 git status。
 '
 
 while IFS='|' read -r v e c; do
@@ -65,15 +85,17 @@ while IFS='|' read -r v e c; do
     case "$v" in \#*) continue ;; esac
     
     if [ "$UI_LANG" = "zh" ]; then
-        eval "$v=\"$c\""
+        eval "$v=\"\$c\""
     else
-        eval "$v=\"$e\""
+        eval "$v=\"\$e\""
     fi
 done <<EOF
 $LANG_TABLE
 EOF
 
-# --- 5. Helper Functions ---
+# ------------------------------
+# 5. Helper Functions
+# ------------------------------
 log() { echo -e "${H_BLUE}[INFO]${NC} $1"; }
 success() { echo -e "${H_GREEN}[OK]${NC} $1"; }
 warn() { echo -e "${H_YELLOW}[WARN]${NC} $1"; }
@@ -93,61 +115,22 @@ $MSG_FEAT_HEAD
   $MSG_FEAT_1
   $MSG_FEAT_2
   $MSG_FEAT_3
-  $MSG_FEAT_4
 EOF
 }
 
-# --- 6. Argument Parsing ---
+# ------------------------------
+# 6. Argument Parsing
+# ------------------------------
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --help|-h)
-            usage
-            exit 0
-            ;;
-        *)
-            echo "Unknown option: $1"
-            usage
-            exit 1
-            ;;
+        --help|-h) usage; exit 0 ;;
+        *) echo "Unknown option: $1"; usage; exit 1 ;;
     esac
 done
 
 # ==============================================================================
-# Core Logic (Strictly Preserved)
+# Main Logic
 # ==============================================================================
-
-# --- Link Function (Original) ---
-link_recursive() {
-  local src_dir="$1"
-  local dest_dir="$2"
-  
-  mkdir -p "$dest_dir"
-  find "$src_dir" -mindepth 1 -maxdepth 1 -not -path '*/.git*' | while read -r src_path; do
-    local item_name=$(basename "$src_path")
-    local need_recurse=false
-
-    if [ "$item_name" == ".config" ] || [ "$item_name" == ".local" ]; then
-        need_recurse=true
-    elif [[ "$src_dir" == *".local" ]] && { [ "$item_name" == "share" ] || [ "$item_name" == "bin" ]; }; then
-        need_recurse=true
-    fi
-
-    if [ "$need_recurse" = true ]; then
-        link_recursive "$src_path" "$dest_dir/$item_name"
-    else
-        local target_path="$dest_dir/$item_name"
-        if [ -L "$target_path" ] && [ "$(readlink -f "$target_path")" == "$src_path" ]; then
-            continue
-        fi
-        if [ -e "$target_path" ] || [ -L "$target_path" ]; then
-            rm -rf "$target_path"
-        fi
-        ln -sf "$src_path" "$target_path"
-    fi
-  done
-}
-
-# --- Main Execution Flow ---
 
 if [ ! -d "$DOTFILES_REPO/.git" ]; then
     error "$MSG_ERR_REPO $DOTFILES_REPO"
@@ -155,26 +138,36 @@ fi
 
 cd "$DOTFILES_REPO" || exit 1
 
-# 1. Backup (Interactive)
-mkdir -p "$BACKUP_ROOT"
-BACKUP_DONE=false
+# Trap: Warn user if script exits with stashed changes
+cleanup() {
+    if git stash list | grep -q "ShorinUpdate_PreMerge"; then
+        echo ""
+        warn "Script exited but changes are still stashed."
+        warn "Run 'git stash pop' manually to recover your uncommitted changes."
+    fi
+}
+trap cleanup EXIT
 
-# Use localized string for prompt
+# 1. Backup (Single File Overwrite)
+mkdir -p "$BACKUP_ROOT"
+BACKUP_CREATED=false
+
 echo -ne "${H_YELLOW}${MSG_ASK_BACKUP}${NC} "
 read -r OPT_BACKUP
-
 if [[ "$OPT_BACKUP" =~ ^[yY]$ ]]; then
     log "$MSG_BACKUP_ING"
-    tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
+    # Remove old backup first to ensure clean state
+    rm -f "$BACKUP_FILE"
+    tar -czf "$BACKUP_FILE" --exclude='.git' -C "$DOTFILES_REPO" . 2>/dev/null
     success "$MSG_BACKUP_DONE"
-    BACKUP_DONE=true
+    BACKUP_CREATED=true
 else
     log "$MSG_BACKUP_SKIP"
 fi
 
-# 2. Update Logic (Git Management)
+# 2. Update & Merge
 log "$MSG_CHECK_UPDATE"
-git fetch --depth 1 origin "$BRANCH"
+git fetch origin "$BRANCH"
 
 LOCAL_HASH=$(git rev-parse HEAD)
 REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
@@ -182,53 +175,113 @@ REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
 if [ "$LOCAL_HASH" == "$REMOTE_HASH" ]; then
     success "$MSG_UP_TO_DATE"
 else
-    HAS_LOCAL_CHANGES=false
+    # A. Auto Stash
+    HAS_STASH=false
     if [ -n "$(git status --porcelain)" ]; then
-        HAS_LOCAL_CHANGES=true
-        warn "$MSG_LOCAL_CHANGE"
-        
-        if [ -z "$(git config user.email)" ]; then
-            git config user.email "updater@shorin.local"
-            git config user.name "Shorin Updater"
-        fi
-        
-        git add -A
-        git commit -m "TEMP_SAVE" --quiet || error "$MSG_ERR_COMMIT"
+        log "$MSG_STASH_SAVE"
+        git stash push -u -m "ShorinUpdate_PreMerge" >/dev/null 2>&1
+        HAS_STASH=true
     fi
 
-    git config core.sparseCheckout true
-    SPARSE_FILE=".git/info/sparse-checkout"
-    truncate -s 0 "$SPARSE_FILE"
-    for item in "${TARGET_DIRS[@]}"; do echo "$item" >> "$SPARSE_FILE"; done
+    # B. Smart Merge Logic
+    # Temporarily disable 'exit on error' for the dry-run merge
+    set +e 
+    git merge --no-commit --no-ff "origin/$BRANCH" > /dev/null 2>&1
+    MERGE_TEST_RESULT=$?
+    set -e 
 
-    log "$MSG_PULLING"
-    if git pull --rebase -Xtheirs origin "$BRANCH"; then
-        success "$MSG_CORE_OK"
+    if [ $MERGE_TEST_RESULT -eq 0 ]; then
+        # Case 1: No Conflicts
+        git merge --abort > /dev/null 2>&1
+        log "$MSG_MERGE_NORMAL"
+        git merge "origin/$BRANCH"
     else
-        git rebase --abort 2>/dev/null
-        error "$MSG_CONFLICT"
+        # Case 2: Conflicts Detected
+        git merge --abort > /dev/null 2>&1
+        warn "$MSG_CONFLICT_WARN"
+        
+        echo -e "${H_YELLOW}${MSG_SELECT_TITLE}${NC}"
+        echo -e "${H_GREEN}${MSG_OPT_1}${NC}"
+        echo -e "${H_RED}${MSG_OPT_2}${NC}"
+        echo -e "${H_BLUE}${MSG_OPT_3}${NC}"
+        
+        echo -ne "${MSG_INPUT_PROMPT} "
+        read -r USER_CHOICE
+        USER_CHOICE=${USER_CHOICE:-3}
+
+        case "$USER_CHOICE" in
+            1)
+                log "$MSG_MERGE_OURS"
+                # -X ours: Auto-resolve conflicts by keeping local version
+                git merge --no-edit -X ours "origin/$BRANCH"
+                ;;
+            2)
+                log "$MSG_MERGE_THEIRS"
+                # -X theirs: Auto-resolve conflicts by taking remote version
+                git merge --no-edit -X theirs "origin/$BRANCH"
+                ;;
+            *)
+                if [ "$HAS_STASH" = true ]; then
+                    log "$MSG_STASH_POP"
+                    git stash pop >/dev/null 2>&1
+                fi
+                error "$MSG_OP_CANCEL"
+                ;;
+        esac
     fi
 
-    if [ "$HAS_LOCAL_CHANGES" = true ]; then
-        log "$MSG_RESTORE"
-        git reset --soft HEAD~1
-        git reset
-        success "$MSG_RESTORE_OK"
+    if [ $? -eq 0 ]; then
+        success "$MSG_MERGE_OK"
+    else
+        error "$MSG_ERR_MERGE"
+    fi
+
+    # C. Restore Stash
+    if [ "$HAS_STASH" = true ]; then
+        log "$MSG_STASH_POP"
+        if ! git stash pop >/dev/null 2>&1; then
+             warn "$MSG_ERR_DIRTY"
+        fi
     fi
 fi
 
 # 3. Linking
+link_recursive() {
+    local src_dir="$1"
+    local dest_dir="$2"
+    
+    mkdir -p "$dest_dir"
+    find "$src_dir" -mindepth 1 -maxdepth 1 -not -path '*/.git*' -print0 | while IFS= read -r -d '' src_path; do
+        local item_name
+        item_name=$(basename "$src_path")
+        local need_recurse=false
+
+        if [[ "$item_name" == ".config" || "$item_name" == ".local" ]]; then
+            need_recurse=true
+        elif [[ "$src_dir" == *".local" && "$item_name" == "share" ]]; then
+            need_recurse=true
+        fi
+
+        if [ "$need_recurse" = true ]; then
+            link_recursive "$src_path" "$dest_dir/$item_name"
+        else
+            local target_path="$dest_dir/$item_name"
+            if [ -L "$target_path" ] && [ "$(readlink -f "$target_path")" == "$src_path" ]; then
+                continue
+            fi
+            rm -rf "$target_path"
+            ln -snf "$src_path" "$target_path"
+        fi
+    done
+}
+
 log "$MSG_LINKING"
 link_recursive "$DOTFILES_REPO/dotfiles" "$HOME"
 
 # 4. Cleanup
-log "$MSG_CLEANING"
-git reflog expire --expire=now --all
-git gc --prune=now 2>/dev/null
-
 echo ""
 echo -e "${H_GREEN}${MSG_ALL_DONE}${NC}"
 
-if [ "$BACKUP_DONE" = true ]; then
+if [ "$BACKUP_CREATED" = true ]; then
     echo -e "${H_BLUE}${MSG_BACKUP_PATH}${NC} $BACKUP_FILE"
 fi
