@@ -35,6 +35,7 @@ window-rule {
     // - Flatpak Firefox (app-id is "org.mozilla.firefox")
 
     match app-id="media_info"
+    match app-id="video2gif"
     match app-id="nm-connection-editor"
     match app-id="niri-quick-switch"
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"

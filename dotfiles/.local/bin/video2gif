@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# ==============================================================================
+# Video to GIF Converter (CLI Version for Kitty/Niri)
+# ==============================================================================
+
+set -u
+
+# 定义颜色，让终端输出好看点
+BLUE='\033[1;34m'
+GREEN='\033[1;32m'
+RED='\033[1;31m'
+NC='\033[0m'
+
+# 检查 ffmpeg
+if ! command -v ffmpeg &> /dev/null; then
+    echo -e "${RED}Error: 未找到 ffmpeg。${NC}"
+    read -p "按回车键退出..."
+    exit 1
+fi
+
+echo -e "${BLUE}=== 开始批量转换 GIF (High Quality) ===${NC}"
+echo -e "任务数量: $#"
+
+count=0
+total=$#
+
+for input_file in "$@"; do
+    ((count++))
+    filename=$(basename "$input_file")
+    output_file="${input_file%.*}_hq.gif"
+
+    echo -e "\n${BLUE}[$count/$total] 正在处理: $filename${NC}"
+    
+    # 核心转换逻辑 (保持之前的高画质参数)
+    # fps=20: 流畅度
+    # scale=480: 宽度 480px
+    # unsharp: 锐化
+    # split+palette: 最佳色盘生成
+    ffmpeg -y -v error -stats -i "$input_file" \
+        -vf "fps=20,scale=480:-1:flags=lanczos,unsharp=5:5:1.0:3:3:0.0,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=sierra2_4a" \
+        "$output_file"
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✔ 成功: $output_file${NC}"
+    else
+        echo -e "${RED}✘ 失败: $filename${NC}"
+    fi
+done
+
+echo -e "\n${BLUE}=== 所有任务已完成 ===${NC}"
+
+# 发送系统通知 (Niri通常配合 mako 或 dunst)
+if command -v notify-send &> /dev/null; then
+    notify-send "GIF 转换完成" "已处理 $total 个视频文件" -i image-x-generic
+fi
+
+# 这一步很关键：
+# 如果不暂停，Kitty 跑完瞬间就关掉了，你看不到结果。
+# 配合 Thunar 使用时，我们需要手动暂停一下。
+echo -e "\n按 ${GREEN}[Enter]${NC} 键关闭窗口..."
+read

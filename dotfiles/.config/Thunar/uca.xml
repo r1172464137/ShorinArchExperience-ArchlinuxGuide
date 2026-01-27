@@ -17,7 +17,7 @@
 	<name>多媒体信息</name>
 	<submenu></submenu>
 	<unique-id>1769424941490550-1</unique-id>
-	<command>media-info -f %f -t %n</command>
+	<command>kitty --class &quot;media_info&quot; -e media-info %f </command>
 	<description></description>
 	<range>*</range>
 	<patterns>*</patterns>
@@ -71,5 +71,16 @@ for line in sys.stdin:
 	<range>*</range>
 	<patterns>*</patterns>
 	<directories/>
+</action>
+<action>
+	<icon></icon>
+	<name>视频转gif</name>
+	<submenu></submenu>
+	<unique-id>1769514623477685-1</unique-id>
+	<command>/usr/bin/kitty --class=&quot;video2gif&quot; --title=&quot;GIF Converter&quot; --hold -- /home/shorin/.local/bin/video2gif %F</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<video-files/>
 </action>
 </actions>
