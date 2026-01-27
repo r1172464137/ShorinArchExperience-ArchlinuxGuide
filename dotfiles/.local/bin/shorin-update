@@ -141,10 +141,18 @@ link_recursive() {
         link_recursive "$src_path" "$dest_dir/$item_name"
     else
         local target_path="$dest_dir/$item_name"
+
+
+        if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then         
+            warn "SKIP: $target_path"
+            continue
+        fi
+
         if [ -L "$target_path" ] && [ "$(readlink -f "$target_path")" == "$src_path" ]; then
             continue
         fi
-        if [ -e "$target_path" ] || [ -L "$target_path" ]; then
+
+        if [ -L "$target_path" ]; then
             rm -rf "$target_path"
         fi
         ln -sf "$src_path" "$target_path"
