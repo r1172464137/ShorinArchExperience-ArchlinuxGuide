@@ -324,7 +324,7 @@ layout {
 // 桌面壁纸的守护进程
 spawn-at-startup "swww-daemon"
 // 总览界面背景壁纸的守护进程
-spawn-sh-at-startup "swww-daemon -n overview"
+spawn-at-startup "swww-daemon" "-n" "overview"
 // 随机更换一张壁纸
 spawn-at-startup "waypaper" "--random"
 // 恢复壁纸
@@ -344,7 +344,11 @@ spawn-at-startup "waybar"
 // 输入法
 spawn-at-startup "fcitx5" 
 // 剪贴板守护进程
-spawn-sh-at-startup "clipse --listen" 
+spawn-at-startup "clipse" "--listen" 
+// wayland-->x11剪贴板同步
+spawn-at-startup "wl-paste" "--watch" "xclip" "-selection" "clipboard"
+// x11-->wayland剪贴板同步
+spawn-at-startup "clipsync-x2w"
 // 闲置时自动熄屏锁屏休眠的脚本
 spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
 // 大写锁定键的osd显示
