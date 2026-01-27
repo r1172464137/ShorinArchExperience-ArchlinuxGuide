@@ -77,10 +77,21 @@ for line in sys.stdin:
 	<name>视频转gif</name>
 	<submenu></submenu>
 	<unique-id>1769514623477685-1</unique-id>
-	<command>/usr/bin/kitty --class=&quot;video2gif&quot; --title=&quot;GIF Converter&quot; --hold -- /home/shorin/.local/bin/video2gif %F</command>
+	<command>kitty --class=&quot;floating-term&quot; -e video2gif %F</command>
 	<description></description>
 	<range>*</range>
 	<patterns>*</patterns>
 	<video-files/>
+</action>
+<action>
+	<icon></icon>
+	<name>图片转png</name>
+	<submenu></submenu>
+	<unique-id>1769516013413116-2</unique-id>
+	<command>bash -c &apos;exec 1&gt;&gt;/tmp/img_err.log 2&gt;&amp;1; /usr/bin/notify-send &quot;图片转换&quot; &quot;正在后台处理 $# 张图片...&quot;; for f in &quot;$@&quot;; do /usr/bin/magick &quot;$f&quot; &quot;$(echo &quot;$f&quot; | sed &quot;s/\.[^.]*$//&quot;).png&quot;; done; /usr/bin/notify-send &quot;图片转换&quot; &quot;处理完成&quot;&apos; -- %F</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<image-files/>
 </action>
 </actions>
