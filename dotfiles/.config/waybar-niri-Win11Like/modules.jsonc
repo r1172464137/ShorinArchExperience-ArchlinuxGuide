@@ -8,7 +8,7 @@
     "format": "{icon}",
     "format-charging": "󰂄 {capacity}% ",
     "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂂", "󰁹"],
-    "tooltip-format": "{capacity}% | -{power} | Time:{timeTo}",
+    "tooltip-format": "剩余电量：{capacity}%\n充 放 电 ：{power}\n可用时间：{timeTo}\n---\n电池健康度：{health}%",
   },
   //时钟
   "clock": {

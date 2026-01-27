@@ -1,0 +1,34 @@
+#!/bin/bash
+# 简单的电池健康度弹窗
+
+# 获取电池路径
+BAT_PATH=$(upower -e | grep battery | head -n 1)
+
+if [ -z "$BAT_PATH" ]; then
+    notify-send "错误" "未检测到电池" -u critical
+    exit 1
+fi
+
+# 获取信息
+INFO=$(upower -i "$BAT_PATH")
+MODEL=$(echo "$INFO" | grep "model" | awk '{print $2}')
+STATUS=$(echo "$INFO" | grep "state" | awk '{print $2}')
+PERCENT=$(echo "$INFO" | grep "percentage" | awk '{print $2}')
+HEALTH=$(echo "$INFO" | grep "capacity" | awk '{print $2}')
+FULL_DESIGN=$(echo "$INFO" | grep "energy-full-design" | awk '{print $2, $3}')
+FULL_NOW=$(echo "$INFO" | grep "energy-full:" | awk '{print $2, $3}')
+
+# 弹窗显示 (Kitty style)
+# 如果你想用 kitty 显示，取消下面注释，注释掉 notify-send
+# kitty --class="floating-info" --hold -- bash -c "echo ..."
+
+# 使用 notify-send 发送报告
+notify-send "电池健康报告 ($MODEL)" \
+"状态: $STATUS
+电量: $PERCENT
+----------------
+健康度: $HEALTH
+----------------
+设计容量: $FULL_DESIGN
+实际容量: $FULL_NOW" \
+-i battery-good
