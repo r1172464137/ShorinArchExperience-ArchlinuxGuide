@@ -118,6 +118,7 @@ msg() {
         notif_stopped)  printf "已停止录制。" ;;
         notif_processing_gif) printf "正在转换为 GIF，请稍候..." ;;
         notif_gif_failed)     printf "GIF 转换失败，保留原视频。" ;;
+        notif_copied)         printf "文件已复制" ;;
         already_running) printf "already running" ;;
         not_running)      printf "not running" ;;
         title_mode)       printf "选择录制模式" ;;
@@ -167,6 +168,7 @@ msg() {
         notif_stopped)  printf "録画を停止しました。" ;;
         notif_processing_gif) printf "GIF に変換中、お待ちください..." ;;
         notif_gif_failed)     printf "GIF 変換に失敗しました。元の動画を保持します。" ;;
+        notif_copied)         printf "ファイルをコピーしました" ;;
         already_running) printf "already running" ;;
         not_running)      printf "not running" ;;
         title_mode)       printf "録画モードを選択" ;;
@@ -216,6 +218,7 @@ msg() {
         notif_stopped)  printf "Recording stopped." ;;
         notif_processing_gif) printf "Converting to GIF, please wait..." ;;
         notif_gif_failed)     printf "GIF conversion failed. Original video kept." ;;
+        notif_copied)         printf "File copied" ;;
         already_running) printf "already running" ;;
         not_running)      printf "not running" ;;
         title_mode)       printf "Select recording mode" ;;
@@ -679,7 +682,18 @@ stop_rec() {
   if [[ -n "$save_path" && -f "$save_path" ]]; then
     # 生成不带后缀的 latest（例如：.../latest）
     ln -sf "$(basename "$save_path")" "$(dirname "$save_path")/latest" || true
-    local s; s="$(msg notif_saved "$save_path")"; echo "$s"; notify "$s"
+
+    # --- [NEW] Auto Copy to Clipboard (as File Object) ---
+    local cp_note=""
+    if command -v wl-copy >/dev/null; then
+        # [CRITICAL FIX] 使用 text/uri-list MIME 类型，并添加 file:// 前缀
+        # 这会让剪贴板将其视为一个“文件”，允许在文件管理器或聊天软件中直接粘贴
+        echo "file://${save_path}" | wl-copy --type text/uri-list
+        cp_note=" $(msg notif_copied)"
+    fi
+    # ------------------------------------
+
+    local s; s="$(msg notif_saved "$save_path")${cp_note}"; echo "$s"; notify "$s"
   else
     local s; s="$(msg notif_stopped)"; echo "$s"; notify "$s"
   fi
