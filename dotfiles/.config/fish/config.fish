@@ -21,6 +21,8 @@ end
 
 
 thefuck --alias | source
+# 小黄鸭补帧 需要steam安装正版小黄鸭
+abbr lsfg 'LSFG_PROCESS="miyu"'
 # fa运行fastfetch
 abbr fa fastfetch
 # f运行带二次元美少女的fastfetch

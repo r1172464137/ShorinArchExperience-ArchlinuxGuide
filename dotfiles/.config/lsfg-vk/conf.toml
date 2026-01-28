@@ -5,7 +5,7 @@ no_fp16 = false
 
 [[game]]
 exe = "miyu"
-multiplier = 3
+multiplier = 2
 flow_scale = 1.0
 performance_mode = true
 hdr_mode = false
