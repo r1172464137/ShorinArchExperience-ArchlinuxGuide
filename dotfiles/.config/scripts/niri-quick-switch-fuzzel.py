@@ -15,7 +15,7 @@ FUZZEL_ARGS = [
     "--lines", "15",        
     "--prompt", "Switch: ", 
     # 修改了这里：提示 Ctrl+L 跳转，Ctrl+H 关闭
-    "--placeholder", "Search... [Ctrl+J/K: Move | Ctrl+L: Switch | Ctrl+J: Close]"
+    "--placeholder", "Search... [Ctrl+J/K: Select | Ctrl+L: Switch | Ctrl+H: Close]"
 ]
 # =================================================
 
