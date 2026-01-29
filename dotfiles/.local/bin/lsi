@@ -1,38 +1,34 @@
 #!/bin/bash
 
 # =============================================================================
-# lsi - ls with images (Eza + Timg Wrapper)
+# lsi v5.0 - The Ultimate LS + Image Preview
 # =============================================================================
 
-# --- 默认配置 ---
-DEFAULT_GRID=5          # 默认每行显示 5 张
-DEFAULT_TITLE="%b"      # %b = 仅文件名 (basename), %f = 完整路径
-TERM_PROTOCOL="k"       # k = Kitty, i = iTerm2 (自动检测通常也可以，这里强制指定Kitty以获得最佳性能)
+# --- 配置区 ---
+DEFAULT_GRID=5          # 网格模式：一行显示几张
+TERM_PROTOCOL="k"       # k = Kitty (推荐), i = iTerm2, s = Sixel
 
 # --- 帮助信息 ---
 show_help() {
-    echo -e "Usage: lsi [OPTIONS] [EZA_OPTIONS] [FILE/DIR]"
-    echo -e ""
-    echo -e "A wrapper around 'eza' that displays image previews using 'timg'."
-    echo -e ""
-    echo -e "Options:"
-    echo -e "  -g, --grid N    Set number of images per row (Default: 5)"
-    echo -e "  -h, --help      Show this help message"
-    echo -e ""
-    echo -e "Eza Options:"
-    echo -e "  All other arguments are passed directly to eza."
-    echo -e "  Example: lsi -la --grid 8 ~/Downloads"
-    echo -e ""
+    echo "Usage: lsi [OPTIONS] [FILE/DIR...]"
+    echo ""
+    echo "Options:"
+    echo "  -g, --grid N    Set grid size (default: $DEFAULT_GRID)"
+    echo "  -h, --help      Show help"
+    echo ""
+    echo "Examples:"
+    echo "  lsi                   # 当前目录网格预览"
+    echo "  lsi image.jpg         # 单张高清预览"
+    echo "  lsi -la ~/Pics        # 查看其他目录"
 }
 
-# --- 参数解析 ---
-# 我们需要把属于 lsi 的参数提取出来，剩下的留给 eza
+# --- 1. 参数解析 ---
 EZA_ARGS=()
+TARGET_FILES=()
 GRID_SIZE=$DEFAULT_GRID
-TARGET_DIR="."  # 默认目标目录是当前目录
 
 while [[ $# -gt 0 ]]; do
-    case $1 in
+    case "$1" in
         -h|--help)
             show_help
             exit 0
@@ -46,47 +42,69 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             ;;
-        *)
-            # 记录最后一个参数，尝试判断它是不是目录
-            # 这样如果你运行 lsi /tmp，图片预览也会显示 /tmp 下的图片
-            if [ -d "$1" ]; then
-                TARGET_DIR="$1"
-            fi
-            # 将参数加入 eza 参数列表
+        -*)
+            # 透传参数给 eza (如 -l, -a, --tree)
             EZA_ARGS+=("$1")
+            shift
+            ;;
+        *)
+            # 文件或目录路径
+            TARGET_FILES+=("$1")
             shift
             ;;
     esac
 done
 
-# --- 1. 执行 Eza (列表显示) ---
-# 使用 eza 显示文件列表
-eza --icons "${EZA_ARGS[@]}"
+# 默认为当前目录
+if [ ${#TARGET_FILES[@]} -eq 0 ]; then
+    TARGET_FILES=(".")
+fi
 
-# --- 2. 图片预览逻辑 ---
+# --- 2. 运行 Eza (列表) ---
+eza --icons "${EZA_ARGS[@]}" "${TARGET_FILES[@]}"
 
-# 检查目标目录下是否有图片
-# 使用 nullglob 防止通配符不匹配时报错
-shopt -s nullglob
-IMG_FILES=("$TARGET_DIR"/*.{jpg,jpeg,png,gif,webp,bmp,svg})
-shopt -u nullglob
+# --- 3. 智能图片收集逻辑 ---
+IMAGES_TO_SHOW=()
+MODE="GRID" 
 
-if [ ${#IMG_FILES[@]} -gt 0 ]; then
-    echo -e "\n\033[0;36m--- 󰋩 Gallery View (${#IMG_FILES[@]} images in grid of $GRID_SIZE) ---\033[0m"
+# 判断是单文件还是目录
+if [ ${#TARGET_FILES[@]} -eq 1 ]; then
+    TARGET="${TARGET_FILES[0]}"
+    if [ -f "$TARGET" ] && [[ "$TARGET" =~ \.(jpg|jpeg|png|gif|webp|bmp|svg)$ ]]; then
+        IMAGES_TO_SHOW+=("$TARGET")
+        MODE="SINGLE" # 只有这里切换为单图模式
+    elif [ -d "$TARGET" ]; then
+        shopt -s nullglob
+        IMAGES_TO_SHOW=("${TARGET}"/*.{jpg,jpeg,png,gif,webp,bmp,svg})
+        shopt -u nullglob
+    fi
+else
+    # 混合参数情况 (lsi a.jpg b.jpg)
+    for f in "${TARGET_FILES[@]}"; do
+        if [[ -f "$f" && "$f" =~ \.(jpg|jpeg|png|gif|webp|bmp|svg)$ ]]; then
+            IMAGES_TO_SHOW+=("$f")
+        fi
+    done
+fi
+
+# --- 4. 调用 timg 绘图 ---
+if [ ${#IMAGES_TO_SHOW[@]} -gt 0 ]; then
+    echo "" 
     
-    # --- Timg 命令详解 ---
-    # -p k       : 使用 Kitty 图形协议
-    # --grid N   : 网格数量
-    # -W         : Fit Width (强制撑满终端宽度，解决排版对其问题)
-    # --upscale=i: 仅整数倍放大，防止图片变糊
-    # --title    : 显示标题 (%b 表示只显示文件名)
-    # --center   : 居中对齐
-    
-    timg -p "$TERM_PROTOCOL" \
-         --grid="$GRID_SIZE" \
-         -W \
-         --upscale=i \
-         --center \
-         --title="$DEFAULT_TITLE" \
-         "${IMG_FILES[@]}"
+    if [ "$MODE" == "SINGLE" ]; then
+        # === 单图模式 ===
+        # 高清、全宽、显示完整标题
+        timg -p "$TERM_PROTOCOL" -W --center --title="%f" "${IMAGES_TO_SHOW[0]}"
+    else
+        # === 网格模式 ===
+        # 恢复了 --title="%b" (只显示文件名)
+        echo -e "\033[0;36m--- 󰋩 Gallery Preview (${#IMAGES_TO_SHOW[@]} images) ---\033[0m"
+        timg -p "$TERM_PROTOCOL" \
+             --grid="$GRID_SIZE" \
+             -W \
+             --center \
+             --upscale=i \
+             --title="%b" \
+             "${IMAGES_TO_SHOW[@]}"
+    fi
 fi
