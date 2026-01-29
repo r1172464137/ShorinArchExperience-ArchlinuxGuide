@@ -16,7 +16,7 @@ function y
 end
 
 function ls
-	command eza $argv
+	command eza --icons $argv
 end
 
 

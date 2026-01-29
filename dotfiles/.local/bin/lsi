@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# =============================================================================
+# lsi - ls with images (Eza + Timg Wrapper)
+# =============================================================================
+
+# --- 默认配置 ---
+DEFAULT_GRID=5          # 默认每行显示 5 张
+DEFAULT_TITLE="%b"      # %b = 仅文件名 (basename), %f = 完整路径
+TERM_PROTOCOL="k"       # k = Kitty, i = iTerm2 (自动检测通常也可以，这里强制指定Kitty以获得最佳性能)
+
+# --- 帮助信息 ---
+show_help() {
+    echo -e "Usage: lsi [OPTIONS] [EZA_OPTIONS] [FILE/DIR]"
+    echo -e ""
+    echo -e "A wrapper around 'eza' that displays image previews using 'timg'."
+    echo -e ""
+    echo -e "Options:"
+    echo -e "  -g, --grid N    Set number of images per row (Default: 5)"
+    echo -e "  -h, --help      Show this help message"
+    echo -e ""
+    echo -e "Eza Options:"
+    echo -e "  All other arguments are passed directly to eza."
+    echo -e "  Example: lsi -la --grid 8 ~/Downloads"
+    echo -e ""
+}
+
+# --- 参数解析 ---
+# 我们需要把属于 lsi 的参数提取出来，剩下的留给 eza
+EZA_ARGS=()
+GRID_SIZE=$DEFAULT_GRID
+TARGET_DIR="."  # 默认目标目录是当前目录
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -g|--grid)
+            if [[ -n "$2" && "$2" =~ ^[0-9]+$ ]]; then
+                GRID_SIZE="$2"
+                shift 2
+            else
+                echo "Error: --grid requires a number."
+                exit 1
+            fi
+            ;;
+        *)
+            # 记录最后一个参数，尝试判断它是不是目录
+            # 这样如果你运行 lsi /tmp，图片预览也会显示 /tmp 下的图片
+            if [ -d "$1" ]; then
+                TARGET_DIR="$1"
+            fi
+            # 将参数加入 eza 参数列表
+            EZA_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+# --- 1. 执行 Eza (列表显示) ---
+# 使用 eza 显示文件列表
+eza --icons "${EZA_ARGS[@]}"
+
+# --- 2. 图片预览逻辑 ---
+
+# 检查目标目录下是否有图片
+# 使用 nullglob 防止通配符不匹配时报错
+shopt -s nullglob
+IMG_FILES=("$TARGET_DIR"/*.{jpg,jpeg,png,gif,webp,bmp,svg})
+shopt -u nullglob
+
+if [ ${#IMG_FILES[@]} -gt 0 ]; then
+    echo -e "\n\033[0;36m--- 󰋩 Gallery View (${#IMG_FILES[@]} images in grid of $GRID_SIZE) ---\033[0m"
+    
+    # --- Timg 命令详解 ---
+    # -p k       : 使用 Kitty 图形协议
+    # --grid N   : 网格数量
+    # -W         : Fit Width (强制撑满终端宽度，解决排版对其问题)
+    # --upscale=i: 仅整数倍放大，防止图片变糊
+    # --title    : 显示标题 (%b 表示只显示文件名)
+    # --center   : 居中对齐
+    
+    timg -p "$TERM_PROTOCOL" \
+         --grid="$GRID_SIZE" \
+         -W \
+         --upscale=i \
+         --center \
+         --title="$DEFAULT_TITLE" \
+         "${IMG_FILES[@]}"
+fi
