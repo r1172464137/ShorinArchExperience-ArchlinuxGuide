@@ -6,7 +6,7 @@
 
 # --- 1. 定义默认值 (Fallback Defaults) ---
 # 这些是当配置文件不存在时的“兜底”设置
-CFG_GRID=5              # 默认每行 5 张
+CFG_GRID=4             # 默认每行 5 张
 CFG_PROTOCOL="k"        # k=Kitty, i=iTerm2, s=Sixel
 CFG_FRAMES=1            # GIF 默认只读第 1 帧 (静态)
 CFG_TITLE="%b"          # 标题格式: %b=文件名, %f=全路径, %w=宽... (留空则不显示)
