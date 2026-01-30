@@ -24,7 +24,7 @@ post_hook = "kitty +kitten themes --reload-in=all matugen &"
 [templates.fcitx5]
 input_path = '~/.config/matugen/templates/fcitx5-theme.conf'
 output_path = '~/.local/share/fcitx5/themes/Matugen/theme.conf'
-post_hook= 'fcitx5 -r -d & disown '
+post_hook= 'fcitx5 -r & disown '
 
 [templates.mako]
 input_path = '~/.config/matugen/templates/mako-colors.conf'
@@ -67,10 +67,10 @@ output_path = '~/.config/gtk-4.0/colors.css'
 #output_path = '~/.config/swaync/colors.css'
 #post_hook = 'swaync-client -rs &'
 
-[templates.ghostty]
-input_path = '~/.config/matugen/templates/ghostty-colors.conf'
-output_path = '~/.config/ghostty/themes/Matugen'
-post_hook = 'pkill -SIGUSR2 ghostty'
+#[templates.ghostty]
+#input_path = '~/.config/matugen/templates/ghostty-colors.conf'
+#output_path = '~/.config/ghostty/themes/Matugen'
+#post_hook = 'pkill -SIGUSR2 ghostty'
 
 [templates.qt5ct]
 input_path = '~/.config/matugen/templates/qtct-colors.conf'
@@ -84,10 +84,10 @@ output_path = '~/.config/qt6ct/colors/matugen.conf'
 input_path = '~/.config/matugen/templates/Matugen.colors'
 output_path = '~/.local/share/color-schemes/Matugen.colors'
 
-[templates.hyprland]
-input_path = '~/.config/matugen/templates/hyprland-colors.conf'
-output_path = '~/.config/hypr/colors.conf'
-post_hook = 'hyprctl reload &'
+#[templates.hyprland]
+#input_path = '~/.config/matugen/templates/hyprland-colors.conf'
+#output_path = '~/.config/hypr/colors.conf'
+#post_hook = 'hyprctl reload &'
 
 #[templates.niriswitcher]
 #input_path = '~/.config/matugen/templates/niriswitcher-colors.css'

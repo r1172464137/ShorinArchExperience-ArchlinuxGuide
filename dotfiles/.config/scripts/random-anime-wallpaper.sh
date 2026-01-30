@@ -3,8 +3,13 @@
 # ================= 默认配置 =================
 API_URL="https://t.alcy.cc/pc/"
 SAVE_DIR="$HOME/Pictures/Wallpapers/api-random-download"
-# 阈值：宽度小于xxxx 才进行超分，2K/4K 原图直出
-UPSCALE_THRESHOLD=2300
+
+# [新增配置] 自动清理时保留最近多少张图片？
+KEEP_COUNT=20
+
+# 阈值：宽度小于 2500 (即1080P及以下) 才进行超分，2K/4K 原图直出
+UPSCALE_THRESHOLD=2200
+
 # 默认开关状态 (可被参数覆盖)
 ENABLE_CLEANUP=true   # 默认清理旧图片
 ENABLE_UPSCALE=true   # 默认开启智能超分
@@ -67,9 +72,6 @@ send_notify "Wallpaper" "Downloading from Alcy..." "--expire-time=5000"
 USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 # 执行下载
-# -L: 跟随重定向
-# -s: 静默 curl 输出 (由我们的心跳通知接管)
-# -m 120: 给足时间下载大图
 curl -L -s -A "$USER_AGENT" --connect-timeout 10 -m 120 -o "$RAW_PATH" "$API_URL"
 DOWNLOAD_EXIT_CODE=$?
 
@@ -104,7 +106,6 @@ fi
 FINAL_PATH="$RAW_PATH"
 MSG_EXTRA=""
 
-# 判断是否需要超分: (开启了开关) AND (identify命令存在)
 if [ "$ENABLE_UPSCALE" = true ]; then
     IMG_WIDTH=0
     if command -v identify &> /dev/null; then
@@ -116,16 +117,14 @@ if [ "$ENABLE_UPSCALE" = true ]; then
         send_notify "Wallpaper" "Upscaling image..." "--expire-time=2000"
         UPSCALED_PATH="${RAW_PATH%.*}.png"
         
-        # 执行超分: 2倍放大，降噪等级1
         if waifu2x-ncnn-vulkan -i "$RAW_PATH" -o "$UPSCALED_PATH" -n 1 -s 2; then
             FINAL_PATH="$UPSCALED_PATH"
             MSG_EXTRA="(Upscaled 2x)"
-            rm "$RAW_PATH" # 成功后删除低清原图
+            rm "$RAW_PATH"
         else
             MSG_EXTRA="(Upscale Failed)"
         fi
     else
-        # 足够清晰或无法超分
         if [ "$IMG_WIDTH" -ge "$UPSCALE_THRESHOLD" ]; then
             MSG_EXTRA="(Original High-Res)"
         else
@@ -142,13 +141,18 @@ swww img "$FINAL_PATH" --transition-duration 2 --transition-type center --transi
 
 # --- 4. 钩子与清理 ---
 (
-    [ -x "$HOME/.config/scripts/matugen-update.sh" ] && "$HOME/.config/scripts/matugen-update.sh" "$FINAL_PATH"
-    sleep 0.5
-    [ -x "$HOME/.config/scripts/niri_set_overview_blur_dark_bg.sh" ] && "$HOME/.config/scripts/niri_set_overview_blur_dark_bg.sh"
+    # 钩子脚本屏蔽标准输出，保留报错
+    [ -x "$HOME/.config/scripts/matugen-update.sh" ] && "$HOME/.config/scripts/matugen-update.sh" "$FINAL_PATH" > /dev/null
     
-    # 仅当清理开关开启时执行
+    sleep 0.5
+    
+    [ -x "$HOME/.config/scripts/niri_set_overview_blur_dark_bg.sh" ] && "$HOME/.config/scripts/niri_set_overview_blur_dark_bg.sh" > /dev/null
+    
+    # [修改] 动态清理逻辑
     if [ "$ENABLE_CLEANUP" = true ]; then
-        cd "$SAVE_DIR" && ls -t | tail -n +11 | xargs -I {} rm -- {} 2>/dev/null
+        # 计算需要从第几行开始删除 (保留数量 + 1)
+        DELETE_START=$((KEEP_COUNT + 1))
+        cd "$SAVE_DIR" && ls -t | tail -n +$DELETE_START | xargs -I {} rm -- {} 2>/dev/null
     fi
 ) &
 
