@@ -25,7 +25,7 @@ WALL_DIR="$HOME/Pictures/Wallpapers/"
 ORPHAN_CACHE_LIMIT=10
 
 # --- 浮动窗口例外设置 ---
-FLOAT_BYPASS_ENABLED="false"
+FLOAT_BYPASS_ENABLED="true"
 FLOAT_BYPASS_THRESHOLD="1"
 
 # --- 视觉参数 ---

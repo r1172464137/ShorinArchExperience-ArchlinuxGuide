@@ -3,9 +3,8 @@
 # ================= 默认配置 =================
 API_URL="https://t.alcy.cc/pc/"
 SAVE_DIR="$HOME/Pictures/Wallpapers/api-random-download"
-# 阈值：宽度小于 2500 (即1080P及以下) 才进行超分，2K/4K 原图直出
-UPSCALE_THRESHOLD=2500
-
+# 阈值：宽度小于xxxx 才进行超分，2K/4K 原图直出
+UPSCALE_THRESHOLD=2300
 # 默认开关状态 (可被参数覆盖)
 ENABLE_CLEANUP=true   # 默认清理旧图片
 ENABLE_UPSCALE=true   # 默认开启智能超分

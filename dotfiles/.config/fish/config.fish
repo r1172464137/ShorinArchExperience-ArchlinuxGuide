@@ -55,3 +55,7 @@ end
 function remove 
 	command pacr $argv
 end
+function raw
+	command ~/.config/scripts/random-anime-wallpaper.sh $argv
+end
+
