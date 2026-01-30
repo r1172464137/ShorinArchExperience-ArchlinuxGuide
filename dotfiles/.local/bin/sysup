@@ -13,6 +13,7 @@
 # 07. 更新后自动执行 GRUB 配置更新 (grub-mkconfig)
 # 08. 自动请求并后台保持 sudo 权限 (使用 trap 机制安全退出)
 # 09. 自动检测系统语言 (zh_CN) 实现中英双语支持
+# 10. 更新完成后静默刷新 Waybar 模块
 # ===============================================================
 # 【命令行参数】
 # --ui-lang      zh|en         指定脚本交互语言 (默认: 自动检测)
@@ -201,6 +202,11 @@ perform_update() {
     else
         _warn "grub-mkconfig not found. Skipping GRUB update."
     fi
+
+    # Step 5: Silent Waybar Refresh (Low Coupling)
+    # 无论上面步骤是否全部完美成功，只要执行到这里，都尝试刷新状态
+    # >/dev/null 2>&1 确保没有任何输出，如果 waybar 没运行则静默失败
+    pkill -RTMIN+8 waybar >/dev/null 2>&1
 }
 
 # ------------------------------

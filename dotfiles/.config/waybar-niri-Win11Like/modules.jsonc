@@ -345,15 +345,15 @@
     "tooltip": false,
   },
   //archupdater
-  "custom/updates": {
+"custom/updates": {
     "format": "{}{icon}",
     "return-type": "json",
     "format-icons": {
       "has-updates": "",
-      "updated": "",
+      "updated": ""
     },
-    "exec-if": "which waybar-module-pacman-updates",
-    "exec": "waybar-module-pacman-updates --no-zero-output",
+    "exec": "~/.config/waybar/scripts/check-updates.sh",
+    "interval": 3600, 
     "on-click": "kitty -e sysup",
   },
   //隐私
