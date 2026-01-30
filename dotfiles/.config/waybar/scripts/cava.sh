@@ -4,7 +4,6 @@
 bar="▁▂▃▄▅▆▇█"
 bar_count=10
 config_file="/tmp/waybar_cava_config"
-cava_pid=""
 
 # ================= 1. 生成配置 =================
 echo "
@@ -32,48 +31,64 @@ empty_char="${bar:0:1}"
 empty_line=""
 for ((j=0; j<bar_count; j++)); do empty_line="${empty_line}${empty_char}"; done
 
-# ================= 3. 清理函数 =================
+# ================= 3. 控制逻辑 =================
+cava_pid=""
+current_state="running"
+
 cleanup() {
-    [ -n "$cava_pid" ] && kill $cava_pid 2>/dev/null
+    [ -n "$cava_pid" ] && kill -KILL $cava_pid 2>/dev/null
     exit 0
 }
 trap cleanup EXIT INT TERM
 
+# 启动 cava
+cava -p "$config_file" | sed -u "$dict" &
+cava_pid=$!
+sleep 0.5
+
 # ================= 4. 主循环 =================
 while true; do
-    # === 核心修改 ===
-    # 不再检测 sink-inputs (输入流)，改为检测 sinks (输出设备)
-    # 只要有任何一个输出设备处于 RUNNING 状态，就认为有声音
-    # 这几乎能捕获所有类型的音频活动 (ALSA, PipeWire, Pulse)
+    # === 终极检测逻辑 ===
+    # 1. 优先检查 Pulse/PipeWire 的 SINK (硬件设备) 状态
+    #    只要有声音，Sink 必须是 RUNNING。
+    is_running=$(LC_ALL=C pactl list sinks 2>/dev/null | grep -c "State: RUNNING")
     
-    # 1. 尝试用 pactl 检测 Sink 状态 (强制英文环境)
-    playing=$(LC_ALL=C pactl list sinks 2>/dev/null | grep -c "State: RUNNING")
-    
-    # 2. 如果 pactl 完全失效 (极少数情况)，尝试检查 /proc/asound (ALSA底层状态)
-    # 如果 playing 还是 0，我们多做这一步保险
-    if [ "$playing" -eq 0 ]; then
+    # 2. 如果 pactl 说没声音，再查一次内核层面的声卡状态 (ALSA)
+    #    这是最后的防线，除了蓝牙设备外，所有物理声卡都会在这里显示状态
+    if [ "$is_running" -eq 0 ]; then
         if grep -q "RUNNING" /proc/asound/card*/pcm*/sub*/status 2>/dev/null; then
-            playing=1
+            is_running=1
         fi
     fi
 
-    if [ "$playing" -gt 0 ]; then
+    if [ "$is_running" -gt 0 ]; then
         # --- [有声音] ---
-        if [ -z "$cava_pid" ]; then
+        if [ "$current_state" == "stopped" ]; then
+            # 解冻进程 (SIGCONT)
+            kill -CONT $cava_pid 2>/dev/null
+            current_state="running"
+        fi
+        
+        # 活体检测
+        if ! kill -0 $cava_pid 2>/dev/null; then
             cava -p "$config_file" | sed -u "$dict" &
             cava_pid=$!
         fi
-        sleep 1 
-        if ! kill -0 $cava_pid 2>/dev/null; then
-            cava_pid=""
-        fi
+        
+        # 稍微等待，减少检测频率
+        sleep 1
+
     else
         # --- [无声音] ---
-        if [ -n "$cava_pid" ]; then
-            kill $cava_pid 2>/dev/null
-            cava_pid=""
+        if [ "$current_state" == "running" ]; then
+            # 冻结进程 (SIGSTOP) -> CPU 0%
+            kill -STOP $cava_pid 2>/dev/null
+            current_state="stopped"
+            
+            # 只有在刚停下的时候输出一次直线
+            echo "$empty_line"
         fi
-        echo "$empty_line"
+        
         sleep 2
     fi
 done
