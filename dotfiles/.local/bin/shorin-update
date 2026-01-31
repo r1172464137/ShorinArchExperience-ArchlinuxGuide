@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================================================================
-# Shorin-Niri Updater
+# Shorin-Niri Updater (Fixed Sparse Checkout & Dependency Manager)
 # ==============================================================================
 
 set -o pipefail
@@ -19,12 +19,14 @@ fi
 # Force C locale for git/find consistency
 export LC_ALL=C
 
-# --- 2. Configuration (Original) ---
+# --- 2. Configuration ---
 DOTFILES_REPO="$HOME/.local/share/shorin-niri"
 BACKUP_ROOT="$HOME/.cache/shorin-niri-update"
 BACKUP_FILE="$BACKUP_ROOT/backup.tar.gz"
 TARGET_DIRS=("dotfiles" "wallpapers") 
 BRANCH="main"
+# [CONFIG] 你的依赖清单文件
+PKG_LIST_FILE="$DOTFILES_REPO/niri-applist.txt"
 
 # --- 3. Styles ---
 H_RED='\033[1;31m'; H_GREEN='\033[1;32m'; H_YELLOW='\033[1;33m'; H_BLUE='\033[1;34m'; NC='\033[0m'
@@ -36,10 +38,10 @@ MSG_FEAT_HEAD     | Features:                                                  |
 MSG_FEAT_1        | - Safe Update: Git fetch, stash changes, and rebase        | - 安全更新：Git 拉取、暂存本地修改并变基
 MSG_FEAT_2        | - Backup: Optional tarball backup before update            | - 备份机制：更新前可选创建压缩包备份
 MSG_FEAT_3        | - Auto Link: Smart recursive symlinking                    | - 自动链接：智能递归软链接管理
-MSG_FEAT_4        | - Self-Healing: Sparse checkout & conflict recovery        | - 自我修复：稀疏检出重置与冲突回滚
+MSG_FEAT_4        | - Dependency: Auto install missing packages                | - 依赖管理：自动解析 niri-applist.txt 并安装
 MSG_ASK_BACKUP    | [QUERY] Create a backup of current state? [Y/n]:           | [询问] 是否创建当前状态的备份? [Y/n]: 
 MSG_BACKUP_ING    | Creating backup...                                         | 正在创建备份...
-MSG_QUICKSAVE	  | Qucik snapper saving...				                       | 正在快速快照存档...
+MSG_QUICKSAVE     | Qucik snapper saving...                                    | 正在快速快照存档...
 MSG_BACKUP_DONE   | Backup completed.                                          | 备份完成
 MSG_BACKUP_SKIP   | Backup skipped.                                            | 已跳过备份
 MSG_CHECK_UPDATE  | Checking for updates...                                    | 检查更新...
@@ -56,6 +58,9 @@ MSG_ALL_DONE      | Update Completed.                                          |
 MSG_BACKUP_PATH   | Backup Path:                                               | 备份路径:
 MSG_ERR_REPO      | Repository not found:                                      | 未找到仓库:
 MSG_ERR_COMMIT    | Failed to create temp commit.                              | 无法创建临时提交
+MSG_CHECK_DEPS    | Parsing dependency list (niri-applist.txt)...              | 正在解析依赖清单 (niri-applist.txt)...
+MSG_INSTALL_DEPS  | Installing missing packages:                               | 正在安装缺失的软件包:
+MSG_DEPS_OK       | All dependencies are satisfied.                            | 所有依赖已满足。
 '
 
 while IFS='|' read -r v e c; do
@@ -86,7 +91,7 @@ usage() {
 Usage: $(basename "$0") [options]
 
 Options:
-  --help, -h    Show this help and exit
+  --help, -h     Show this help and exit
 
 Description:
   $MSG_DESC
@@ -97,6 +102,91 @@ $MSG_FEAT_HEAD
   $MSG_FEAT_3
   $MSG_FEAT_4
 EOF
+}
+
+# --- [NEW] Smart Dependency Parser ---
+check_dependencies() {
+    # Fail silently if file still doesn't exist (prevents crash on first run errors)
+    if [ ! -f "$PKG_LIST_FILE" ]; then
+        return 0
+    fi
+
+    log "$MSG_CHECK_DEPS"
+
+    # Detect AUR Helper (Prioritize paru > yay > pacman)
+    local helper=""
+    if command -v paru &> /dev/null; then helper="paru"
+    elif command -v yay &> /dev/null; then helper="yay"
+    else 
+        helper="sudo pacman"
+    fi
+
+    local missing_pkgs=()
+    
+    # Process the file line by line
+    while read -r line; do
+        # 1. Remove comments (everything after #)
+        local clean_line="${line%%#*}"
+
+        # 2. Remove 'AUR:' prefix
+        clean_line="${clean_line#AUR:}"
+
+        # 3. Trim whitespace using xargs
+        local pkg_name=$(echo "$clean_line" | xargs)
+
+        # 4. Skip empty lines
+        [ -z "$pkg_name" ] && continue
+        
+        # 5. Check if installed (Quiet check)
+        if ! pacman -Q "$pkg_name" &> /dev/null; then
+            missing_pkgs+=("$pkg_name")
+        fi
+    done < "$PKG_LIST_FILE"
+
+    if [ ${#missing_pkgs[@]} -gt 0 ]; then
+        warn "$MSG_INSTALL_DEPS ${missing_pkgs[*]}"
+        $helper -S --needed --noconfirm "${missing_pkgs[@]}" || error "Failed to install packages."
+    else
+        success "$MSG_DEPS_OK"
+    fi
+}
+
+# --- Link Function ---
+link_recursive() {
+  local src_dir="$1"
+  local dest_dir="$2"
+  
+  mkdir -p "$dest_dir"
+  find "$src_dir" -mindepth 1 -maxdepth 1 -not -path '*/.git*' | while read -r src_path; do
+    local item_name=$(basename "$src_path")
+    local need_recurse=false
+
+    if [ "$item_name" == ".config" ] || [ "$item_name" == ".local" ]; then
+        need_recurse=true
+    elif [[ "$src_dir" == *".local" ]] && [ "$item_name" == "share" ]; then
+        need_recurse=true
+    fi
+
+    if [ "$need_recurse" = true ]; then
+        link_recursive "$src_path" "$dest_dir/$item_name"
+    else
+        local target_path="$dest_dir/$item_name"
+
+        if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then          
+            warn "SKIP: $target_path"
+            continue
+        fi
+
+        if [ -L "$target_path" ] && [ "$(readlink -f "$target_path")" == "$src_path" ]; then
+            continue
+        fi
+
+        if [ -L "$target_path" ]; then
+            rm -rf "$target_path"
+        fi
+        ln -sf "$src_path" "$target_path"
+    fi
+  done
 }
 
 # --- 6. Argument Parsing ---
@@ -115,52 +205,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ==============================================================================
-# Core Logic (Strictly Preserved)
+# Core Execution Flow
 # ==============================================================================
-
-# --- Link Function (Modified) ---
-link_recursive() {
-  local src_dir="$1"
-  local dest_dir="$2"
-  
-  mkdir -p "$dest_dir"
-  find "$src_dir" -mindepth 1 -maxdepth 1 -not -path '*/.git*' | while read -r src_path; do
-    local item_name=$(basename "$src_path")
-    local need_recurse=false
-
-    # Condition 1: High level config/local folders
-    if [ "$item_name" == ".config" ] || [ "$item_name" == ".local" ]; then
-        need_recurse=true
-    # Condition 2: Inside .local, ONLY recurse for 'share'. 
-    # 'bin' is removed here so it gets symlinked as a folder.
-    elif [[ "$src_dir" == *".local" ]] && [ "$item_name" == "share" ]; then
-        need_recurse=true
-    fi
-
-    if [ "$need_recurse" = true ]; then
-        link_recursive "$src_path" "$dest_dir/$item_name"
-    else
-        local target_path="$dest_dir/$item_name"
-
-
-        if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then         
-            warn "SKIP: $target_path"
-            continue
-        fi
-
-        if [ -L "$target_path" ] && [ "$(readlink -f "$target_path")" == "$src_path" ]; then
-            continue
-        fi
-
-        if [ -L "$target_path" ]; then
-            rm -rf "$target_path"
-        fi
-        ln -sf "$src_path" "$target_path"
-    fi
-  done
-}
-
-# --- Main Execution Flow ---
 
 if [ ! -d "$DOTFILES_REPO/.git" ]; then
     error "$MSG_ERR_REPO $DOTFILES_REPO"
@@ -172,17 +218,14 @@ cd "$DOTFILES_REPO" || exit 1
 mkdir -p "$BACKUP_ROOT"
 BACKUP_DONE=false
 
-# Use localized string for prompt (Now defaults to Y)
 echo -ne "${H_YELLOW}${MSG_ASK_BACKUP}${NC} "
 read -r OPT_BACKUP
-
-# Set default to Y if input is empty
 OPT_BACKUP=${OPT_BACKUP:-Y}
 
 if [[ "$OPT_BACKUP" =~ ^[yY] ]]; then
     log "$MSG_BACKUP_ING"
     if quicksave; then
-	log "$MSG_QUICKSAVE"
+        log "$MSG_QUICKSAVE"
     fi
     tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
     success "$MSG_BACKUP_DONE"
@@ -199,6 +242,15 @@ LOCAL_HASH=$(git rev-parse HEAD)
 REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
 
 if [ "$LOCAL_HASH" == "$REMOTE_HASH" ]; then
+    # Even if up-to-date, we must ensure sparse-checkout rules are applied
+    # in case the user manually deleted the file or it's a fresh run
+    git config core.sparseCheckout true
+    SPARSE_FILE=".git/info/sparse-checkout"
+    truncate -s 0 "$SPARSE_FILE"
+    for item in "${TARGET_DIRS[@]}"; do echo "$item" >> "$SPARSE_FILE"; done
+    echo "niri-applist.txt" >> "$SPARSE_FILE"
+    git read-tree -mu HEAD 2>/dev/null || true
+
     success "$MSG_UP_TO_DATE"
 else
     HAS_LOCAL_CHANGES=false
@@ -215,10 +267,19 @@ else
         git commit -m "TEMP_SAVE" --quiet || error "$MSG_ERR_COMMIT"
     fi
 
+    # [CRITICAL FIX] Update Sparse Checkout Rules & Force Apply
     git config core.sparseCheckout true
     SPARSE_FILE=".git/info/sparse-checkout"
+    
+    # Re-write the rule file
     truncate -s 0 "$SPARSE_FILE"
     for item in "${TARGET_DIRS[@]}"; do echo "$item" >> "$SPARSE_FILE"; done
+    # Explicitly add the dependency list file
+    echo "niri-applist.txt" >> "$SPARSE_FILE"
+
+    # FORCE Git to refresh the working directory based on new rules
+    # This brings the file into existence if it was hidden
+    git read-tree -mu HEAD 2>/dev/null || true
 
     log "$MSG_PULLING"
     if git pull --rebase -Xtheirs origin "$BRANCH"; then
@@ -236,11 +297,14 @@ else
     fi
 fi
 
-# 3. Linking
+# 3. Check Dependencies (Will process niri-applist.txt)
+check_dependencies
+
+# 4. Linking
 log "$MSG_LINKING"
 link_recursive "$DOTFILES_REPO/dotfiles" "$HOME"
 
-# 4. Cleanup
+# 5. Cleanup
 log "$MSG_CLEANING"
 git reflog expire --expire=now --all
 git gc --prune=now 2>/dev/null
