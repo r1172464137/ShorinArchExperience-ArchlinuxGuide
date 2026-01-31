@@ -1,36 +1,65 @@
 #!/bin/bash
 
-bar="▁▂▃▄▅▆▇█"
-config_file="/tmp/waybar_cava_config"
+# 配置
+CHARS="▁▂▃▄▅▆▇█"
+BARS=10
+CONF="/tmp/waybar_cava_config"
 
-# 当脚本退出(EXIT)或被中断时，自动杀掉当前脚本的子进程(cava)
-trap "pkill -P $$" EXIT
+# 初始化
+len=$((${#CHARS}-1))
+idle_char="${CHARS:0:1}"
+idle_output=$(printf "%0.s$idle_char" $(seq 1 $BARS))
 
-# --- 2. 生成配置 ---
-echo "
+# 生成 Cava 配置
+cat > "$CONF" <<EOF
 [general]
-framerate = 24
-sleep_timer = 1   
-bars = 10
-
+bars = $BARS
 [input]
 method = pulse
-
+source = auto
 [output]
 method = raw
 raw_target = /dev/stdout
 data_format = ascii
-ascii_max_range = 7
-" > "$config_file"
+ascii_max_range = $len
+EOF
 
-# --- 3. 构建字典 ---
-dict="s/;//g;"
-i=0
-while [ $i -lt ${#bar} ]
-do
-    dict="${dict}s/$i/${bar:$i:1}/g;"
-    i=$((i=i+1))
+cleanup() {
+    trap - EXIT INT TERM
+    pkill -P $$ 2>/dev/null
+    echo "$idle_output"
+    exit 0
+}
+trap cleanup EXIT INT TERM
+
+# 核心检测：是否存在未暂停的音频流
+is_audio_active() {
+    pactl list sink-inputs 2>/dev/null | grep -q "Corked: no"
+}
+
+# 初始状态
+echo "$idle_output"
+
+while true; do
+    # 如果存在未静音的音频
+    if is_audio_active; then
+        if ! pgrep -P $$ -x cava >/dev/null; then
+            # 这里的 sed 字典是根据你的 CHARS 动态生成的
+            sed_dict="s/;//g;"
+            for ((i=0; i<=${len}; i++)); do
+                sed_dict="${sed_dict}s/$i/${CHARS:$i:1}/g;"
+            done
+            cava -p "$CONF" 2>/dev/null | sed -u "$sed_dict" &
+        fi
+        # 正在播放时，稍微降低检查频率减少 CPU 占用
+        sleep 1
+    else
+        if pgrep -P $$ -x cava >/dev/null; then
+            pkill -P $$ -x cava 2>/dev/null
+            wait 2>/dev/null
+            echo "$idle_output"
+        fi
+        # 没声音时，使用 subscribe 等待事件，被动唤醒，不产生任何循环开销
+        timeout 5s pactl subscribe 2>/dev/null | grep --line-buffered "sink-input" | head -n 1 >/dev/null
+    fi
 done
-
-# --- 4. 运行 ---
-cava -p "$config_file" | sed -u "$dict"
