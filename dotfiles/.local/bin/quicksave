@@ -45,7 +45,7 @@ if [ -f "$ROOT_CONF_FILE" ]; then
     if ! snapper -c "$ROOT_CONF_NAME" get-config >/dev/null 2>&1; then
         # 使用 pkexec 提权，并调用 snapper 原生命令修改配置
         # 这比 sed 更安全，且 pkexec 会处理 GUI 密码弹窗
-        pkexec snapper -c "$ROOT_CONF_NAME" set-config ALLOW_GROUPS="wheel"
+	pkexec snapper -c "$ROOT_CONF_NAME" set-config ALLOW_GROUPS="wheel" NUMBER_LIMIT=10 NUMBER_MIN_AGE=0
     fi
 else
     # 配置文件物理丢失的极端情况

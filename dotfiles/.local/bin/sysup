@@ -27,7 +27,6 @@
 # ------------------------------
 COUNT_LIMIT=15       # Default max news items
 NEWS_SOURCE="official" # Default source
-# 优化：使用 locale 命令检测语言，比直接读环境变量更稳健
 UI_LANG=$(
     locale 2>/dev/null |
     awk -F= '/^LC_MESSAGES=/{print $2}' |
@@ -52,18 +51,18 @@ usage() {
 Usage: $(basename "$0") [options]
 
 Options:
-  --ui-lang zh|en            UI language (default: auto)
+  --ui-lang zh|en        UI language (default: auto)
   --news-source official|cn  News source (default: official)
-  --count N                  Max number of news items (default: 15)
-  --help, -h                 Show this help and exit
+  --count N                    Max number of news items (default: 15)
+  --help, -h                   Show this help and exit
 EOF
 }
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        --ui-lang)     [ -n "$2" ] && UI_LANG="$2" shift 2 || exit 1 ;;
-        --news-source) [ -n "$2" ] && NEWS_SOURCE="$2" shift 2 || exit 1 ;;
-        --count)       [ -n "$2" ] && COUNT_LIMIT="$2" shift 2 || exit 1 ;;
+        --ui-lang)     [ -n "$2" ] && UI_LANG="$2" && shift 2 || exit 1 ;;
+        --news-source) [ -n "$2" ] && NEWS_SOURCE="$2" && shift 2 || exit 1 ;;
+        --count)       [ -n "$2" ] && COUNT_LIMIT="$2" && shift 2 || exit 1 ;;
         --help|-h)     usage; exit 0 ;;
         *)             printf "Unknown option: %s\n" "$1"; usage; exit 1 ;;
     esac
@@ -78,15 +77,15 @@ TAG_SUCCESS      | [OK]                                            | [成功]
 TAG_WARN         | [WARN]                                          | [注意]
 TAG_ERROR        | [ERROR]                                         | [错误]
 
-INTRO_HEADER     | === Arch Linux System Update Assistant ===      | === Arch Linux 系统更新助手 ===
-INTRO_DESC       | Actions to perform:                             | 本脚本将执行以下操作：
+INTRO_HEADER      | === Arch Linux System Update Assistant ===      | === Arch Linux 系统更新助手 ===
+INTRO_DESC       | Actions to perform:                              | 本脚本将执行以下操作：
 INTRO_1          | 1. Fetch latest Arch Linux news                 | 1. 获取最新 Arch Linux 新闻
-INTRO_2          | 2. Sync Pacman DB & Update GPG Keyrings         | 2. 同步软件数据库并更新 GPG 密钥环
+INTRO_2          | 2. Sync Pacman DB & Update GPG Keyrings          | 2. 同步软件数据库并更新 GPG 密钥环
 INTRO_3          | 3. Upgrade system packages                      | 3. 升级系统软件包 
 INTRO_4          | 4. Update Flatpak apps                          | 4. 更新 Flatpak 应用
 INTRO_5          | 5. Re-generate GRUB config                      | 5. 重新生成 GRUB 配置文件
 
-MSG_REQ_SUDO     | Requesting sudo...                              | 正在请求管理员权限以更新系统...
+MSG_REQ_SUDO      | Requesting sudo...                              | 正在请求管理员权限以更新系统...
 MSG_SUDO_FAIL    | Sudo privileges required. Exiting...            | 需要管理员权限才能更新系统。已退出。
 MSG_NO_HELPER    | No AUR helper found (paru or yay)               | 未找到 AUR 助手 (paru 或 yay)
 MSG_PREPARING    | Preparing update with %s...                     | 准备使用 %s 更新系统...
@@ -99,12 +98,13 @@ MSG_FORCE_ASK    | Force update anyway? [y/N]                      | 是否忽�
 MSG_FORCING      | Forcing update...                               | 正在强制更新...
 MSG_EXIT         | Safe exit.                                      | 安全退出。
 
-MSG_STEP_1       | [1/4] Sync DB & Keyrings                        | [1/4] 同步数据库并更新密钥环...
+MSG_SNAP         | [0/5] Creating Btrfs Snapshot...                | [0/5] 正在创建 Btrfs 快照...
+MSG_STEP_1       | [1/5] Sync DB & Keyrings                        | [1/5] 同步数据库并更新密钥环...
 MSG_KEYRING_OK   | DB & Keyrings synced.                           | 数据库与密钥环已同步。
 MSG_KEYRING_WARN | Keyring issues detected...                      | 密钥环更新遇到问题，继续尝试系统更新...
-MSG_STEP_2       | [2/4] Upgrading system                          | [2/4] 正在升级系统...
-MSG_STEP_3       | [3/4] Checking Flatpak updates                  | [3/4] 检查 Flatpak 更新...
-MSG_STEP_4       | [4/4] Updating GRUB                             | [4/4] 更新 GRUB 配置...
+MSG_STEP_2       | [2/5] Upgrading system                          | [2/5] 正在升级系统...
+MSG_STEP_3       | [3/5] Checking Flatpak updates                  | [3/5] 检查 Flatpak 更新...
+MSG_STEP_4       | [4/5] Updating GRUB                             | [4/5] 更新 GRUB 配置...
 MSG_GRUB_OK      | GRUB updated.                                   | GRUB 更新成功。
 MSG_GRUB_FAIL    | GRUB update failed.                             | GRUB 更新失败。
 '
@@ -144,7 +144,6 @@ if ! sudo -v; then
     _error "$MSG_SUDO_FAIL"
 fi
 
-# 优化：使用 trap 机制清理后台 sudo 进程，比 kill -0 更规范
 # Keep sudo alive in background
 while true; do sudo -n true; sleep 60; done 2>/dev/null &
 SUDO_PID=$!
@@ -166,10 +165,15 @@ fi
 # 8. Update Function
 # ------------------------------
 perform_update() {
+    # Step 0: Quick Snapshot (Before everything)
+    if command -v quicksave >/dev/null 2>&1; then
+        _log "$MSG_SNAP"
+        quicksave
+    fi
+
     # Step 1: Sync DB & Update keyrings
     _log "$MSG_STEP_1"
     KEYRING_TARGETS="archlinux-keyring"
-    # 直接检测 pacman.conf 判断是否需要 cn keyring
     if grep -q "^\[archlinuxcn\]" /etc/pacman.conf; then
         KEYRING_TARGETS="$KEYRING_TARGETS archlinuxcn-keyring"
     fi
@@ -193,7 +197,6 @@ perform_update() {
     # Step 4: Update GRUB
     _log "$MSG_STEP_4"
     if command -v grub-mkconfig >/dev/null 2>&1; then
-        # 优化：抑制 grub-mkconfig 的冗余输出，只看结果
         if sudo env LANG=en_US.UTF-8 grub-mkconfig -o /boot/grub/grub.cfg; then
             _success "$MSG_GRUB_OK"
         else
@@ -203,9 +206,7 @@ perform_update() {
         _warn "grub-mkconfig not found. Skipping GRUB update."
     fi
 
-    # Step 5: Silent Waybar Refresh (Low Coupling)
-    # 无论上面步骤是否全部完美成功，只要执行到这里，都尝试刷新状态
-    # >/dev/null 2>&1 确保没有任何输出，如果 waybar 没运行则静默失败
+    # Step 5: Silent Waybar Refresh
     pkill -RTMIN+8 waybar >/dev/null 2>&1
 }
 
