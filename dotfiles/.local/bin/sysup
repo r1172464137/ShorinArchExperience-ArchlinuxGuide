@@ -168,7 +168,7 @@ perform_update() {
     # Step 0: Quick Snapshot (Before everything)
     if command -v quicksave >/dev/null 2>&1; then
         _log "$MSG_SNAP"
-        quicksave
+        quicksave -d sysup
     fi
 
     # Step 1: Sync DB & Update keyrings
