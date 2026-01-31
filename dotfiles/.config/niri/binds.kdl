@@ -25,8 +25,8 @@ binds {
     Mod+F10 hotkey-overlay-title="随机切换壁纸 Random wallpaper" {spawn "waypaper" "--random";}
     Mod+Shift+F10 hotkey-overlay-title="随机下载动漫壁纸 Random download anime wallpaper" {spawn "~/.config/scripts/random-anime-wallpaper.sh";}
     Mod+F1 hotkey-overlay-title="开关输入法 Toggle fcitx" {spawn-sh "pkill fcitx5 || fcitx5 ";}
-    Mod+F2 hotkey-overlay-title="顶部任务栏 Top bar"  {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
-    Mod+F3  hotkey-overlay-title="底部任务栏 Bottom bar" {spawn-sh "pkill waybar & pkill cava || true &&  waybar -c $HOME/.config/waybar-niri-Win11Like/config.jsonc -s $HOME/.config/waybar-niri-Win11Like/style.css ";}
+    Mod+F2 hotkey-overlay-title="顶部任务栏 Top bar"  {spawn-sh "pkill cava || true && pkill waybar || true && waybar -c $HOME/.config/waybar/config.jsonc -s $HOME/.config/waybar/style.css ";}
+    Mod+F3  hotkey-overlay-title="底部任务栏 Bottom bar" {spawn-sh "pkill cava || true && pkill waybar || true &&  waybar -c $HOME/.config/waybar-niri-Win11Like/config.jsonc -s $HOME/.config/waybar-niri-Win11Like/style.css ";}
     Mod+F5 hotkey-overlay-title="快速存档 Quick save" {spawn "~/.local/bin/quicksave";}
     Mod+F8 hotkey-overlay-title="快速读档 Quick load" {spawn "~/.local/bin/quickload";}
 

@@ -346,6 +346,7 @@
   //音频可视化
   "custom/cava": {
     "tooltip": false,
+    "return-type": "plain",
     "format": "{}",
     "exec": "~/.config/waybar/scripts/cava.sh",
   },
