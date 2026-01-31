@@ -8,7 +8,7 @@ set -u
 
 # --- 用户配置区域 ---
 GIF_WIDTH=720
-GIF_FPS=24
+GIF_FPS=30
 DITHER_MODE="bayer:bayer_scale=5"
 STATS_MODE="diff"
 # --------------------

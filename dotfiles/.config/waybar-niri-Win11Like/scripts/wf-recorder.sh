@@ -44,7 +44,7 @@ _DEFAULT_SAVE_EXT="auto"             # auto/mp4/mkv/webm
 
 # --- [NEW] GIF 配置区域 ---
 GIF_WIDTH=720
-GIF_FPS=24
+GIF_FPS=30
 GIF_DITHER_MODE="bayer:bayer_scale=5"
 GIF_STATS_MODE="diff"
 # -------------------------
