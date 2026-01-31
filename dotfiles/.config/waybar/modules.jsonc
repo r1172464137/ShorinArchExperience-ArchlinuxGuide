@@ -285,9 +285,10 @@
     ],
   },
   "custom/ddcutil-day": {
-    "tooltip-format": "左键：100%外接屏幕亮度",
+    "tooltip-format": "左键：100%外接屏幕亮度\n右键：切换护眼模式",
     "format": "󰃠",
     "on-click": "ddcutil --display 1 setvcp 10 100 ",
+    "on-click-right": "~/.local/bin/toggle-wlsunset",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
