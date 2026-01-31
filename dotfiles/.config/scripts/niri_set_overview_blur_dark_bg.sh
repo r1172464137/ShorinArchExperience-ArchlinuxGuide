@@ -212,19 +212,14 @@ apply_wallpaper() {
         
     elif [ "$WALLPAPER_BACKEND" == "swaybg" ]; then
         # Swaybg 逻辑
-        # 1. 以后台模式启动新的 swaybg
-        # 注意：swaybg 不像 swww 那样支持热重载，通常需要先启动新的覆盖，再杀旧的，或者先杀再启
-        # 这里采用先杀再启的简单策略，可能会有极短暂的闪烁，但逻辑最稳
-        
-        # 杀死现有的 swaybg 实例 (忽略报错如果没运行)
-        pkill -x swaybg || true
-        
-        # 启动新的
+        # 1. 检查 niri 的图层状态，如果发现 overview 正在运行
+        if niri msg layers | grep -qE "(swww-daemonoverview|awww-daemonoverview)"; then
+            # 2. 杀掉对应的后台进程
+            pkill -f "swww-daemon -n overview" || true
+            pkill -f "awww-daemon -n overview" || true
+        fi        # 启动新的
         swaybg -i "$img_path" -m "$SWAYBG_MODE" &
         
-        # 另一种平滑策略（如果支持）：先启动新的，等待一会，再杀旧的。
-        # 但 swaybg 独占图层，如果不杀旧的，新的可能无法显示或重叠。
-        # 标准做法通常是管理 PID，但 bash 脚本里 pkill 最简单。
     fi
 }
 
