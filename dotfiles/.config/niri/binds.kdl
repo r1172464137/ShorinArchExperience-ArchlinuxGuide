@@ -35,15 +35,15 @@ binds {
     // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
     Mod+F4 hotkey-overlay-title="开关任务栏 toggle bar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
     // 临时打开一个文本编辑器
-    Mod+M hotkey-overlay-title="记事本 Notebook" {spawn-sh "kitty --class notebook -e vim";}
+    Mod+M hotkey-overlay-title="记事本 Notebook" {spawn "kitty" "--single-instance" "--class" "notebook" "-e" "vim";}
     // 临时开一个浮动终端
-    Mod+Slash hotkey-overlay-title="临时终端 Quick Terminal" {spawn "kitty" "--class" "quickterminal";}
+    Mod+Slash hotkey-overlay-title="临时终端 Quick Terminal" {spawn "kitty" "--single-instance" "--class" "quickterminal";}
     Mod+F12 hotkey-overlay-title=null {spawn "kitty" "--class" "quickterminal";}
     //打开浏览器
     Mod+B hotkey-overlay-title="浏览器 Browser" { spawn "firefox"; }        
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T hotkey-overlay-title="终端 Terminal" { spawn "kitty"; }
+    Mod+T hotkey-overlay-title="终端 Terminal" { spawn "kitty" "--single-instance"; }
     // 文档管理器。如果有thunar的话会优先打开thunar，没有的话会打开nautilus，不要问我为什么（）
     Mod+E hotkey-overlay-title="文档管理器 Filemanager" { spawn-sh "thunar || env GSK_RENDERER=gl GTK_IM_MODULE=fcitx  nautilus"; }
     // 另一个打开nautilus的快捷键，主要是为了在同时安装thunar和nautilus的情况下打开naultilus
@@ -52,7 +52,7 @@ binds {
     // 锁屏
     Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn-sh "swaylock || hyprlock"; } 
     Mod+P hotkey-overlay-title="选取屏幕颜色 Pick color " { spawn-sh "hyprpicker | wl-copy"; }
-    Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui || kitty --class clipse -o font_size=13 -o \"modify_font cell_height 90%\" -e clipse";}
+    Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui || kitty --single-instance --class clipse -o font_size=13 -o \"modify_font cell_height 90%\" -e clipse";}
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
