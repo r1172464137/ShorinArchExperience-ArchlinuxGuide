@@ -156,7 +156,7 @@ check_dependencies() {
         
         # [MODIFIED] Try to install, but do NOT exit on failure.
         # Just show a warning message and let the script proceed.
-        if ! $helper -S --needed --noconfirm "${missing_pkgs[@]}"; then
+        if ! $helper -S --needed "${missing_pkgs[@]}"; then
             warn "$MSG_INSTALL_FAIL"
         fi
     else
