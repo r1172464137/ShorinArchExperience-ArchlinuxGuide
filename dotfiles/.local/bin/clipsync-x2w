@@ -1,23 +1,63 @@
 #!/bin/bash
+#!/bin/bash
 
-# 啟動時先同步一次（防止遺漏）
-X_INIT=$(xclip -o -selection clipboard 2>/dev/null)
-W_INIT=$(wl-paste 2>/dev/null)
-if [ -n "$X_INIT" ] && [ "$X_INIT" != "$W_INIT" ]; then
-    echo -n "$X_INIT" | wl-copy
-fi
+# 初始化哈希缓存
+LAST_HASH=""
 
-# 開始監聽循環
-while clipnotify; do
-    # 1. 讀取 X11 剪貼簿 (Typora 裡的內容)
-    X_CONTENT=$(xclip -o -selection clipboard 2>/dev/null)
-
-    # 2. 讀取 Wayland 剪貼簿 (為了比對)
-    W_CONTENT=$(wl-paste 2>/dev/null)
-
-    # 3. 【關鍵】只有當兩邊內容不一致時，才執行寫入！
-    # 這行判斷就是防止死循環的煞車
-    if [ -n "$X_CONTENT" ] && [ "$X_CONTENT" != "$W_CONTENT" ]; then
-        echo -n "$X_CONTENT" | wl-copy
+# 辅助函数：计算 X11 内容的 MD5 (统一处理)
+calc_x_hash() {
+    local type="$1"
+    if [[ "$type" == "image/png" ]]; then
+        # 读取图片流计算 hash
+        xclip -selection clipboard -t "$type" -o 2>/dev/null | md5sum
+    else
+        # 读取文本流计算 hash
+        xclip -selection clipboard -o 2>/dev/null | md5sum
     fi
+}
+
+# 循环监听 (事件驱动，零 CPU 占用)
+while clipnotify; do
+    # 1. 检查格式 (使用 xclip 快速探测)
+    TARGETS=$(xclip -selection clipboard -t TARGETS -o 2>/dev/null)
+    
+    # 变量复位
+    MIME=""
+    
+    # 2. 优先级判断 (使用 Bash 内置匹配，比 grep 快 10 倍以上)
+    if [[ "$TARGETS" == *"image/png"* ]]; then
+        MIME="image/png"
+    elif [[ "$TARGETS" == *"UTF8_STRING"* ]] || [[ "$TARGETS" == *"STRING"* ]]; then
+        MIME="text"
+    fi
+
+    # 如果既不是图也不是字，直接跳过 (如文件操作)
+    if [[ -z "$MIME" ]]; then continue; fi
+
+    # 3. 计算当前 X11 内容的指纹
+    # read 命令直接读取 md5sum 的第一列输出，不需要 awk
+    read -r CURRENT_HASH _ < <(calc_x_hash "$MIME")
+
+    # 4. 【核心优化】本地缓存比对 (Loop Breaker)
+    # 如果当前 X11 的内容指纹 == 我们上一次同步过的指纹
+    # 说明这是 (Wayland -> XWayland -> X11) 的回声，或者是用户重复复制
+    # 这种情况无需操作，直接跳过，不仅防死循环，还省去了调用 wl-copy 的开销
+    if [[ "$CURRENT_HASH" == "$LAST_HASH" ]]; then
+        continue
+    fi
+
+    # 5. 执行单向同步 (X11 -> Wayland)
+    if [[ "$MIME" == "image/png" ]]; then
+        # 图片模式：显式指定 MIME
+        xclip -selection clipboard -t image/png -o 2>/dev/null | wl-copy --type image/png
+    else
+        # 文本模式
+        xclip -selection clipboard -o 2>/dev/null | wl-copy
+    fi
+
+    # 6. 更新缓存，标记此内容已处理
+    LAST_HASH="$CURRENT_HASH"
+    
+    # 可选：调试日志 (生产环境可注释掉)
+    # echo "[Sync] $MIME synced. Hash: ${CURRENT_HASH:0:6}"
 done
