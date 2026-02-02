@@ -52,8 +52,8 @@ binds {
     // 锁屏
     Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn-sh "swaylock || hyprlock"; } 
     Mod+P hotkey-overlay-title="选取屏幕颜色 Pick color " { spawn-sh "hyprpicker | wl-copy"; }
-    //Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui || kitty --single-instance --class clipse -o font_size=13 -o \"modify_font cell_height 90%\" -e clipse";}
-    Mod+Alt+V {spawn-sh "kitty --single-instance --class shorinclip -e ~/.local/bin/shorincliptui";} // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
+    Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || clipse-gui || kitty --single-instance --class clipse -o font_size=13 -o \"modify_font cell_height 90%\" -e clipse";}
+    //Mod+Alt+V {spawn-sh "kitty --single-instance --class shorinclip -e ~/.local/bin/shorincliptui";} // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
