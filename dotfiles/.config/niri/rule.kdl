@@ -31,7 +31,7 @@ window-rule {
 // 以浮动模式打开
 window-rule{
 	match app-id="shorinclip"
-	min-width 800
+	min-width 600
 	min-height 700
 	open-floating true
 
