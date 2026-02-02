@@ -7,17 +7,28 @@ set -euo pipefail
 
 NIRI_CONFIG="$HOME/.config/niri/config.kdl"   # niri 配置文件
 
-SHOTEDITOR_DEFAULT="satty"                   # 默认截图编辑器：swappy 或 satty
+SHOTEDITOR_DEFAULT="satty"                    # 默认截图编辑器：swappy 或 satty
 COPY_CMD="wl-copy"                            # 复制到剪贴板的命令
 
-# 菜单程序，按你实际使用的启动器改
-# wofi 示例: MENU_CMD='wofi -d'
-# rofi 示例: MENU_CMD='rofi -dmenu'
+# 菜单程序
 MENU_CMD='fuzzel --dmenu'
 
 # 图片目录
 PICTURES_DIR="$(xdg-user-dir PICTURES 2>/dev/null || echo "$HOME/Pictures")"
 SCREEN_DIR="$PICTURES_DIR/Screenshots"
+
+# ===========================
+# [新增] 音效配置
+# ===========================
+# 音效文件路径 (默认 freedesktop 快门声)
+SOUND_FILE="/usr/share/sounds/freedesktop/stereo/camera-shutter.oga"
+# 播放命令 (后台运行，静默)
+# 如果你没有 pw-play，可以换成 paplay 或 aplay
+PLAY_SOUND_CMD() {
+    if [[ -f "$SOUND_FILE" ]]; then
+        pw-play "$SOUND_FILE" >/dev/null 2>&1 &
+    fi
+}
 
 ########################
 # 本地化（中/英）
@@ -94,7 +105,7 @@ CONFIG_DIR="$XDG_CACHE_HOME/waybar-power-screenshot-sh"
 
 BACKEND_FILE="$CONFIG_DIR/backend"
 EDITOR_FILE="$CONFIG_DIR/editor"
-EDIT_MODE_FILE="$CONFIG_DIR/edit_mode"   # yes / no
+EDIT_MODE_FILE="$CONFIG_DIR/edit_mode"    # yes / no
 
 # 确保新的缓存目录存在
 mkdir -p "$CONFIG_DIR"
@@ -253,7 +264,7 @@ settings_menu() {
                     choose_backend_mode
                 fi
                 ;;
-            *)               return ;;  # 返回上一层
+            *)                return ;;  # 返回上一层
         esac
     done
 }
@@ -391,7 +402,7 @@ niri_capture_and_maybe_edit() {
     case "$mode" in
         fullscreen) action="screenshot-screen" ;;
         window)     action="screenshot-window" ;;
-        region)     action="screenshot"       ;;
+        region)     action="screenshot"        ;;
         *)          return 0 ;;
     esac
 
@@ -402,10 +413,15 @@ niri_capture_and_maybe_edit() {
 
         niri msg action "$action"
 
+        # 循环等待文件生成
         while :; do
             shot="$(latest_in_dir "$NIRI_SHOT_DIR" || true)"
             if [[ -z "$before" && -n "$shot" ]] || \
                [[ -n "$before" && -n "$shot" && "$shot" != "$before" ]]; then
+                
+                # [新增] 检测到新文件生成，截图成功，播放音效！
+                PLAY_SOUND_CMD
+                
                 break
             fi
             sleep 0.05
@@ -420,6 +436,9 @@ niri_capture_and_maybe_edit() {
         echo "等待剪贴板中的截图超时" >&2
         return 0
     fi
+
+    # [新增] 剪贴板内容变化，截图成功，播放音效！
+    PLAY_SOUND_CMD
 
     edit_from_clipboard "niri"
     return 0
@@ -524,6 +543,11 @@ grim_capture_and_maybe_edit() {
             *)
                 return 0 ;;
         esac
+        
+        # [新增] Grim 执行成功后，播放音效
+        if [[ -f "$shot" ]]; then
+            PLAY_SOUND_CMD
+        fi
 
         edit_file_image "$shot" "grim"
         return 0
@@ -542,6 +566,12 @@ grim_capture_and_maybe_edit() {
             *)
                 return 0 ;;
         esac
+
+        # [新增] Grim 执行成功后，播放音效
+        if [[ -f "$shot" ]]; then
+            PLAY_SOUND_CMD
+        fi
+
         return 0
     fi
 }
