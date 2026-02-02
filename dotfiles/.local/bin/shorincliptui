@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# ================= 配置区 =================
+DB_FILE="$HOME/.cache/shorinclip/history.db"
+CACHE_DIR="$HOME/.cache/shorinclip/previews"
+# 定义列表美化逻辑，避免重复代码
+FMT_CMD="sed 's/\[\[ binary data.*\]\]/ [🖼️  Image] /g'"
+
+mkdir -p "$CACHE_DIR"
+mkdir -p "$(dirname "$DB_FILE")"
+
+# ================= 清理函数 =================
+cleanup() {
+    # 退出时清空缓存目录，保证下次启动是干净的
+    rm -f "$CACHE_DIR"/*
+    kitten icat --clear --stdin=no --silent --transfer-mode=memory < /dev/null > /dev/tty
+}
+
+# ================= 核心逻辑 =================
+
+case "$1" in
+    # --- 预览模式 ---
+    preview)
+        ID="$2"
+        OUTPUT_IMG="$CACHE_DIR/${ID}" # 去掉后缀，先判断类型
+        
+        # 🚀 优化1：缓存机制
+        # 只有当文件不存在(或者为空)时，才执行解码。
+        # 这样在列表中上下快速滚动时，不用重复消耗 CPU 解码图片。
+        if [ ! -s "$OUTPUT_IMG" ]; then
+            cliphist -db-path "$DB_FILE" decode "$ID" > "$OUTPUT_IMG"
+        fi
+        
+        MIME=$(file --mime-type -b "$OUTPUT_IMG")
+        
+        if [[ "$MIME" == image/* ]]; then
+            # === 图片模式 ===
+            sleep 0.2
+            kitten icat --clear --transfer-mode=memory --stdin=no \
+                --place "${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" \
+                "$OUTPUT_IMG"
+        else
+            # === 文本模式 ===
+            # 清除可能存在的旧图片
+            kitten icat --clear --stdin=no --silent --transfer-mode=memory < /dev/null > /dev/tty 2>/dev/null
+            
+            # 🚀 优化2：语法高亮
+            # 如果安装了 bat，就用 bat 渲染；否则降级用 cat
+            if command -v bat >/dev/null 2>&1; then
+                bat --color=always --style=plain --paging=never "$OUTPUT_IMG"
+            else
+                cat "$OUTPUT_IMG"
+            fi
+        fi
+        ;;
+
+    # --- 主界面 ---
+    *)
+        trap cleanup EXIT
+
+        # 快速检查是否有内容
+        if [ -z "$(cliphist -db-path "$DB_FILE" list | head -n 1)" ]; then
+            echo "📋 ShorinClip 为空"
+            read -n 1
+            exit 0
+        fi
+
+        # 🚀 优化3：使用 eval 动态执行 FMT_CMD，保持代码整洁
+        SELECTED=$(cliphist -db-path "$DB_FILE" list | \
+            eval "$FMT_CMD" | \
+            fzf \
+            --delimiter=$'\t' \
+            --with-nth=2.. \
+            --preview "$0 preview {1}" \
+            --preview-window=down:45%:wrap \
+            --bind "ctrl-x:execute(cliphist -db-path '$DB_FILE' delete <<< {})+reload(cliphist -db-path '$DB_FILE' list | eval \"$FMT_CMD\")" \
+            --header="[Enter] 复制  [Ctrl-X] 删除" \
+            --prompt="📎 Clip > " \
+            --layout=reverse \
+            --info=inline \
+            --border=rounded \
+            --height=100%
+        )
+
+        if [ -n "$SELECTED" ]; then
+            ID=$(echo "$SELECTED" | cut -f1)
+            cliphist -db-path "$DB_FILE" decode "$ID" | wl-copy > /dev/null 2>&1
+        fi
+        
+        exit 0
+        ;;
+esac

@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # 初始化哈希缓存
 LAST_HASH=""

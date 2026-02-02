@@ -317,7 +317,7 @@ layout {
 // Add lines like this to spawn processes at startup.
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
-// See the binds section below for more spawn examples.
+// See the binds section below for more ipawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // 自动启动设置
@@ -344,7 +344,8 @@ spawn-at-startup "waybar"
 // 输入法
 spawn-at-startup "fcitx5" 
 // 剪贴板守护进程
-spawn-at-startup "clipse" "--listen" 
+spawn-sh-at-startup "wl-paste --type text --watch cliphist -db-path \"$HOME/.cache/shorinclip/history.db\" store"
+spawn-sh-at-startup "wl-paste --type image --watch cliphist -db-path \"$HOME/.cache/shorinclip/history.db\" store"
 // wayland-->x11剪贴板同步
 spawn-at-startup "wl-paste" "--watch" "xclip" "-selection" "clipboard"
 // x11-->wayland剪贴板同步

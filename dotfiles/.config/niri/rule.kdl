@@ -29,6 +29,13 @@ window-rule {
     }
 // Open the Firefox picture-in-picture player as floating by default.
 // 以浮动模式打开
+window-rule{
+	match app-id="shorinclip"
+	min-width 500
+	min-height 700
+	open-floating true
+
+}
 window-rule {
     // This app-id regular expression will work for both:
     // - host Firefox (app-id is "firefox")
