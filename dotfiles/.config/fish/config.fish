@@ -19,8 +19,6 @@ function ls
 	command eza --icons $argv
 end
 
-
-thefuck --alias | source
 # 小黄鸭补帧 需要steam安装正版小黄鸭
 abbr lsfg 'LSFG_PROCESS="miyu"'
 # fa运行fastfetch
