@@ -69,9 +69,10 @@ MSG_INSTALL_DEPS  | Installing missing packages:                                
 MSG_INSTALL_FAIL  | Installation failed. Please check dependencies manually.     | 自动安装失败，请稍后手动检查依赖。
 MSG_DEPS_OK       | All dependencies are satisfied.                              | 所有依赖已满足。
 MSG_CHECK_REMOVE  | Checking for removed packages...                             | 正在检查需移除的软件包...
-MSG_ASK_REMOVE    | [QUERY] Package "%s" is removed from list. Uninstall? [y/N]: | [询问] 软件包 "%s" 已从清单移除。是否卸载? [y/N]: 
+MSG_ASK_REMOVE    | [QUERY] Package "%s" is removed from list. Uninstall? [Y/n]: | [询问] 软件包 "%s" 已从清单移除。是否卸载? [Y/n]: 
 MSG_REMOVING      | Removing packages...                                         | 正在移除软件包...
 MSG_REMOVE_FAIL   | Failed to remove packages.                                   | 移除失败。
+MSG_REBOOT_TIP    | Note: You may need to reboot for changes to take effect.     | 注意：可能需要重启系统以确保变更生效。
 '
 
 while IFS='|' read -r v e c; do
@@ -102,7 +103,7 @@ usage() {
 Usage: $(basename "$0") [options]
 
 Options:
-  --help, -h     Show this help and exit
+  --help, -h      Show this help and exit
 
 Description:
   $MSG_DESC
@@ -186,6 +187,10 @@ check_dependencies() {
                     
                     echo -ne "${H_YELLOW}${msg_ask}${NC} "
                     read -r confirm_rm < /dev/tty
+                    
+                    # [MODIFIED] 默认改为 Y
+                    confirm_rm=${confirm_rm:-Y}
+                    
                     if [[ "$confirm_rm" =~ ^[yY] ]]; then
                         remove_candidates+=("$pkg")
                     fi
@@ -252,7 +257,7 @@ link_recursive() {
     else
         local target_path="$dest_dir/$item_name"
 
-        if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then           
+        if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then            
             warn "SKIP: $target_path (Regular file exists)"
             continue
         fi
@@ -383,6 +388,8 @@ git gc --prune=now 2>/dev/null
 
 echo ""
 echo -e "${H_GREEN}${MSG_ALL_DONE}${NC}"
+# [MODIFIED] 重启提示
+echo -e "${H_YELLOW}${MSG_REBOOT_TIP}${NC}"
 
 if [ "$BACKUP_DONE" = true ]; then
     echo -e "${H_BLUE}${MSG_BACKUP_PATH}${NC} $BACKUP_FILE"
