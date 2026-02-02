@@ -1,117 +1,40 @@
- @import url("colors.css");
+@import url("colors.css");
 
-
-/* ==============================================
-
-   1. 主窗口
-
-   ============================================== */
-
+/* 1. 主窗口 */
 window#osd {
-
     background: none;
-
-    padding: 1em; /* 甚至这里的 padding 也可以用 em */
-
-    
-
-    /* 控制垂直位置：
-
-       数字越大 -> 离底部越远（往上）
-
-       数字越小 -> 离底部越近（往下）
-
-       试试 6em 或 8em 看看位置是否舒服
-
-    */
-
+    padding: 1em;
     margin-bottom: 12em 6em 6em 6em; 
-
 }
 
-
-/* ==============================================
-
-   2. 核心容器 (全 em 适配，颜色更淡)
-
-   ============================================== */
-
+/* 2. 核心容器 */
 #container {
-
     background-color: alpha(@secondary_container, 0.6);
-
-
     border: 0.1em solid alpha(@outline, 0.6); 
-
-    
-
     border-radius: 0.5em;
-
-
     padding: 0.8em 1.2em; 
-
 }
 
-
-/* ==============================================
-
-   3. 文字与图标
-
-   ============================================== */
-
+/* 3. 文字与图标 */
 image, label {
-
     color: @on_surface;
-
 }
-
 
 label {
-
-    /* 调整这个数字，整个 UI 就会等比例缩放 */
-
     font-size: 1.2em; 
-
     margin-left: 0.8em;
-
 }
 
-
-/* ==============================================
-
-   4. 进度条 (全 em 适配)
-
-   ============================================== */
-
+/* 4. 进度条 */
 progressbar trough {
-
     background-color: alpha(@on_surface, 0.25);
-
     border-radius: 0.5em;
-
-    
-
-    /* 高度 */
-
     min-height: 0.3em;
-
-    
-
-    /* 宽度：用 em 控制长短 */
-
     min-width: 12em; 
-
 }
-
 
 progressbar progress {
-
-    /* 进度条本体 */
-
     background-color: @on_surface;
-
     border-radius: 0.5em;
-
     min-height: 0.2em;
-
-} 
+}
