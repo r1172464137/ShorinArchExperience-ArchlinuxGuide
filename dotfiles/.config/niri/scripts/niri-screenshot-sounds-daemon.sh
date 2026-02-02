@@ -1,4 +1,15 @@
 #!/bin/bash
+until wl-paste --list-types >/dev/null 2>&1; do
+    sleep 0.5
+done
+
+# 2. (可选) 等待音频服务 (PipeWire) 就绪
+# 检查 pw-play 命令是否存在且能运行
+if command -v pw-play >/dev/null; then
+    until pw-play --help >/dev/null 2>&1; do
+        sleep 0.5
+    done
+fi
 SOUND="/usr/share/sounds/freedesktop/stereo/camera-shutter.oga"
 TOKEN="/dev/shm/niri_screenshot_active"
 
