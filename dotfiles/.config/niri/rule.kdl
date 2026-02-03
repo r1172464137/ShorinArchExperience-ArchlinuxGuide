@@ -34,7 +34,7 @@ window-rule{
 	//min-width 900
 	min-height 600
 	open-floating true
-	//default-floating-position x=0 y=10 relative-to="top"
+	default-floating-position x=0 y=18 relative-to="top"
 }
 window-rule {
     // This app-id regular expression will work for both:
