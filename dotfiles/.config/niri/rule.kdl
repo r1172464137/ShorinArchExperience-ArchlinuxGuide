@@ -31,10 +31,10 @@ window-rule {
 // 以浮动模式打开
 window-rule{
 	match app-id="shorinclip"
-	min-width 600
-	min-height 700
+	//min-width 900
+	min-height 600
 	open-floating true
-
+	//default-floating-position x=0 y=10 relative-to="top"
 }
 window-rule {
     // This app-id regular expression will work for both:

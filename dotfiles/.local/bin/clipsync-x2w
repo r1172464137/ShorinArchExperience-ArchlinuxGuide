@@ -1,62 +1,80 @@
 #!/bin/bash
 
+# ================= 配置区域 =================
+# 冷却时间 (秒)
+# 0.2 到 0.5 是最佳甜点。太短防不住风暴，太长感觉有延迟。
+DEBOUNCE_TIME=0.3
+
 # 初始化哈希缓存
 LAST_HASH=""
 
-# 辅助函数：计算 X11 内容的 MD5 (统一处理)
+# ================= 工具函数 =================
+
+# 计算 MD5 (统一处理)
 calc_x_hash() {
     local type="$1"
+    # 增加 timeout 防止 xclip 在某些坏死的 X11 窗口上卡死
     if [[ "$type" == "image/png" ]]; then
-        # 读取图片流计算 hash
-        xclip -selection clipboard -t "$type" -o 2>/dev/null | md5sum
+        timeout 1s xclip -selection clipboard -t "$type" -o 2>/dev/null | md5sum
     else
-        # 读取文本流计算 hash
-        xclip -selection clipboard -o 2>/dev/null | md5sum
+        timeout 1s xclip -selection clipboard -o 2>/dev/null | md5sum
     fi
 }
 
-# 循环监听 (事件驱动，零 CPU 占用)
+# ================= 主循环 =================
+
+# 只有当 clipnotify 存在时才运行
+if ! command -v clipnotify >/dev/null; then
+    echo "Error: clipnotify not found."
+    exit 1
+fi
+
 while clipnotify; do
-    # 1. 检查格式 (使用 xclip 快速探测)
-    TARGETS=$(xclip -selection clipboard -t TARGETS -o 2>/dev/null)
+    # 【核心修复 1】：去抖动 (Debounce)
+    # clipnotify 只是一个通知器，它退出意味着"有事件发生了"。
+    # 我们睡一小会儿，让那些乱七八糟的中间状态事件都过去，只取最后的状态。
+    # 这直接扼杀了 "xclip fork bomb"，解决了 SIGKILL 问题。
+    sleep "$DEBOUNCE_TIME"
+
+    # 1. 检查格式 (探测 Targets)
+    # 使用 timeout 保护，防止 xclip 卡住脚本
+    TARGETS=$(timeout 1s xclip -selection clipboard -t TARGETS -o 2>/dev/null)
     
     # 变量复位
     MIME=""
     
-    # 2. 优先级判断 (使用 Bash 内置匹配，比 grep 快 10 倍以上)
+    # 2. 优先级判断
     if [[ "$TARGETS" == *"image/png"* ]]; then
         MIME="image/png"
     elif [[ "$TARGETS" == *"UTF8_STRING"* ]] || [[ "$TARGETS" == *"STRING"* ]]; then
         MIME="text"
     fi
 
-    # 如果既不是图也不是字，直接跳过 (如文件操作)
+    # 如果既不是图也不是字，直接跳过
     if [[ -z "$MIME" ]]; then continue; fi
 
-    # 3. 计算当前 X11 内容的指纹
-    # read 命令直接读取 md5sum 的第一列输出，不需要 awk
+    # 3. 计算指纹
     read -r CURRENT_HASH _ < <(calc_x_hash "$MIME")
+    
+    # 如果 xclip 读取失败（比如空内容），hash 会为空，跳过
+    if [[ -z "$CURRENT_HASH" ]]; then continue; fi
 
-    # 4. 【核心优化】本地缓存比对 (Loop Breaker)
-    # 如果当前 X11 的内容指纹 == 我们上一次同步过的指纹
-    # 说明这是 (Wayland -> XWayland -> X11) 的回声，或者是用户重复复制
-    # 这种情况无需操作，直接跳过，不仅防死循环，还省去了调用 wl-copy 的开销
+    # 4. 本地缓存比对 (防止回声循环)
     if [[ "$CURRENT_HASH" == "$LAST_HASH" ]]; then
         continue
     fi
 
-    # 5. 执行单向同步 (X11 -> Wayland)
+    # 5. 执行同步 (X11 -> Wayland)
+    # 这里的逻辑是：X11 变了 -> 同步给 Wayland
     if [[ "$MIME" == "image/png" ]]; then
-        # 图片模式：显式指定 MIME
+        # 图片模式
         xclip -selection clipboard -t image/png -o 2>/dev/null | wl-copy --type image/png
     else
-        # 文本模式
+        # 文本模式 (去除末尾可能的换行符差异是 wl-copy 自动处理的，这里直接传)
         xclip -selection clipboard -o 2>/dev/null | wl-copy
     fi
 
-    # 6. 更新缓存，标记此内容已处理
+    # 6. 更新缓存
     LAST_HASH="$CURRENT_HASH"
     
-    # 可选：调试日志 (生产环境可注释掉)
-    # echo "[Sync] $MIME synced. Hash: ${CURRENT_HASH:0:6}"
 done

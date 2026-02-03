@@ -1,0 +1,229 @@
+#!/bin/bash
+# ShorinClip v1.1.19 - The Ultimate Kitty Clipboard Manager
+# Author: Shorin | License: MIT
+
+VERSION="1.1.19"
+CACHE_DIR="$HOME/.cache/shorinclip"
+RESULT_FILE="/tmp/shorinclip_res_$$"
+FZF_PORT=$((10000 + RANDOM % 50000))
+ENABLE_WATCH=true
+PREVIEW_ID=10
+SELF=$(readlink -f "$0")
+
+show_usage() {
+    cat <<EOF
+ShorinClip v$VERSION
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  -h, --help        Show this help message
+  -c, --clear-cache Clear thumbnail cache
+  -n, --no-watch    Disable auto-refresh monitoring
+EOF
+}
+
+check_deps() {
+    local deps=(fzf cliphist wl-copy kitty curl file ffmpeg mktemp)
+    for cmd in "${deps[@]}"; do
+        command -v "$cmd" &>/dev/null || { echo "❌ Error: Missing dependency: '$cmd'. Please install it." >&2; exit 1; }
+    done
+}
+
+ttyecho() { printf "$@" > /dev/tty; }
+
+url_decode() {
+    local url="${1//+/ }"
+    printf '%b' "${url//%/\\x}"
+}
+
+extract_path() {
+    local raw="$1"
+    raw="${raw#"${raw%%[![:space:]]*}"}"
+    raw="${raw%"${raw##*[![:space:]]}"}"
+    [[ "$raw" =~ src=\"(file://[^\"]+)\" ]] && raw="${BASH_REMATCH[1]}"
+    if [[ "$raw" == file://* ]]; then url_decode "${raw#file://}"
+    elif [[ "$raw" == /* ]]; then echo "$raw"; fi
+}
+
+draw_image() {
+    (( $2 <= 0 || $3 <= 0 )) && return
+    ttyecho "\e[?25l\0337"
+    kitty +kitten icat --silent --transfer-mode=file --stdin=no --image-id=$PREVIEW_ID \
+        --place "${2}x${3}@${4}x${5}" --align center "$1" > /dev/tty 2>/dev/null
+    ttyecho "\0338\e[?25h"
+}
+
+clean_only() {
+    ttyecho "\e[?25l\0337"
+    kitty +kitten icat --clear --silent --transfer-mode=file --image-id=$PREVIEW_ID < /dev/null > /dev/tty 2>/dev/null
+    ttyecho "\0338\e[?25h"
+}
+
+start_monitor() {
+    (
+        local last_top current_top
+        last_top=$(cliphist list | head -n 1)
+        while sleep 1; do
+            current_top=$(cliphist list | head -n 1)
+            if [[ "$last_top" != "$current_top" ]]; then
+                curl -s -X POST -d "reload($SELF _get_list)" "http://localhost:$FZF_PORT" >/dev/null 2>&1
+                last_top="$current_top"
+            fi
+        done
+    ) &
+    MONITOR_PID=$!
+}
+
+get_ext_from_mime() {
+    case "$1" in
+        image/png) echo "png" ;;
+        image/jpeg) echo "jpg" ;;
+        image/gif) echo "gif" ;;
+        image/webp) echo "webp" ;;
+        image/svg+xml) echo "svg" ;;
+        video/mp4) echo "mp4" ;;
+        video/webm) echo "webm" ;;
+        video/x-matroska) echo "mkv" ;;
+        *) echo "" ;;
+    esac
+}
+
+handle_subcommand() {
+    case "$1" in
+        _get_list)
+            cliphist list | awk -v cache_dir="$CACHE_DIR" '{
+                id=$1; $1=""; c=$0; sub(/^[ \t]+/, "", c);
+                if(c~/^(<meta|<html)/) next;
+                if(index(c, "file://" cache_dir "/") == 1) next;
+                t="";
+                if(c~/^\[\[ binary data/){t=(c~/gif/)?"\033[96m[GIF]":"\033[94m[IMG]"; c=t" (Bin)\033[0m"}
+                else if(c~/^(file:\/\/|\/)/){n=split(c,p,"/");f=p[n];
+                if(f~/\.(jpg|png|webp|svg)/)t="\033[94m[IMG]";else if(f~/\.gif/)t="\033[96m[GIF]";else if(f~/\.(mp4|mkv)/)t="\033[95m[VID]";
+                if(t)c=t"\033[0m "f} else if(c~/^\[Image\]/)c="\033[94m"c"\033[0m";
+                if(length(c)>80)c=substr(c,1,80)"...";
+                printf "%s\t\033[90m%d.\033[0m %s\n", id, NR, c
+            }'
+            exit 0 ;;
+        _preview)
+            trap 'printf "\0338" > /dev/tty' EXIT SIGINT SIGTERM
+            local id="$2"
+            [[ -z "$id" ]] && { clean_only; exit 0; }
+            
+            local raw_cache="${CACHE_DIR}/${id}"
+            local W=${FZF_PREVIEW_COLUMNS:-0} H=${FZF_PREVIEW_LINES:-0}
+            local X=${FZF_PREVIEW_LEFT:-0} Y=${FZF_PREVIEW_TOP:-0}
+            
+            (( W <= 0 || H <= 0 )) && { clean_only; exit 0; }
+            
+            clean_only  # Always clean before preview to reset
+            
+            local temp_file mime target thumb cache_file ext
+            temp_file=$(mktemp /tmp/shorinclip_preview.XXXXXX)
+            trap 'rm -f "$temp_file"' EXIT SIGINT SIGTERM
+            
+            echo -n "$id" | cliphist decode > "$temp_file" 2>/dev/null
+            [[ ! -s "$temp_file" ]] && { clean_only; rm -f "$temp_file"; exit 0; }
+            
+            mime=$(file --mime-type -b "$temp_file")
+            
+            if [[ "$mime" == image/* || "$mime" == video/* ]]; then
+                # Only create persistent file for media
+                ext=$(get_ext_from_mime "$mime")
+                if [[ -n "$ext" ]]; then
+                    cache_file="${CACHE_DIR}/${id}.${ext}"
+                else
+                    cache_file="$raw_cache"
+                fi
+                if [[ ! -f "$cache_file" ]]; then
+                    mv "$temp_file" "$cache_file"
+                else
+                    rm -f "$temp_file"
+                fi
+                target="$cache_file"
+            else
+                # For text/other, use temp_file for preview, then rm
+                target="$temp_file"
+            fi
+            
+            case "$mime" in
+                image/*) draw_image "$target" "$W" "$H" "$X" "$Y" ;;
+                video/*) thumb="${CACHE_DIR}/${id}.jpg"
+                    [[ ! -f "$thumb" ]] && ffmpeg -v error -y -i "$target" -ss 0 -vframes 1 "$thumb" >/dev/null 2>&1
+                    [[ -s "$thumb" ]] && draw_image "$thumb" "$W" "$H" "$X" "$Y" || { clean_only; echo "⚠️ Video Error"; } ;;
+                *) clean_only; { command -v bat >/dev/null && bat --style=plain --color=always "$target" | head -100 || cat "$target" | head -100; } ;;
+            esac
+            rm -f "$temp_file"
+            exit 0 ;;
+        _delete)
+            echo -n "$2" | cliphist delete
+            rm -f "$CACHE_DIR/$2"*
+            clean_only
+            exit 0 ;;
+    esac
+}
+
+[[ -n "$1" && "$1" == _* ]] && handle_subcommand "$@"
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -h|--help) show_usage; exit 0 ;;
+        -c|--clear-cache) rm -rf "$CACHE_DIR"/*; echo "✅ Cache cleared."; exit 0 ;;
+        -n|--no-watch) ENABLE_WATCH=false ;;
+        *) echo "Unknown option: $1"; show_usage; exit 1 ;;
+    esac; shift
+done
+
+mkdir -p "$CACHE_DIR"
+check_deps
+sleep 0.15
+
+cleanup() {
+    printf "\e[?25h\e[?1049l\e[2J" > /dev/tty
+    kitty +kitten icat --clear --silent --transfer-mode=file --image-id=$PREVIEW_ID < /dev/null > /dev/tty 2>/dev/null
+    rm -f "$RESULT_FILE"
+    [[ -n "$MONITOR_PID" ]] && kill "$MONITOR_PID" 2>/dev/null
+}
+trap cleanup EXIT
+rm -f "$RESULT_FILE"
+
+if $ENABLE_WATCH; then start_monitor; fi
+
+"$SELF" _get_list | fzf \
+    --listen "$FZF_PORT" \
+    --ansi --delimiter='\t' --with-nth=2 \
+    --layout=reverse --info=inline \
+    --prompt="📋 > " \
+    --header="Enter:Paste | C-X:Del | C-R:Reload" \
+    --preview-window="down:55%:wrap" \
+    --preview "$SELF _preview {1}" \
+    --bind "ctrl-r:reload($SELF _get_list)" \
+    --bind "ctrl-x:execute($SELF _delete {1}; $SELF _preview)+reload($SELF _get_list)" \
+    --bind "ctrl-j:down,ctrl-k:up" > "$RESULT_FILE"
+
+clean_only  # Ensure clean after fzf
+
+if [[ -s "$RESULT_FILE" ]]; then
+    ID=$(awk '{print $1}' "$RESULT_FILE")
+    if [[ -n "$ID" ]]; then
+        CONTENT=$(echo -n "$ID" | cliphist decode | head -c 4096 | tr -d '\0')
+        REAL_FILE=$(extract_path "$CONTENT")
+        
+        if [[ -n "$REAL_FILE" ]]; then
+            echo -e "file://$REAL_FILE" | wl-copy --type text/uri-list >/dev/null 2>&1
+        else
+            CACHE_FILE=$(ls "$CACHE_DIR/$ID"* 2>/dev/null | head -n1)
+            if [[ -n "$CACHE_FILE" ]]; then
+                MIME=$(file --mime-type -b "$CACHE_FILE")
+                if [[ "$MIME" == image/* || "$MIME" == video/* ]]; then
+                    echo -e "file://$CACHE_FILE" | wl-copy --type text/uri-list >/dev/null 2>&1
+                else
+                    cat "$CACHE_FILE" | wl-copy >/dev/null 2>&1
+                fi
+            else
+                # Direct decode for non-media
+                echo -n "$ID" | cliphist decode | wl-copy >/dev/null 2>&1
+            fi
+        fi
+    fi
+fi
+exit 0

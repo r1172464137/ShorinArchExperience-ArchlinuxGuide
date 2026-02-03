@@ -344,11 +344,13 @@ spawn-at-startup "waybar"
 // 输入法
 spawn-at-startup "fcitx5" 
 // 剪贴板守护进程
-spawn-at-startup "clipse" "-listen"
-// wayland-->x11剪贴板同步
-spawn-at-startup "wl-paste" "--watch" "xclip" "-selection" "clipboard"
-// x11-->wayland剪贴板同步
-spawn-sh-at-startup "~/.local/bin/clipsync-x2w &"
+	//cliphist
+spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
+	// wayland-->x11剪贴板同步
+spawn-at-startup "wl-paste" "--type" "--watch" "xclip" "-selection" "clipboard"
+	// x11-->wayland剪贴板同步
+spawn-at-startup "~/.local/bin/clipsyncw-x2w"
 // 闲置时自动熄屏锁屏睡眠的脚本
 spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
 // 大写锁定键的osd显示
