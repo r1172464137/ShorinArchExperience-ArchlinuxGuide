@@ -25,6 +25,7 @@ BACKUP_ROOT="$HOME/.cache/shorin-niri-update"
 BACKUP_FILE="$BACKUP_ROOT/backup.tar.gz"
 TARGET_DIRS=("dotfiles" "wallpapers") 
 BRANCH="main"
+NEED_REBOOT=false  # [NEW] 重启追踪标志
 
 # [CONFIG] Remote Dependency List URL
 APP_LIST_URL="https://raw.githubusercontent.com/SHORiN-KiWATA/shorin-arch-setup/refs/heads/main/niri-applist.txt"
@@ -116,8 +117,7 @@ $MSG_FEAT_HEAD
 EOF
 }
 
-# --- [NEW] Remote Dependency Manager (Sync: Install & Remove) ---
-# --- [MODIFIED] Remote Dependency Manager (Strict Parsing) ---
+# --- Remote Dependency Manager ---
 check_dependencies() {
     log "$MSG_FETCH_LIST"
     
@@ -128,69 +128,39 @@ check_dependencies() {
     local old_sorted="/tmp/shorin_niri_deps_old_sorted.txt"
     local new_sorted="/tmp/shorin_niri_deps_new_sorted.txt"
 
-    # 1. 下载清单
     if ! curl -sL "$APP_LIST_URL" -o "$raw_temp"; then
         warn "$MSG_FETCH_FAIL"
         return 0
     fi
 
-    # 2. 强力清洗数据 (Strict Cleaning)
     rm -f "$new_clean_list"
     touch "$new_clean_list"
     
-    # 逻辑说明：
-    # sed 's/#.*//'  -> 删掉 # 和它后面所有内容
-    # sed 's/AUR://' -> 删掉 AUR: 前缀
-    # awk '{print $1}' -> 关键一步！只取第一列非空字符，自动丢弃前后所有空格/Tab
-    # tr -cd '[:alnum:]@._+-\n' -> 防御性过滤，只保留合法的包名字符
-    
     while read -r line; do
-        # 跳过空行
         [ -z "$line" ] && continue
-        
-        local pkg_name=$(echo "$line" | sed 's/#.*//' | sed 's/AUR://' | awk '{print $1}' | tr -cd '[:alnum:]@._+-\n')
-        
+        # [FIX] 将 tr 里的减号放到最后，避免被误认为字符范围
+        local pkg_name=$(echo "$line" | sed 's/#.*//' | sed 's/AUR://' | awk '{print $1}' | tr -cd '[:alnum:]@._+\n-')
         [ -z "$pkg_name" ] && continue
-        
         echo "$pkg_name" >> "$new_clean_list"
     done < "$raw_temp"
     rm -f "$raw_temp"
 
-    # 3. 对比逻辑 (Diff Logic)
     if [ -f "$LAST_KNOWN_LIST" ]; then
         log "$MSG_CHECK_REMOVE"
-
-        # [DEBUG]
-        local count_old=$(wc -l < "$LAST_KNOWN_LIST")
-        local count_new=$(wc -l < "$new_clean_list")
-        # echo "Debug: Old DB has $count_old pkgs, New List has $count_new pkgs"
-
         sort "$LAST_KNOWN_LIST" > "$old_sorted"
         sort "$new_clean_list" > "$new_sorted"
-
-        # 找出 Old 有但 New 没有的 (候选移除)
         local diff_pkgs=$(comm -23 "$old_sorted" "$new_sorted")
-        
         rm -f "$old_sorted" "$new_sorted"
 
         local remove_candidates=()
-
         if [ -n "$diff_pkgs" ]; then
             while read -r pkg; do
                 [ -z "$pkg" ] && continue
-                
-                # 再次确认系统里是否真的装了这个包
-                # 这一次包名绝对是纯净的，pacman -Q 应该能准确识别
                 if pacman -Q "$pkg" &> /dev/null; then
-                    local msg_ask
-                    msg_ask=$(printf "$MSG_ASK_REMOVE" "$pkg")
-                    
+                    local msg_ask=$(printf "$MSG_ASK_REMOVE" "$pkg")
                     echo -ne "${H_YELLOW}${msg_ask}${NC} "
                     read -r confirm_rm < /dev/tty
-                    
-                    # [MODIFIED] 默认改为 Y
                     confirm_rm=${confirm_rm:-Y}
-                    
                     if [[ "$confirm_rm" =~ ^[yY] ]]; then
                         remove_candidates+=("$pkg")
                     fi
@@ -198,40 +168,39 @@ check_dependencies() {
             done <<< "$diff_pkgs"
         fi
 
-        # 执行移除
         if [ ${#remove_candidates[@]} -gt 0 ]; then
             log "$MSG_REMOVING"
-            if ! sudo pacman -Rns "${remove_candidates[@]}"; then
+            if sudo pacman -Rns "${remove_candidates[@]}"; then
+                 NEED_REBOOT=true # 变动标记
+            else
                  warn "$MSG_REMOVE_FAIL"
             fi
         fi
     fi
 
-    # 4. 安装新包逻辑
     local helper=""
     if command -v paru &> /dev/null; then helper="paru"
     elif command -v yay &> /dev/null; then helper="yay"
     else helper="sudo pacman"; fi
 
     local missing_pkgs=()
-    if [ -f "$new_clean_list" ]; then
-        while read -r pkg_name; do
-            if ! pacman -Q "$pkg_name" &> /dev/null; then
-                missing_pkgs+=("$pkg_name")
-            fi
-        done < "$new_clean_list"
-    fi
+    while read -r pkg_name; do
+        if ! pacman -Q "$pkg_name" &> /dev/null; then
+            missing_pkgs+=("$pkg_name")
+        fi
+    done < "$new_clean_list"
 
     if [ ${#missing_pkgs[@]} -gt 0 ]; then
         warn "$MSG_INSTALL_DEPS ${missing_pkgs[*]}"
-        if ! $helper -S --needed "${missing_pkgs[@]}"; then
+        if $helper -S --needed "${missing_pkgs[@]}"; then
+            NEED_REBOOT=true # 变动标记
+        else
             warn "$MSG_INSTALL_FAIL"
         fi
     else
         success "$MSG_DEPS_OK"
     fi
 
-    # 5. 更新状态
     cp "$new_clean_list" "$LAST_KNOWN_LIST"
     rm -f "$new_clean_list"
 }
@@ -256,16 +225,13 @@ link_recursive() {
         link_recursive "$src_path" "$dest_dir/$item_name"
     else
         local target_path="$dest_dir/$item_name"
-
         if [ -e "$target_path" ] && [ ! -L "$target_path" ]; then            
             warn "SKIP: $target_path (Regular file exists)"
             continue
         fi
-
         if [ -L "$target_path" ] && [ "$(readlink -f "$target_path")" == "$src_path" ]; then
             continue
         fi
-
         if [ -L "$target_path" ]; then
             rm -rf "$target_path"
         fi
@@ -277,15 +243,8 @@ link_recursive() {
 # --- 6. Argument Parsing ---
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --help|-h)
-            usage
-            exit 0
-            ;;
-        *)
-            echo "Unknown option: $1"
-            usage
-            exit 1
-            ;;
+        --help|-h) usage; exit 0 ;;
+        *) echo "Unknown option: $1"; usage; exit 1 ;;
     esac
 done
 
@@ -299,10 +258,9 @@ fi
 
 cd "$DOTFILES_REPO" || exit 1
 
-# 1. Backup (Interactive)
+# 1. Backup
 mkdir -p "$BACKUP_ROOT"
 BACKUP_DONE=false
-
 echo -ne "${H_YELLOW}${MSG_ASK_BACKUP}${NC} "
 read -r OPT_BACKUP
 OPT_BACKUP=${OPT_BACKUP:-Y}
@@ -320,38 +278,26 @@ else
     log "$MSG_BACKUP_SKIP"
 fi
 
-# 2. Update Logic (Git Management)
+# 2. Update Logic
 log "$MSG_CHECK_UPDATE"
 git fetch --depth 1 origin "$BRANCH"
-
 LOCAL_HASH=$(git rev-parse HEAD)
 REMOTE_HASH=$(git rev-parse "origin/$BRANCH")
 
 if [ "$LOCAL_HASH" == "$REMOTE_HASH" ]; then
-    # Ensure sparse checkout is correct even if no updates
-    git config core.sparseCheckout true
-    SPARSE_FILE=".git/info/sparse-checkout"
-    truncate -s 0 "$SPARSE_FILE"
-    for item in "${TARGET_DIRS[@]}"; do echo "$item" >> "$SPARSE_FILE"; done
-    git read-tree -mu HEAD 2>/dev/null || true
-
     success "$MSG_UP_TO_DATE"
 else
+    NEED_REBOOT=true # Git 仓库有更新，标记需要重启
     HAS_LOCAL_CHANGES=false
     if [ -n "$(git status --porcelain)" ]; then
         HAS_LOCAL_CHANGES=true
         warn "$MSG_LOCAL_CHANGE"
-        
-        if [ -z "$(git config user.email)" ]; then
-            git config user.email "updater@shorin.local"
-            git config user.name "Shorin Updater"
-        fi
-        
+        git config user.email "updater@shorin.local"
+        git config user.name "Shorin Updater"
         git add -A
         git commit -m "TEMP_SAVE" --quiet || error "$MSG_ERR_COMMIT"
     fi
 
-    # Update Sparse Checkout
     git config core.sparseCheckout true
     SPARSE_FILE=".git/info/sparse-checkout"
     truncate -s 0 "$SPARSE_FILE"
@@ -374,7 +320,7 @@ else
     fi
 fi
 
-# 3. Check Dependencies (Sync: Install New & Remove Old)
+# 3. Check Dependencies
 check_dependencies
 
 # 4. Linking
@@ -388,8 +334,11 @@ git gc --prune=now 2>/dev/null
 
 echo ""
 echo -e "${H_GREEN}${MSG_ALL_DONE}${NC}"
-# [MODIFIED] 重启提示
-echo -e "${H_YELLOW}${MSG_REBOOT_TIP}${NC}"
+
+# [FIXED] 仅在有变动时提示重启
+if [ "$NEED_REBOOT" = true ]; then
+    echo -e "${H_YELLOW}${MSG_REBOOT_TIP}${NC}"
+fi
 
 if [ "$BACKUP_DONE" = true ]; then
     echo -e "${H_BLUE}${MSG_BACKUP_PATH}${NC} $BACKUP_FILE"
