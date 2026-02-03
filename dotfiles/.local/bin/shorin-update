@@ -269,7 +269,7 @@ if [[ "$OPT_BACKUP" =~ ^[yY] ]]; then
     log "$MSG_BACKUP_ING"
     if type quicksave &>/dev/null; then
         log "$MSG_QUICKSAVE"
-        quicksave || warn "Snapper quicksave failed, continuing with tar backup..."
+        quicksave -d quicksave-shorin-update || warn "Snapper quicksave failed, continuing with tar backup..."
     fi
     tar -czf "$BACKUP_FILE" -C "$DOTFILES_REPO" . 2>/dev/null
     success "$MSG_BACKUP_DONE"
