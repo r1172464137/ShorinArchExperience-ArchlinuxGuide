@@ -102,7 +102,7 @@ trap "kill $WATCH_PID 2>/dev/null" EXIT
 # 50次循环超时
 wait_timeout=50
 # 循环检测终端的长和宽
-while [[ $(tput cols) -lt 30 || $(tput lines) -lt 20 ]]; do
+while [[ $(tput cols) -lt 35 || $(tput lines) -lt 25 ]]; do
 	# 每循环一次减少超时时间
     ((wait_timeout--))
     [ "$wait_timeout" -eq 0 ] && break
