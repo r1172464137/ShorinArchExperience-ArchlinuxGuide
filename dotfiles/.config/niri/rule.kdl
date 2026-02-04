@@ -32,7 +32,7 @@ window-rule {
 window-rule{
 	match app-id="shorinclip"
 	//min-width 900
-	min-height 600
+	min-height 700
 	open-floating true
 	default-floating-position x=0 y=18 relative-to="top"
 }

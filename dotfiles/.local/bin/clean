@@ -67,7 +67,7 @@ MSG_DESC_TITLE   | The script will perform the following tasks:    | 本脚本�
 MSG_DESC_1       | 1. Remove orphaned packages                     | 1. 删除孤儿软件包 (不再被需要的依赖)
 MSG_DESC_2       | 2. Clean package cache (keep installed)         | 2. 清理软件包缓存 (仅保留已安装版本)
 MSG_DESC_3       | 3. Vacuum systemd journal logs (keep 2 weeks)   | 3. 清理 systemd 日志 (保留最近2周)
-MSG_DESC_4       | 4. Empty Trash and thumbnail cache              | 4. 清空回收站和缩略图缓存
+MSG_DESC_4       | 4. Empty Trash, thumbnail and clipboard cache   | 4. 清空回收站、缩略图和剪贴板缓存
 MSG_DESC_5       | 5. Remove unused Flatpak runtimes               | 5. 删除未使用的 Flatpak 运行时
 MSG_ASK_CONFIRM  | Continue with cleanup? [Y/n]                    | 是否继续执行清理？[Y/n]
 MSG_ABORT        | Cleanup cancelled by user.                      | 用户已取消清理。
@@ -85,10 +85,12 @@ MSG_STEP_BROKEN  | Cleaning residual download directories...       | 正在清�
 MSG_BROKEN_DONE  | Residual directories removed.                   | 残留目录已清理。
 MSG_STEP_LOG     | Vacuuming systemd journal logs...               | 正在清理 systemd 日志...
 MSG_LOG_DONE     | Systemd journal logs cleaned.                   | 系统日志已清理。
+MSG_CLIP_DONE    | Clipboard cache cleaned. 			   | 剪贴板缓存已清理。
 MSG_STEP_TRASH   | Cleaning user Trash and thumbnails...           | 正在清理回收站和缩略图...
 MSG_TRASH_DONE   | Trash emptied.                                  | 回收站已清空。
 MSG_THUMB_DONE   | Thumbnails cleaned.                             | 缩略图已清理。
 MSG_STEP_FLATPAK | Checking for unused Flatpak runtimes...         | 正在检查未使用的 Flatpak 运行时...
+
 MSG_FLATPAK_DONE | Unused Flatpak runtimes removed.                | 未使用的 Flatpak 运行时已删除。
 '
 
@@ -205,6 +207,7 @@ _success "$MSG_LOG_DONE"
 _info "$MSG_STEP_TRASH"
 TRASH_DIR="$HOME/.local/share/Trash"
 THUMB_DIR="$HOME/.cache/thumbnails"
+CLIP_DIR="$HOME/.cache/shorinclip"
 
 if [ -d "$TRASH_DIR" ]; then
     # Only delete inside content, not the Trash folder itself
@@ -215,6 +218,10 @@ fi
 if [ -d "$THUMB_DIR" ]; then
     find "$THUMB_DIR" -type f -atime +30 -delete 2>/dev/null || true
     _success "$MSG_THUMB_DONE"
+fi
+if [ -d "$CLIP_DIR" ]; then
+    find "$CLIP_DIR" -type f -atime +30 -delete 2>/dev/null || true
+    _success "$MSG_CLIP_DONE"
 fi
 
 # [6] Flatpak

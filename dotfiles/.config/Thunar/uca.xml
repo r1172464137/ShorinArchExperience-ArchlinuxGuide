@@ -66,7 +66,7 @@ for line in sys.stdin:
 	<name>粘贴剪贴板图片</name>
 	<submenu></submenu>
 	<unique-id>1769429285959977-2</unique-id>
-	<command>sh -c &apos;d=&quot;%f&quot;; [ -d &quot;$d&quot; ] || d=&quot;$(dirname &quot;$d&quot;)&quot;; cd &quot;$d&quot; &amp;&amp; wl-paste --list-types | grep -q &quot;^image/&quot; &amp;&amp; wl-paste --type image/png &gt; &quot;img_$(date -Iseconds | cut -d+ -f1 | tr T _ | tr : -).png&quot;&apos;</command>
+	<command>bash -c &apos;d=&quot;%f&quot;;[ -d &quot;$d&quot; ]||d=&quot;$(dirname &quot;$d&quot;)&quot;;cd &quot;$d&quot;||exit;n=&quot;img_$(date -Iseconds|cut -d+ -f1|tr T _|tr : -)&quot;;t=$(wl-paste -l);if echo &quot;$t&quot;|grep -q &quot;^image/&quot;;then wl-paste -t image/png&gt;&quot;$n.png&quot;;elif echo &quot;$t&quot;|grep -q &quot;text/uri-list&quot;;then u=$(wl-paste -t text/uri-list|head -n1);if [[ &quot;$u&quot; == file://* ]];then p=&quot;${u#file://}&quot;;f=$(python3 -c &quot;import sys,urllib.parse;print(urllib.parse.unquote(sys.argv[1]))&quot; &quot;$p&quot;);[ -f &quot;$f&quot; ]&amp;&amp;cp &quot;$f&quot; &quot;$n.${f##*.}&quot;;fi;fi&apos;</command>
 	<description></description>
 	<range>*</range>
 	<patterns>*</patterns>
