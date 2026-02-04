@@ -229,8 +229,6 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
   else
         kitty icat --clear --silent --transfer-mode=file > /dev/tty 2>/dev/null
         # 直接预览
-        echo "[$mimeType]"
-        echo --- 
         echo {} | cliphist decode 
   fi
   ' \
