@@ -99,12 +99,10 @@ WATCH_PID=$!
 trap "kill $WATCH_PID 2>/dev/null" EXIT
 
 # 读取窗口大小，避免窗口过小的时候就打开fzf导致菜单错位
-# 0.5s超时
+# 50次循环超时
 wait_timeout=50
 # 循环检测终端的长和宽
 while [[ $(tput cols) -lt 30 || $(tput lines) -lt 20 ]]; do
-	# 每0.01秒一次循环
-	sleep 0.01
 	# 每循环一次减少超时时间
     ((wait_timeout--))
     [ "$wait_timeout" -eq 0 ] && break
