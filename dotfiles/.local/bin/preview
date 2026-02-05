@@ -41,11 +41,11 @@ echo -e "\x1b[1;36m[Type: $MIME]\x1b[0m"
 case "$CATEGORY" in
 # 1. 图片：Kitty icat
 image)
-  kitty icat --clear --align left "$FILE"
+  chafa "$FILE"
   ;;
 # 2. 视频：MPV 终端播放
 video)
-  mpv --vo=kitty --quiet "$FILE"
+  mpv --hwdec=auto --vo=kitty --quiet "$FILE"
   ;;
 # 3. 音频
 audio)
@@ -54,7 +54,7 @@ audio)
     # 2. 【关键】在后台启动 mpv
     # --no-video: 纯音频
     # --no-terminal: 彻底禁止 mpv 输出任何字符到终端，防止破坏 cava 画面
-    mpv --no-video "$FILE" >/dev/null &
+    mpv --no-video --hwdec=auto "$FILE" >/dev/null &
     MPV_PID=$! # 立即记录 mpv 的进程 ID
 
     # 3. 设置陷阱 (Trap) - 确保同生共死

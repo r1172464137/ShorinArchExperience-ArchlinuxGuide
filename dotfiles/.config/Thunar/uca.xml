@@ -105,4 +105,20 @@ for line in sys.stdin:
 	<patterns>*</patterns>
 	<video-files/>
 </action>
+<action>
+	<icon></icon>
+	<name>快速查看</name>
+	<submenu></submenu>
+	<unique-id>1770297188807065-1</unique-id>
+	<command>kitty --class=&quot;floating-term&quot; -e bash -c &quot;~/.local/bin/preview \&quot;\$1\&quot;; read -n 1 -s -r&quot; -- %f</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
 </actions>

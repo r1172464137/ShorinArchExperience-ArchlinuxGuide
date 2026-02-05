@@ -11,17 +11,24 @@ export C_CYAN='\x1b[1;36m'
 export C_RESET='\x1b[0m'
 
 # 检查是否支持kitty icat，不支持的话遇到图片会禁用预览
-# check_kitty_icat() {
-# 	if command -v kitty &>/dev/null;then
-# 		export ENABLE_ICAT=1
-# 	elif [[ "$TERM_PROGRAM" == "ghostty" ]] || [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
-# 		export ENABLE_ICAT=1
-# 	else 		
-# 		export ENABLE_ICAT=0
-# 	fi
-# }
-# check_kitty_icat
-
+check_kitty_icat() {
+  # 默认禁用kitty icat
+  export ENABLE_ICAT=0
+  if [ $TERM = "xterm-kitty" ] || [ "$TERM_PROGRAM" = "ghostty" ] || [ "$TERM_PROGRAM" = "WezTerm" ]; then
+    export ENABLE_ICAT=1
+  fi
+}
+check_kitty_icat
+# 设置preview命令
+_preview() {
+  local file="$1"
+  if [ "$ENABLE_ICAT" = "1" ]; then
+    kitty icat --transfer-mode=file --clear --image-id=10 --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" "$file" </dev/tty
+  else
+    chafa --animate=off --size="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}" "$file"
+  fi
+}
+export -f _preview
 # 过滤无法复制粘贴的信息
 filter_clip_list() {
   grep -vP "(?s)(?i)\t.*<html.*\[表情\]"
@@ -115,9 +122,9 @@ trap "kill $WATCH_PID 2>/dev/null" EXIT
 wait_timeout=50
 # 循环检测终端的长和宽
 while [[ $(tput cols) -lt 35 || $(tput lines) -lt 25 ]]; do
-	# 每循环一次减少超时时间
-    ((wait_timeout--))
-    [ "$wait_timeout" -eq 0 ] && break
+  # 每循环一次减少超时时间
+  ((wait_timeout--))
+  [ "$wait_timeout" -eq 0 ] && break
 done
 
 #=== FZF 主程序 ===
@@ -136,7 +143,6 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
   --delimiter '\t' \
   --preview-window=down:60% \
   --preview '
-
   # 获取当期剪贴版项目的id 
   id=$(echo {} | cut -f1)
   content=$(echo {} | cut -f2-)
@@ -152,8 +158,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
         img_hash=$(echo {} | cliphist decode | md5sum | cut -d" " -f1)
         cache_file="$CACHE_DIR/$img_hash.$ext" 
         echo {} | cliphist decode > "$cache_file"
-        kitty icat --clear --image-id=10 --transfer-mode=file \
-            --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" "$cache_file" </dev/tty
+        _preview "$cache_file"
    
   # 如果是qq复制出来的html链接
   elif [ "$mimeType" = "text/html" ] && echo "$content" | grep -q QQ; then
@@ -165,8 +170,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
         #cp $qq_img_file $qq_img_cache_file 
         # 把路径传给kitty icat预览
         if [ -f "$qq_img_file" ]; then
-        kitty icat --transfer-mode=file --clear --image-id=10 \
-              --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" "$qq_img_file" </dev/tty
+        _preview "$qq_img_file"
         else
               echo "$qq_img_file does not exsist."
         fi
@@ -176,8 +180,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
         path_mime=$(file -b --mime-type "$path")
         # 如果是图片的话 
         if [[ $path_mime =~ image ]]; then
-              kitty icat --transfer-mode=file --clear --image-id=10 \
-                  --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" "$path" </dev/tty
+              _preview "$path"
         # 如果是视频的话 
         elif [[ "$path_mime" =~ video ]]; then
               # 计算路径哈希值避免重复生成视频缩略图
@@ -194,9 +197,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
               fi
               # 如果缩略图文件存在且大小不为零 
               if [ -s "$thumb_file" ]; then
-                   kitty icat --transfer-mode=file --image-id=10 \
-                        --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@${FZF_PREVIEW_LEFT}x${FZF_PREVIEW_TOP}" \
-                        "$thumb_file" </dev/tty 
+                 _preview "$thumb_file"
                else
                    echo "Video: $path (No thumbnail)"
                fi
@@ -212,8 +213,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
 
         # 如果是图片的话
         if [[ $mime_raw_path =~ image ]]; then
-            kitty icat --transfer-mode=file --clear --image-id=10 \
-                      --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" "$raw_path" </dev/tty
+            _preview "$raw_path" 
         # 如果是视频的话
         elif [[ $mime_raw_path =~ video  ]]; then
             video_hash=$(echo "$raw_path" | md5sum | cut -d" " -f1)
@@ -229,9 +229,8 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
             fi
             # 如果缩略图文件存在且大小不为零 
             if [ -s "$raw_thumb_file" ]; then
-                kitty icat --transfer-mode=file --image-id=10 \
-                     --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@${FZF_PREVIEW_LEFT}x${FZF_PREVIEW_TOP}" \
-                     "$raw_thumb_file" </dev/tty 
+                _preview \
+                     "$raw_thumb_file" 
             else
                  echo "Video: $raw_path (No thumbnail)"
             fi
@@ -239,7 +238,9 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
 
   # 其他数据
   else
+        if [ $ENABLE_ICAT = 1 ]; then
         kitty icat --clear --silent --transfer-mode=file > /dev/tty 2>/dev/null
+        fi
         # 直接预览
         echo {} | cliphist decode 
   fi
