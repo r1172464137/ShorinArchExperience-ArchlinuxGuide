@@ -99,7 +99,16 @@ COLOR_PRES_CHART_GREEN_DEEP=$INVERSE_MAIN_SHADOW # 饼图-深绿 (Accent Dark)
 # 支架颜色 (保持中性灰或微调)
 COLOR_PRES_STAND_DARK="{{colors.outline.default.hex}}"
 COLOR_PRES_STAND_LIGHT="{{colors.outline.default.hex}}"
-
+# ------------------------------------------------------------------------------
+# [10] 音频文件 (audio-x-generic.svg)
+# ------------------------------------------------------------------------------
+# 对应之前的光影逻辑，映射到 Tertiary (第三色系) 以保持与其他图标的区别
+# 逻辑：Pale > Highlight > Body > Shadow > Deep
+COLOR_AUDIO_PALE="{{colors.tertiary_fixed.default.hex}}"        # 最亮高光 (原 #8ff0a4)
+COLOR_AUDIO_HIGHLIGHT=$INVERSE_MAIN_HIGHLT                      # 鲜艳高光 (原 #38ec8b, #38f39d)
+COLOR_AUDIO_BODY=$INVERSE_MAIN_COLOR                            # 主体 (原 #33d17a, #2dbd7d)
+COLOR_AUDIO_SHADOW=$INVERSE_MAIN_SHADOW                         # 阴影/过渡 (原 #26a269)
+COLOR_AUDIO_DEEP="{{colors.on_tertiary_container.default.hex}}" # 最深轮廓 (原 #1a6842)
 
 # ==============================================================================
 # [二] 核心逻辑与 Sed 规则生成
@@ -199,6 +208,17 @@ s/#414140/$COLOR_PRES_STAND_DARK/g;
 s/#949390/$COLOR_PRES_STAND_LIGHT/g;
 s/#d7e8fc/$COLOR_SCRIPT_PALE/g"
 
+# 10. Audio (音频) 规则
+# 精确映射 audio-x-generic.svg 中的所有绿色阶
+CMD_AUDIO="
+s/#1a6842/$COLOR_AUDIO_DEEP/g;
+s/#26a269/$COLOR_AUDIO_SHADOW/g;
+s/#2dbd7d/$COLOR_AUDIO_BODY/g;
+s/#2dc47e/$COLOR_AUDIO_BODY/g;
+s/#33d17a/$COLOR_AUDIO_BODY/g;
+s/#38ec8b/$COLOR_AUDIO_HIGHLIGHT/g;
+s/#38f39d/$COLOR_AUDIO_HIGHLIGHT/g;
+s/#8ff0a4/$COLOR_AUDIO_PALE/g"
 # ==============================================================================
 # [三] 执行核心流程
 # ==============================================================================
@@ -256,7 +276,8 @@ find "$TARGET_DIR/scalable/mimetypes" -name "x-office-document*.svg" -print0 | x
 
 # [Group 9] Mimetypes - Presentation
 find "$TARGET_DIR/scalable/mimetypes" -name "x-office-presentation*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_PRES"
-
+# [Group 10] Mimetypes - Audio
+find "$TARGET_DIR/scalable/mimetypes" -name "audio-x-generic*.svg" -print0 | xargs -0 -P0 sed -i "$CMD_AUDIO"
 # 4. 应用变更
 gsettings set org.gnome.desktop.interface icon-theme "$TARGET_THEME"
 flatpak override --user --env=ICON_THEME="$TARGET_THEME" 2>/dev/null || true
