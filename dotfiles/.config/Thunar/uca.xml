@@ -117,7 +117,6 @@ for line in sys.stdin:
 	<directories/>
 	<audio-files/>
 	<image-files/>
-	<other-files/>
 	<text-files/>
 	<video-files/>
 </action>
