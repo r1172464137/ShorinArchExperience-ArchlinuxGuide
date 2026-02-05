@@ -10,6 +10,18 @@ export C_PRIMARY='\x1b[1;34m'
 export C_CYAN='\x1b[1;36m'
 export C_RESET='\x1b[0m'
 
+# 检查是否支持kitty icat，不支持的话遇到图片会禁用预览
+# check_kitty_icat() {
+# 	if command -v kitty &>/dev/null;then
+# 		export ENABLE_ICAT=1
+# 	elif [[ "$TERM_PROGRAM" == "ghostty" ]] || [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
+# 		export ENABLE_ICAT=1
+# 	else 		
+# 		export ENABLE_ICAT=0
+# 	fi
+# }
+# check_kitty_icat
+
 # 过滤无法复制粘贴的信息
 filter_clip_list() {
   grep -vP "(?s)(?i)\t.*<html.*\[表情\]"
@@ -108,7 +120,6 @@ while [[ $(tput cols) -lt 35 || $(tput lines) -lt 25 ]]; do
     [ "$wait_timeout" -eq 0 ] && break
 done
 
-
 #=== FZF 主程序 ===
 cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
   --ansi \
@@ -125,6 +136,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
   --delimiter '\t' \
   --preview-window=down:50% \
   --preview '
+
   # 获取当期剪贴版项目的id 
   id=$(echo {} | cut -f1)
   content=$(echo {} | cut -f2-)
