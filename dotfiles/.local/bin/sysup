@@ -207,7 +207,7 @@ perform_update() {
     fi
 
     # Step 5: Silent Waybar Refresh
-    pkill -RTMIN+8 waybar >/dev/null 2>&1
+    ~/.config/waybar/scripts/check-updats.sh &>/dev/null
 }
 
 # ------------------------------
