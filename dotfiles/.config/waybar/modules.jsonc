@@ -341,7 +341,7 @@
   "custom/colorpicker": {
     "tooltip": true,
     "format": "󱏜",
-    "on-click": "hyprpicker | wl-copy",
+    "on-click": "hyprpicker -a && pw-play /usr/share/sounds/freedesktop/stereo/message.oga",
     "tooltip-format":"左键：提取颜色",
   },
   //音频可视化
