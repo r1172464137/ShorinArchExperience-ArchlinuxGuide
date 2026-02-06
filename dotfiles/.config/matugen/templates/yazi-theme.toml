@@ -25,11 +25,20 @@ border_style  = { fg = "{{colors.surface_tint.default.hex}}" }
 # : ]]]
 
 
-# : Tabs (New Section) [[[
+# : Indicator [[[
+
+[indicator]
+padding = { open = "█", close = "█" }
+
+# : ]]]
+
+
+# : Tabs [[[
 
 [tabs]
-active    = { fg = "{{colors.on_primary.default.hex}}", bg = "{{colors.primary.default.hex}}", bold = true }
-inactive  = { fg = "{{colors.primary_fixed.default.hex}}", bg = "{{colors.on_primary_fixed.default.hex}}" }
+active    = { fg = "{{colors.primary.default.hex}}", bold = true, bg = "{{colors.surface.default.hex}}" }
+inactive  = { fg = "{{colors.secondary.default.hex}}", bg = "{{colors.surface.default.hex}}" }
+sep_inner = { open = "[", close = "]" }
 
 # : ]]]
 
@@ -58,11 +67,6 @@ unset_alt  = { bg = "{{colors.surface_variant.default.hex}}", fg = "{{colors.on_
 sep_left  = { open = "🭁", close = "🭠" }
 sep_right = { open = "🭁", close = "🭠" }
 
-# Progress
-progress_label  = { bold = true }
-progress_normal = { fg = "{{colors.primary.default.hex}}", bg = "{{colors.surface_bright.default.hex}}" }
-progress_error  = { fg = "{{colors.error.default.hex}}", bg = "{{colors.surface_bright.default.hex}}" }
-
 # Permissions
 perm_type  = { fg = "{{colors.secondary.default.hex | auto_lightness: 30.0}}" }
 perm_write = { fg = "{{colors.tertiary.default.hex | auto_lightness: 30.0}}" }
@@ -70,42 +74,10 @@ perm_read  = { fg = "{{colors.error.default.hex | auto_lightness: 30.0}}" }
 perm_exec  = { fg = "{{colors.tertiary_fixed.default.hex | auto_lightness: 30.0}}" }
 perm_sep   = { fg = "{{colors.primary_fixed.default.hex | auto_lightness: 30.0}}" }
 
-# : ]]]
-
-
-# : Picker (Renamed from Select) [[[
-
-[pick]
-border   = { fg = "{{colors.primary.default.hex}}" }
-active   = { fg = "{{colors.tertiary.default.hex}}", bold = true }
-inactive = {}
-
-# : ]]]
-
-
-# : Input [[[
-
-[input]
-border = { fg = "{{colors.primary.default.hex}}" }
-value  = { fg = "{{colors.on_surface.default.hex}}" }
-
-# : ]]]
-
-
-# : Completion (Renamed from Completion) [[[
-
-[cmp]
-border = { fg = "{{colors.primary.default.hex}}", bg = "{{colors.on_primary.default.hex}}" }
-
-# : ]]]
-
-
-# : Tasks [[[
-
-[tasks]
-border  = { fg = "{{colors.primary.default.hex}}" }
-title   = {}
-hovered = { fg = "{{colors.tertiary_fixed.default.hex}}", underline = true }
+# Progress
+progress_label  = { bold = true }
+progress_normal = { fg = "{{colors.primary.default.hex}}", bg = "{{colors.surface_bright.default.hex}}" }
+progress_error  = { fg = "{{colors.error.default.hex}}", bg = "{{colors.surface_bright.default.hex}}" }
 
 # : ]]]
 
@@ -124,22 +96,59 @@ separator_style = { fg = "{{colors.on_surface.default.hex}}" }
 # : ]]]
 
 
-# : Help [[[
-
-[help]
-on     = { fg = "{{colors.on_surface.default.hex}}" }
-run    = { fg = "{{colors.on_surface.default.hex}}" }
-footer = { fg = "{{colors.on_secondary.default.hex}}", bg = "{{colors.secondary.default.hex}}" }
-
-# : ]]]
-
-
 # : Notify [[[
 
 [notify]
 title_info  = { fg = "{{colors.tertiary.default.hex}}" }
 title_warn  = { fg = "{{colors.primary.default.hex}}" }
 title_error = { fg = "{{colors.error.default.hex}}" }
+
+# : ]]]
+
+
+# : Picker [[[
+
+[pick]
+border = { fg = "{{colors.primary.default.hex}}" }
+active = { fg = "{{colors.tertiary.default.hex}}", bold = true }
+inactive = {}
+
+# : ]]]
+
+
+# : Input [[[
+
+[input]
+border = { fg = "{{colors.primary.default.hex}}" }
+value  = { fg = "{{colors.on_surface.default.hex}}" }
+
+# : ]]]
+
+
+# : Completion [[[
+
+[cmp]
+border = { fg = "{{colors.primary.default.hex}}", bg = "{{colors.on_primary.default.hex}}" }
+
+# : ]]]
+
+
+# : Tasks [[[
+
+[tasks]
+border  = { fg = "{{colors.primary.default.hex}}" }
+title   = {}
+hovered = { fg = "{{colors.tertiary_fixed.default.hex}}", underline = true }
+
+# : ]]]
+
+
+# : Help [[[
+
+[help]
+on     = { fg = "{{colors.on_surface.default.hex}}" }
+run    = { fg = "{{colors.on_surface.default.hex}}" }
+footer = { fg = "{{colors.on_secondary.default.hex}}", bg = "{{colors.secondary.default.hex}}" }
 
 # : ]]]
 
@@ -162,8 +171,8 @@ rules = [
     { mime = "application/{pdf,doc,rtf}", fg = "#a6e3a1" },
 
     # Special files
-    { url = "*", is = "orphan", bg = "{{colors.error_container.default.hex}}" },
-    { url = "*", is = "exec", fg = "{{colors.on_error_container.default.hex}}" },
+    { name = "*", is = "orphan", bg = "{{colors.error_container.default.hex}}" },
+    { name = "*", is = "exec", fg = "{{colors.on_error_container.default.hex}}" },
 
     # Fallback
     { url = "*", fg = "{{colors.on_surface.default.hex}}" },
@@ -171,4 +180,3 @@ rules = [
 ]
 
 # : ]]]
-
