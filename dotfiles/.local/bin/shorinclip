@@ -141,7 +141,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
   --layout=reverse \
   --with-nth 2.. \
   --delimiter '\t' \
-  --preview-window=down:60% \
+  --preview-window=down:60%,wrap \
   --preview '
   # 获取当期剪贴版项目的id 
   id=$(echo {} | cut -f1)
