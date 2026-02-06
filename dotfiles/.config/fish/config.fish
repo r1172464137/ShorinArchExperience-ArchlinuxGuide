@@ -27,25 +27,6 @@ abbr reboot 'systemctl reboot'
 function 滚
 	sysup 
 end
-function 更新
-	sysup 
-end
-function 清理
-	command clean $argv
-end
-
-function 安装
-	command pac $argv
-end
-function 卸载
-	command par $argv
-end
-function install
-	command pac $argv
-end
-function remove 
-	command pacr $argv
-end
 function raw
 	command ~/.config/scripts/random-anime-wallpaper.sh $argv
 end
