@@ -178,5 +178,13 @@ rules = [
     { url = "*", fg = "{{colors.on_surface.default.hex}}" },
     { url = "*/", fg = "{{colors.surface_tint.default.hex}}" },
 ]
+[icon]
+# prepend_conds 意味着把这条规则插到最前面，优先级最高
+prepend_conds = [
+    # 针对所有文件夹 (if = "dir")
+    # text = "" 是文件夹的图标 (Nerd Font)
+    # fg = ... 是你要的颜色
+    { if = "dir", text = "", fg = "{{colors.surface_tint.default.hex}}" }
+]
 
 # : ]]]
