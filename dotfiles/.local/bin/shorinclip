@@ -202,7 +202,7 @@ cliphist list | filter_clip_list | format_clip_list | add_num | fzf \
                    echo "Video: $path (No thumbnail)"
                fi
         else
-              echo "$path does not exsist."
+              echo "$path"
         fi
   # 如果是file:///开头的协议路径
   elif decoded=$(echo {} | cliphist decode) && [[ "$decoded" == file://* ]]; then

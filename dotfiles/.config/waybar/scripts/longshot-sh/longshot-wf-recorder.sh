@@ -59,9 +59,24 @@ wait $REC_PID 2>/dev/null
 
 # Step 4: 处理
 if [ -f "$TMP_VIDEO" ]; then
-    notify-send -t 2000 "Longshot" "$TXT_MSG"
+    notify-send "Longshot" "$TXT_MSG"
+    
+    # --- 修改开始：启动后台通知循环 ---
+    (
+        while true; do
+            sleep 8
+            notify-send "Longshot" "$TXT_MSG"
+        done
+    ) &
+    NOTIFY_PID=$!
+    # -------------------------------
     
     "$VENV_PYTHON" "$PY_STITCH" "$TMP_VIDEO" "$OUTPUT_IMG"
+    
+    # --- 修改结束：生成完成后杀死通知循环 ---
+    kill $NOTIFY_PID 2>/dev/null
+    # -----------------------------------
+
     rm -f "$TMP_VIDEO"
     
     if [ -f "$OUTPUT_IMG" ]; then
