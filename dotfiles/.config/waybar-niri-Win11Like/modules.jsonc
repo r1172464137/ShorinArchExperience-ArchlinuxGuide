@@ -354,8 +354,9 @@
       "updated": ""
     },
     "exec": "~/.config/waybar/scripts/check-updates.sh",
-    "interval": 3600, 
+    "restart-interval": 0,
     "on-click": "kitty -e sysup",
+    "on-click-right": "pkill -SIGUSR1 -f ~/.config/waybar/scripts/check-updates.sh" 
   },
   //隐私
   "privacy": {

@@ -201,7 +201,7 @@
   //logo+程序启动器
   "custom/applauncher": {
     "tooltip-format": "左键：软件启动菜单\n右键：切换壁纸\n中键：启用/禁用niri背景自动模糊",
-    "format": "󰣇",
+    "format": "",
     "on-click": "fuzzel",
     "on-click-right": "waypaper",
     "on-click-middle": "~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh"
@@ -375,8 +375,9 @@
       "updated": ""
     },
     "exec": "~/.config/waybar/scripts/check-updates.sh",
-    "interval": 3600, 
+    "restart-interval": 0,
     "on-click": "kitty -e sysup",
+    "on-click-right": "pkill -SIGUSR1 -f ~/.config/waybar/scripts/check-updates.sh" 
   },
   //隐私
   "privacy": {
