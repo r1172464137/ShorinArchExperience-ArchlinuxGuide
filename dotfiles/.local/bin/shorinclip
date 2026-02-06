@@ -2,6 +2,7 @@
 
 # 确保缓存目录存在
 export CACHE_DIR="$HOME/.cache/shorinclip"
+export SHELL=bash
 mkdir -p "$CACHE_DIR"
 
 # 颜色变量
