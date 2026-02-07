@@ -29,7 +29,7 @@
   <property name="misc-full-path-in-tab-title" type="bool" value="false"/>
   <property name="last-restore-tabs" type="bool" value="true"/>
   <property name="last-tabs-left" type="array">
-    <value type="string" value="file:///home/shorin/Downloads"/>
+    <value type="string" value="file:///home/shorin/Videos/wf-recorder"/>
   </property>
   <property name="last-focused-tab-left" type="int" value="0"/>
   <property name="last-focused-tab-right" type="int" value="0"/>

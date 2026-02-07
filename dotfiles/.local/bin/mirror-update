@@ -38,7 +38,7 @@ readonly BACKUP_PATH="$BACKUP_DIR/mirrorlist.bak"
 
 # Base Args: Protocol https, sort by score, verbose output
 # Using --fastest is applied dynamically in the functions
-readonly BASE_ARGS=("--protocol" "https" "--sort" "score" "--verbose")
+readonly BASE_ARGS=("--protocol" "https" "--sort" "rate" "--verbose")
 
 # --- Styles ---
 readonly H_RED='\033[1;31m'
