@@ -349,7 +349,7 @@ spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 	// wayland-->x11剪贴板同步
 spawn-at-startup "wl-paste" "--type" "--watch" "xclip" "-selection" "clipboard"
 	// x11-->wayland剪贴板同步
-spawn-at-startup "~/.local/bin/clipsyncw-x2w"
+spawn-at-startup "~/.local/bin/clipsync-x2w"
 // 闲置时自动熄屏锁屏睡眠的脚本
 spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
 // 大写锁定键的osd显示
