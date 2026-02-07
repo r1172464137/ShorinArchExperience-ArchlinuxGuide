@@ -10,7 +10,6 @@
   <property name="last-separator-position" type="int" value="170"/>
   <property name="hidden-bookmarks" type="array">
     <value type="string" value="computer:///"/>
-    <value type="string" value="file:///home/shorin"/>
     <value type="string" value="recent:///"/>
   </property>
   <property name="last-menubar-visible" type="bool" value="false"/>
@@ -29,7 +28,6 @@
   <property name="misc-full-path-in-tab-title" type="bool" value="false"/>
   <property name="last-restore-tabs" type="bool" value="true"/>
   <property name="last-tabs-left" type="array">
-    <value type="string" value="file:///home/shorin/Videos/wf-recorder"/>
   </property>
   <property name="last-focused-tab-left" type="int" value="0"/>
   <property name="last-focused-tab-right" type="int" value="0"/>
