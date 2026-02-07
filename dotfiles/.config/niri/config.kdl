@@ -357,7 +357,7 @@ spawn-at-startup "swayosd-server"
 // 自动开启护眼模式,经纬度设置位置
 spawn-at-startup "~/.local/bin/toggle-wlsunset"
 // 截图音效的守护进程
-spawn-at-startup "/home/shorin/.config/niri/scripts/niri-screenshot-sounds-daemon.sh"
+spawn-at-startup "~/.config/niri/scripts/niri-screenshot-sounds-daemon.sh"
 // alt+tab切换器（这是一个第三方，无缩略图显示的切换器）
 //spawn-at-startup "niriswitcher"
 
