@@ -5,7 +5,7 @@ API_URL="https://t.alcy.cc/pc/"
 SAVE_DIR="$HOME/Pictures/Wallpapers/api-random-download"
 
 # [新增配置] 自动清理时保留最近多少张图片？
-KEEP_COUNT=20
+KEEP_COUNT=40
 
 # 阈值：宽度小于 2500 (即1080P及以下) 才进行超分，2K/4K 原图直出
 UPSCALE_THRESHOLD=2200
