@@ -166,6 +166,7 @@
     "format-muted": " {format_source} ",
     "format-icons": {
       "headphone": "",
+      "headset": "",
       "bluetooth": "",
       // "speaker":"󰓃"
       "speaker": [
