@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# 这是一段测试文字
 # 确保缓存目录存在
 export CACHE_DIR="$HOME/.cache/shorinclip"
 mkdir -p "$CACHE_DIR"
