@@ -362,12 +362,12 @@ binds {
 
     // 截图相关
     // 截图前创建一个用来触发截图音效进程的token
-    Mod+Alt+A  hotkey-overlay-title="选取区域截图 Select screenshot"  {spawn-sh "touch /dev/shm/niri_screenshot_active && niri msg action screenshot --show-pointer false";}
-    Mod+Alt+Ctrl+A  hotkey-overlay-title="截取聚焦窗口 Focus-window screenshot" { spawn-sh "touch /dev/shm/niri_screenshot_active && niri msg action screenshot-window"; }
-    Mod+Alt+Ctrl+Shift+A  hotkey-overlay-title="截取显示器 Monitor screenshot" { spawn-sh "touch /dev/shm/niri_screenshot_active && niri msg action screenshot-screen --show-pointer false"; }
-    Print  hotkey-overlay-title=null {spawn-sh "touch /dev/shm/niri_screenshot_active && niri msg action screenshot --show-pointer false";}
-    Ctrl+Print  hotkey-overlay-title=null { spawn-sh "touch /dev/shm/niri_screenshot_active && niri msg action screenshot-window --show-pointer false"; }
-    Shift+Print  hotkey-overlay-title=null { spawn-sh "touch /dev/shm/niri_screenshot_active && niri msg action screenshot-screen --show-pointer false"; }
+    Mod+Alt+A  hotkey-overlay-title="选取区域截图 Select screenshot"  {spawn-sh "niri msg action screenshot --show-pointer false && pkill -f -USR1 screenshot-sound.sh";}
+    Mod+Alt+Ctrl+A  hotkey-overlay-title="截取聚焦窗口 Focus-window screenshot" { spawn-sh "niri msg action screenshot-window && pkill -f -USR1 screenshot-sound.sh"; }
+    Mod+Alt+Ctrl+Shift+A  hotkey-overlay-title="截取显示器 Monitor screenshot" { spawn-sh "niri msg action screenshot-screen --show-pointer false"; }
+    Print  hotkey-overlay-title=null {spawn-sh "niri msg action screenshot --show-pointer false && pkill -f -USR1 screenshot-sound.sh";}
+    Ctrl+Print  hotkey-overlay-title=null { spawn-sh "niri msg action screenshot-window --show-pointer false && pkill -f -USR1 screenshot-sound.sh"; }
+    Shift+Print  hotkey-overlay-title=null { spawn-sh "niri msg action screenshot-screen --show-pointer false && pkill -f -USR1 screenshot-sound.sh"; }
 
     //Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
     Mod+Shift+S  hotkey-overlay-title="截图后按下此键进行编辑 Edit the image after screenshot" { spawn-sh "wl-paste | satty -f -";}
