@@ -21,6 +21,12 @@ window-rule {
     // 禁止边框画到背景里
     draw-border-with-background false
 }
+// niri-siderbar需要的全局窗口规则
+window-rule {
+    match is-floating=true
+    min-width 100
+    min-height 100
+}
 // 以浮动模式打开imv（一个轻量化图片预览程序）且不自动聚焦
 window-rule {
     match app-id="imv"
