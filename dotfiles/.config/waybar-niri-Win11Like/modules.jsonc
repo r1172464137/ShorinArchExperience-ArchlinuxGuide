@@ -333,6 +333,7 @@
       "activated": "",
       "deactivated": "",
     },
+    "start-activated":true,
         "tooltip-format-activated": "自动熄屏已禁用",
     "tooltip-format-deactivated": "自动熄屏已开启",
     "on-click-right":"~/.config/scripts/matugen-select-type.sh"
