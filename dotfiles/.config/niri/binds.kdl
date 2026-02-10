@@ -360,6 +360,8 @@ binds {
     Mod+Shift+V hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
     Mod+N hotkey-overlay-title="切换浮动聚焦 Change focus to floating" { switch-focus-between-floating-and-tiling; }
 
+    Mod+Alt+N hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
+
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
