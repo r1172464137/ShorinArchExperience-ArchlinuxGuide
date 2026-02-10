@@ -1,21 +1,21 @@
-# 脚本功能：
-# 从随机老婆图片生成 API 下载图片并使用 Fastfetch 展示。
-# 特性：支持 NSFW 模式，支持自动补货，支持阅后即焚防止缓存爆炸。
-
 function f
     # ================= 配置区域 =================
     
-    # [开关] 阅后即焚模式
-    # true  = 运行后强力清空 Fastfetch 的图片缓存（推荐，防止缓存目录无限膨胀）
-    # false = 保留缓存（注意：这会导致 ~/.cache/fastfetch/images/ 占用越来越大）
+    # [开关] 阅后即焚模式 (针对 Fastfetch 内部缓存)
+    # true  = 运行后强力清空 ~/.cache/fastfetch/images/ (防止转码缓存膨胀)
+    # false = 保留缓存
     set -l CLEAN_CACHE_MODE true
     
     # 每次补货下载多少张
     set -l DOWNLOAD_BATCH_SIZE 10
-    # 最大库存上限
+    # 最大库存上限 (待展示区)
     set -l MAX_CACHE_LIMIT 100
     # 库存少于多少张时开始补货
     set -l MIN_TRIGGER_LIMIT 60
+    
+    # [新增] used 目录最大存放数量
+    # 超过此数量将按照时间顺序删除最旧的文件
+    set -l MAX_USED_LIMIT 50
     
     # ===========================================
     
@@ -49,7 +49,11 @@ function f
         set LOCK_FILE "/tmp/fastfetch_waifu.lock"
     end
     
+    # 定义已使用目录
+    set -l USED_DIR "$CACHE_DIR/used"
+    
     mkdir -p "$CACHE_DIR"
+    mkdir -p "$USED_DIR"
     
     # --- 2. 核心函数 ---
     
@@ -103,7 +107,7 @@ function f
     end
     
     function background_job -V CACHE_DIR -V LOCK_FILE -V MIN_TRIGGER_LIMIT -V DOWNLOAD_BATCH_SIZE -V MAX_CACHE_LIMIT -V NSFW_MODE
-        # 导出函数定义
+        # 导出函数定义以便在 fish -c 中使用
         set -l get_random_url_def (functions get_random_url | string collect)
         set -l download_one_image_def (functions download_one_image | string collect)
         
@@ -129,7 +133,7 @@ function f
                 end
             end
             
-            # 2. 清理过多库存
+            # 2. 清理过多库存 (清理的是下载缓存区，不是 used 区)
             set FINAL_COUNT (find \$CACHE_DIR -maxdepth 1 -name '*.jpg' 2>/dev/null | wc -l)
             if test \$FINAL_COUNT -gt $MAX_CACHE_LIMIT
                 set DELETE_START_LINE (math $MAX_CACHE_LIMIT + 1)
@@ -143,7 +147,7 @@ function f
     set -l FILES $CACHE_DIR/*.jpg
     set -l NUM_FILES (count $FILES)
     
-    # fish 中如果没有匹配文件，会返回原始模式字符串，需要检查
+    # fish 若无匹配文件，$FILES 可能为空或保留模式字符串，需额外判断
     if test "$NUM_FILES" -eq 1; and not test -f "$FILES[1]"
         set NUM_FILES 0
         set FILES
@@ -175,11 +179,35 @@ function f
         # 显示图片
         fastfetch --logo "$SELECTED_IMG" --logo-preserve-aspect-ratio true $ARGS_FOR_FASTFETCH
         
-        # 检查是否开启"阅后即焚"缓存清理
+        # === 修改点 1: 移动到 used 目录 ===
+        mv "$SELECTED_IMG" "$USED_DIR/"
+        
+        # === 修改点 2: 检查 used 目录并清理旧图 ===
+        # 注意：fish 的 glob 展开如果文件太多可能会卡，但这里有 limit 限制所以还好
+        set -l used_files $USED_DIR/*.jpg
+        set -l used_count (count $used_files)
+        
+        # 再次确认 count，因为如果没文件 $used_files 可能为空
+        if test "$used_count" -gt 0; and not test -f "$used_files[1]"
+             set used_count 0
+        end
+
+        if test "$used_count" -gt "$MAX_USED_LIMIT"
+            # 计算需要跳过的行数 (保留最新的 N 张)
+            set -l skip_lines (math "$MAX_USED_LIMIT" + 1)
+            
+            # 列出所有文件按时间倒序(tp)，取尾部(tail)，删除(rm)
+            # 2>/dev/null 防止目录为空时报错
+            set -l files_to_delete (ls -tp "$USED_DIR"/*.jpg 2>/dev/null | tail -n +$skip_lines)
+            
+            if test -n "$files_to_delete"
+                rm -- $files_to_delete
+            end
+        end
+
+        # 检查是否开启清理 Fastfetch 内部缓存
         if test "$CLEAN_CACHE_MODE" = true
-            # 删除原图
-            rm -f "$SELECTED_IMG"
-            # 强力清除 Fastfetch 生成的转码缓存，防止磁盘爆炸
+            # 仅删除缩略图缓存，保留原图
             rm -rf "$HOME/.cache/fastfetch/images"
         end
     else
