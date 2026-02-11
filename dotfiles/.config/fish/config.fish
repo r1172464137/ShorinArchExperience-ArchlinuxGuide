@@ -31,3 +31,10 @@ function raw
 	command ~/.config/scripts/random-anime-wallpaper.sh $argv
 end
 
+function 安装
+	command yay -S $argv
+end
+
+function 卸载
+	command yay -Rns $argv
+end 
