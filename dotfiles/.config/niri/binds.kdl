@@ -359,6 +359,7 @@ binds {
     // 在浮动模式和非浮动模式之间切换聚焦
     Mod+Shift+V hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
     Mod+N hotkey-overlay-title="切换浮动聚焦 Change focus to floating" { switch-focus-between-floating-and-tiling; }
+    Alt+grave hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
 
     Mod+Alt+N hotkey-overlay-title=null { switch-focus-between-floating-and-tiling; }
 
