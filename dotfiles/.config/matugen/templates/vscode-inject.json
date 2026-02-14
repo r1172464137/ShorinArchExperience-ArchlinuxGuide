@@ -109,18 +109,6 @@
         "settings": { 
             "foreground": "{{colors.primary.default.hex}}" 
         }
-      },
-      {
-        "scope": [
-            "entity.name.function", 
-            "support.function",
-            "meta.function-call",
-            "meta.function-call.shell variable.function"
-        ],
-        "settings": { 
-            "foreground": "{{colors.secondary.default.hex}}",
-            "fontStyle": "bold"
-        }
       }
     ]
   }
