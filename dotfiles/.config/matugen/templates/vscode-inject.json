@@ -44,11 +44,26 @@
     "tab.activeForeground": "{{colors.primary.default.hex}}",
     "tab.activeBorderTop": "{{colors.primary.default.hex}}",
     "tab.border": "{{colors.outline_variant.default.hex}}",
+    
     "input.background": "{{colors.surface_container.default.hex}}",
     "input.foreground": "{{colors.on_surface.default.hex}}",
     "input.border": "{{colors.outline.default.hex}}",
     "input.placeholderForeground": "{{colors.outline.default.hex}}",
     "input.option.activeBorder": "{{colors.primary.default.hex}}",
+    
+    "inputOption.activeBackground": "{{colors.primary.default.hex}}33",
+    "inputOption.activeForeground": "{{colors.primary.default.hex}}",
+    "inputValidation.errorBackground": "{{colors.error.default.hex}}33",
+    "inputValidation.errorBorder": "{{colors.error.default.hex}}",
+    "inputValidation.infoBackground": "{{colors.secondary.default.hex}}33",
+    "inputValidation.infoBorder": "{{colors.secondary.default.hex}}",
+    "inputValidation.warningBackground": "{{colors.tertiary.default.hex}}33",
+    "inputValidation.warningBorder": "{{colors.tertiary.default.hex}}",
+
+    "editorWidget.background": "{{colors.surface_container_high.default.hex}}",
+    "editorWidget.border": "{{colors.outline.default.hex}}",
+    "editorWidget.resizeBorder": "{{colors.primary.default.hex}}",
+
     "button.background": "{{colors.primary.default.hex}}",
     "button.foreground": "{{colors.on_primary.default.hex}}",
     "button.hoverBackground": "{{colors.primary.default.hex}}CC",
@@ -63,6 +78,12 @@
     "menu.selectionBackground": "{{colors.primary.default.hex}}",
     "menu.selectionForeground": "{{colors.on_primary.default.hex}}",
     "menu.border": "{{colors.outline_variant.default.hex}}",
+
+    "quickInput.background": "{{colors.surface_container_high.default.hex}}",
+    "quickInput.foreground": "{{colors.on_surface.default.hex}}",
+    "pickerGroup.border": "{{colors.outline_variant.default.hex}}",
+    "pickerGroup.foreground": "{{colors.primary.default.hex}}",
+
     "quickInputList.focusBackground": "{{colors.primary.default.hex}}",
     "quickInputList.focusForeground": "{{colors.on_primary.default.hex}}",
     "panel.background": "{{colors.surface_container_low.default.hex}}",
@@ -93,21 +114,21 @@
     "textMateRules": [
       {
         "scope": ["comment", "punctuation.definition.comment"],
-        "settings": { 
+        "settings": {
           "foreground": "{{colors.secondary_fixed_dim.default.hex}}99",
-          "fontStyle": "italic" 
+          "fontStyle": "italic"
         }
       },
       {
         "scope": [
-            "variable", 
-            "variable.language", 
-            "variable.name", 
-            "variable.other", 
+            "variable",
+            "variable.language",
+            "variable.name",
+            "variable.other",
             "variable.parameter"
         ],
-        "settings": { 
-            "foreground": "{{colors.primary.default.hex}}" 
+        "settings": {
+            "foreground": "{{colors.primary.default.hex}}"
         }
       }
     ]
