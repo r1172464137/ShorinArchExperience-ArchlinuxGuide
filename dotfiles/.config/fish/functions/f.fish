@@ -217,6 +217,4 @@ function f
     end
 end
 
-function fnsfw
-    f --nsfw
-end
+
