@@ -332,11 +332,11 @@
     "format": "",
     "on-click": "makoctl restore",
   },
-  //gnome-control-center 
+  //control-center 
   "custom/settings": {
     "format": "",
-    "on-click": "env XDG_CURRENT_DESKTOP=GNOME gnome-control-center",
-    "tooltip-format": "Open control center",
+    "on-click": "better-control",
+    "tooltip-format": "左键：打开设置中心",
   },
   //获取屏幕颜色colorpicker
   "custom/colorpicker": {
