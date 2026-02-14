@@ -7866,4 +7866,4 @@ window.background:not(.solid-csd):not(.csd) > notebook > stack:not(:only-child) 
 #settingsDialog .dialog-vbox.vertical tab:checked:hover {
   background-color: mix(@window_fg_color,@window_bg_color,0.65);
 }
-@import url("../../../.config/gtk-3.0/colors.css");
+@import url("../../../../../.config/gtk-3.0/colors.css");
