@@ -94,7 +94,7 @@
       {
         "scope": ["comment", "punctuation.definition.comment"],
         "settings": { 
-          "foreground": "{{colors.outline.default.hex}}",
+          "foreground": "{{colors.secondary_fixed_dim.default.hex}}99",
           "fontStyle": "italic" 
         }
       },

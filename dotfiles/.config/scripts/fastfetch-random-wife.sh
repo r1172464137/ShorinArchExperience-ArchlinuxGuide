@@ -144,7 +144,7 @@ if [ "$NUM_FILES" -gt 0 ]; then
     
 else
     # 没库存，提示语更改
-    echo "主人，库存不够啦！正在去搬运新的老婆图片，请稍等哦..."
+    echo "库存不够啦！正在去搬运新的图片，请稍等哦..."
     download_one_image
     
     shopt -s nullglob
