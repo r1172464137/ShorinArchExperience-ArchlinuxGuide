@@ -350,6 +350,7 @@
     "tooltip": false,
     "format": "{}",
     "exec": "~/.config/waybar/scripts/cava.sh",
+    "on-click": "playerctl play-pause "
   },
   //禁止熄屏
   "idle_inhibitor": {
