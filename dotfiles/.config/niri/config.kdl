@@ -156,6 +156,7 @@ overview {
 	zoom 0.5
 }
 layout {
+
     //设置工作区背景颜色
     //background-color "transparent"
     // Set gaps around windows in logical pixels.
@@ -326,7 +327,7 @@ spawn-at-startup "swww-daemon"
 // 总览界面背景壁纸的守护进程
 spawn-at-startup "swww-daemon" "-n" "overview"
 // 随机更换一张壁纸
-spawn-sh-at-startup "sleep 0.6 &&  waypaper --random"
+//spawn-sh-at-startup "sleep 0.6 &&  waypaper --random"
 // 恢复壁纸
 //spawn-at-startup "waypaper" "--restore"
 // 询问管理员权限功能（身份验证）
