@@ -86,6 +86,7 @@ window-rule {
 }
 window-rule{
     match app-id="bluetui"
+    match app-id="impala"
     min-width 500 
     min-height 600
 	open-floating true

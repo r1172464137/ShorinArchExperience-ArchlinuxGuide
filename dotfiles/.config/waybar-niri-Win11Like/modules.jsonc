@@ -83,21 +83,21 @@
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} : {ipaddr}\n---\n左键：打开面板\n右键：打开高级网络配置工具",
     "tooltip-format-ethernet": "{ifname} : {ipaddr}\n---\n左键：打开面板\n右键：打开高级网络配置工具",
     "tooltip-format-disconnected": "网络未连接\n---\n左键：打开面板\n右键：打开高级网络配置工具",
-    "on-click": "kitty -e nmtui",
+    "on-click": "kitty --class impala -e impala",
     "on-click-right": "nm-connection-editor",
   },
   "bluetooth": {
     //蓝牙关闭状态下的图标和鼠标悬浮时的提示
     "format-disabled": "󰂲",
-    "tooltip-format-disabled": "左键：开启蓝牙",
+    "tooltip-format-disabled": "右键：启用蓝牙",
     "format": "󰂯",
-    "tooltip-format-on": "左键：禁用蓝牙\n右键：打开面板",
+    "tooltip-format-on": "左键：打开面板\n右键：禁用蓝牙",
     //连接状态下的图标和提示
     "format-connected": "󰂱",
-    "tooltip-format-connected": "󰂱 {device_alias}\n---\n右键：打开面板",
+    "tooltip-format-connected": "󰂱 {device_alias}\n---\n左键：打开面板",
     //点击功能
-    "on-click": "~/.config/waybar/scripts/toggle-bluetooth.sh",
-    "on-click-right": "kitty --class bluetui -e bluetui",
+    "on-click-right": "~/.config/waybar/scripts/toggle-bluetooth.sh",
+    "on-click": "kitty --class bluetui -e bluetui",
   },
   //左键循环切换性能模式
   "power-profiles-daemon": {
