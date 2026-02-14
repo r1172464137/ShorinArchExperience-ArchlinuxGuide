@@ -74,6 +74,7 @@ window-rule {
     match app-id="markpix"
     match title="Steam 设置" 
     match title="另存为"
+    match app-id="better_control.py"
     open-floating true
 }
 //快速终端和笔记
