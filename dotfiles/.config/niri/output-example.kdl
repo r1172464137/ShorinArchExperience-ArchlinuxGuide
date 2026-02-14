@@ -13,9 +13,4 @@ output "DP-2"{
     focus-at-startup
 
 }
-output "HDMI-A-1"{
-    mode "1920x1080@60"
-    scale 1 
-    position x=2560 y=0
 
-    }
