@@ -23,10 +23,12 @@
     ],
     "modules-center": [
         "custom/left_div#3",
-        "bluetooth",
-        "network",
+	// 这个模块是shorinNiri相关的常用命令
+	"custom/actions",
         "custom/wfrec",
         "custom/screenshot",
+	//"custom/wallpapers",
+	"custom/clipboard",
         "custom/left_div#2",
         "idle_inhibitor",
         "custom/colorpicker",
@@ -54,6 +56,8 @@
         "privacy",
         "group/audio",
         "custom/left_div#8",
+        "bluetooth",
+        "network",
         "battery",
         "custom/left_div#5",
         "group/powermenu"

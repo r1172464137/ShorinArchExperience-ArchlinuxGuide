@@ -117,44 +117,43 @@ window#waybar.empty #window {
 
 #custom-left_div.3 {
     color: @surface_container_high;
-    padding: 0px;
+    /* 调节这里的padding可以移动中心的模块位置 */
+    padding: 0px 0em 0em 0.1em;
     font-size: 1.39em; /* 25px */
 }
 
 
-#bluetooth {
+#custom-actions {
     padding: 0px 0.3em 0px 0.5em; /* 7px */
-    font-size: 1.25em; /* 20px */
-}
-#bluetooth.disabled{
-    padding: 0px 0.22em 0px 0.46em ;
+    font-size: 1.35em; /* 20px */
 }
 
-#network {
-    padding: 0px 0.34em; /* 7px */
-    font-size: 1.2em; /* 22px */
-}
-
-#custom-settings {
-    padding: 0px 0.39em; /* 7px */
-    font-size: 1.06em; /* 19px */
-}
-
-#custom-screenshot {
-    padding: 0 0.4em; /* 7px */
-    font-size: 1.28em; /* 22px */
+ #custom-screenshot {
+    padding: 0px 0.35em; /* 7px */
+    font-size: 1.15em; /* 22px */
 }
 
 /* wf-recoder脚本 */
 #custom-wfrec {
-  padding: 0 0.3em; /* 7px */
-  font-size: 1.1em;
+  padding: 0 0.25em; /* 7px */
+  font-size: 1.15em;
 }
+
+#custom-wallpapers{
+    padding: 0 0.5em 0 0.3em; /* 7px */
+    font-size: 1.15em; /* 22px */
+}
+#custom-clipboard{
+    padding: 0 0.5em 0 0.3em; /* 7px */
+    font-size: 1.15em; /* 22px */
+}
+
 
 #custom-wfrec.recording,
 #custom-wfrec,
-#bluetooth,
-#network,
+#custom-actions,
+#custom-wallpapers,
+#custom-clipboard,
 #custom-settings,
 #custom-screenshot {
     background-color: @surface_container_high;
@@ -274,7 +273,8 @@ window#waybar.empty #window {
 #custom-right_div.3 {
 
     color: @surface_container_high;
-    padding: 0px 0.1em 0px 0px ;
+    /* 调节这里的padding可以移动中心的模块位置 */
+    padding: 0px 0em 0px 0px ;
     font-size: 1.39em; /* 25px */
 }
 #custom-right_div.4 {
@@ -422,11 +422,14 @@ window#waybar.empty #window {
 
 
 /* 电池 */
-
+#bluetooth,
+#bluetooth.disabled,
+#network,
 #battery {
     background-color: @surface_container;
     color: @secondary;
     padding: 0px 0.39em; /* 7px */
+    
 }
 
 #battery.critical:not(.charging) {
@@ -439,6 +442,23 @@ window#waybar.empty #window {
     animation-direction: alternate;
     padding: 0px 0.39em; /* 7px */
 }
+
+#bluetooth {
+    padding: 0px 0.3em 0 0.5em; /* 7px */
+    font-size: 1.13em; /* 20px */
+
+    
+}
+#bluetooth.disabled{
+    padding: 0px 0.2em 0px 0.46em ;
+}
+
+#network {
+    padding: 0px 0.3em; /* 7px */
+    font-size: 1.1em; /* 22px */
+
+}
+
 
 /* powermenu电源菜单 */
 #custom-left_div.5 {

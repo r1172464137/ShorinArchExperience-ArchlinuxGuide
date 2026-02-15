@@ -186,11 +186,11 @@
   },
   //logo+程序启动器
   "custom/applauncher": {
-    "tooltip-format": "左键：打开软件启动器\n右键：选择壁纸\n中键：启用/禁用Niri背景自动模糊",
-    "format": "󰣇",
+    "tooltip-format": "左键：软件启动菜单\n右键：打开终端\n中键：启用/禁用niri背景自动模糊",
+    "format": "",
     "on-click": "fuzzel",
-    "on-click-right": "waypaper",
-    "on-click-middle":"~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh"
+    "on-click-right":"kitty || ghostty || alacritty || foot || konsole",
+    "on-click-middle": "~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh"
   },
   //电源菜单
   "group/powermenu": {
@@ -318,7 +318,9 @@
     "tooltip": true,
     "format": "󱏜",
     "on-click": "hyprpicker -a && pw-play /usr/share/sounds/freedesktop/stereo/message.oga",
-    "tooltip-format":"左键：提取颜色",
+    "on-click-right":"~/.config/scripts/matugen-select-type.sh",
+    "on-click-middle":"waypaper",
+    "tooltip-format":"左键：提取颜色\n右键：切换系统配置方案\n中键：打开壁纸切换器",
   },
   //音频可视化
   "custom/cava": {
@@ -400,5 +402,27 @@
   },
   "dwl/window": {
     "format": "[{layout}]{title}",
-  }
+  },
+    //剪贴板
+  "custom/clipboard":{
+    "format":"󰅍",
+    "on-click":"kitty --class shorinclip -e shorinclip",
+    "on-click-right":"pkill wl-paste || true && wl-paste --watch cliphist store && systemctl restart --user clipsync-git",
+    "tooltip-format":"左键：打开剪贴板\n右键：重启剪贴板后台服务"
+  },
+  // 壁纸切换
+ "custom/wallpapers":{
+    "format":"󰸉",
+    "tooltip-format":"左键：打开壁纸切换器\n右键：随机切换壁纸\n中键：随机下载动漫壁纸",
+    "on-click":"waypaper",
+    "on-click-right":"waypaper --random",
+    "on-click-middle":"~/.config/scripts/random-anime-wallpaper.sh"
+ },
+ // 常用命令
+ "custom/actions":{
+   "format":"",
+   "tooltip-format":"左键：常用命令",
+   "on-click":"~/.config/waybar/scripts/command-center.sh"
+ }
+
 }

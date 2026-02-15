@@ -315,11 +315,6 @@ if [[ "$SUCCESS" == "true" ]]; then
         error "$MSG_ERR_FILE_EMPTY"
     else
         printf "\n"
-        success "$MSG_SUCCESS"
-        printf "${H_CYAN}%s${NC}\n" "$MSG_TOP_MIRRORS"
-        # Extract top 3 servers properly
-        head -n 5 "$MIRRORLIST" | grep "Server =" | sed 's/Server = //' | head -n 3
-        printf "\n"
         printf "${H_BLUE}%s${NC} %s\n" "$MSG_FINAL_BACKUP" "$BACKUP_PATH"
         exit 0
     fi

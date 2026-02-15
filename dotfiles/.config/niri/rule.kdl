@@ -37,8 +37,8 @@ window-rule {
 // 以浮动模式打开
 window-rule{
 	match app-id="shorinclip"
-	//min-width 900
-	min-height 700
+	default-column-width { fixed 625; }
+    default-window-height { fixed 700; }
 	open-floating true
 	default-floating-position x=0 y=18 relative-to="top"
 }
@@ -77,6 +77,13 @@ window-rule {
     match app-id="better_control.py"
     open-floating true
 }
+// waybar命令中心模块
+window-rule {
+    match app-id="command-center"
+default-column-width { fixed 1000; }
+    default-window-height { fixed 600; }
+    open-floating true
+}
 //快速终端和笔记
 window-rule {
     match app-id="notebook"
@@ -87,13 +94,14 @@ window-rule {
 window-rule{
     match app-id="bluetui"
     match app-id="impala"
-    //min-width 500 
-    min-height 700
+default-column-width { fixed 800; }
+    default-window-height { fixed 800; }
 	open-floating true
 }
 window-rule {
 	    match app-id="clipse"
-	min-height 600
+	default-column-width { fixed 625; }
+    default-window-height { fixed 700; }
 	open-floating true
 }
     // waydroid调整

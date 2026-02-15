@@ -74,6 +74,9 @@ tooltip label {
 
 #custom-screenshot,
 #custom-wfrec,
+#custom-actions,
+#custom-clipboard,
+#custom-wallpapers,
 #custom-colorpicker {
     background-color: @surface_container_high;
     color: @tertiary;
@@ -85,6 +88,9 @@ tooltip label {
 
 #custom-screenshot,
 #custom-wfrec,
+#custom-actions,
+#custom-clipboard,
+#custom-wallpapers,
 #custom-colorpicker {
     padding: 0px 5px;
     margin: 5px 0px 5px 0px;
@@ -97,9 +103,18 @@ tooltip label {
     border-radius: 5px 0px 0px 5px;
 }
 
+#custom-actions,
+#custom-clipboard,
+#custom-wallpapers,
 #custom-wfrec {
     border-radius: 0px;
 }
+
+
+#custom-actions {
+    font-size: 1.3em;
+}
+
 
 #custom-colorpicker {
     padding: 0px 10px 0px 5px;
