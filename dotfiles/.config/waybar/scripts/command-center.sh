@@ -33,18 +33,18 @@ case "$SELECTED" in
         ;;
     "$OPT_MIRROR")
         # 打开终端，结束后按任意键退出
-        kitty --class command-center --title "更新镜像源" bash -c "~/.local/bin/mirror-update; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "更新镜像源" bash -c "~/.local/bin/mirror-update; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_SYSUP")
         # [新增] 系统更新，打开终端
-        kitty --class command-center --title "系统更新" bash -c "~/.local/bin/sysup; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "系统更新" bash -c "~/.local/bin/sysup; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_SHORIN")
         # [修改] 明确为 Shorin 更新，打开终端
-        kitty --class command-center --title "Shorin更新" bash -c "~/.local/bin/shorin-update; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "Shorin更新" bash -c "~/.local/bin/shorin-update; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_CLEAN")
         # 打开终端
-        kitty --class command-center --title "系统清理" bash -c "~/.local/bin/clean; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "系统清理" bash -c "~/.local/bin/clean; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
 esac
