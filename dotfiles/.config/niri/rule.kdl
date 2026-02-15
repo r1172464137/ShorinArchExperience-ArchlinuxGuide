@@ -17,7 +17,7 @@ window-rule {
     // 去掉超出圆角的窗口内容
     clip-to-geometry true
     // 全局透明度
-    opacity 0.97
+    opacity 0.98
     // 禁止边框画到背景里
     draw-border-with-background false
 }
@@ -38,6 +38,7 @@ window-rule{
 	match app-id="shorinclip"
 	default-column-width { fixed 625; }
     default-window-height { fixed 700; }
+    //min-height 800
 	open-floating true
 	default-floating-position x=0 y=18 relative-to="top"
 }

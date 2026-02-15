@@ -11,7 +11,7 @@
     border: none;
     border-radius: 5px;
     font-family: "JetBrainsMono NFP","LXGW WenKai Screen", "JetBrains Maple Mono";
-    font-size: 15px; /* 1em（基准） */
+    font-size: 16px; /* 1em（基准） */
     min-height: 0;
 }
 
@@ -139,7 +139,7 @@ window#waybar.empty #window {
 
 #custom-applauncher {
     font-size: 1.39em; /* 原 25px */
-    padding: 0px 11px;
+    padding: 0px 0.45em;
     margin: 5px;
     background-color: @primary;
     color: @on_primary;
