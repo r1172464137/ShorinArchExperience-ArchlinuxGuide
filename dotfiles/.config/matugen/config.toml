@@ -124,7 +124,8 @@ output_path = '~/.config/fastfetch/config.jsonc'
 
 [templates.hyprlock]
 input_path = '~/.config/matugen/templates/hyprland-colors.conf'
-output_path = '~/.config/hypr/colors.conf'
+output_path = '~/.cache/matugen/hypr/colors.conf'
+pre_hook = 'mkdir -p ~/.cache/matugen/hypr/'
 
 [templates.vscode_injection]
 input_path = "~/.config/matugen/templates/vscode-inject.json"

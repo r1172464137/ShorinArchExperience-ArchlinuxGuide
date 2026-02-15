@@ -63,7 +63,7 @@ binds {
     Mod+Alt+E hotkey-overlay-title=null {spawn-sh "env GSK_RENDERER=gl GTK_IM_MODULE=fcitx  nautilus";}
     Mod+Z hotkey-overlay-title="程序菜单 Applauncher" { spawn "fuzzel"; }
     // 锁屏
-    Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn-sh "swaylock || hyprlock"; } 
+    Mod+Alt+L hotkey-overlay-title="锁屏 Lock screen" { spawn-sh "swaylock || hyprlock -c ~/.config/niri/hyprlock.conf"; } 
     Mod+P hotkey-overlay-title=null { spawn-sh "hyprpicker -a && pw-play /usr/share/sounds/freedesktop/stereo/message.oga"; }
     //Mod+Alt+V  hotkey-overlay-title="剪贴板 Clipboard" {spawn-sh "copyq toggle || ~/.local/bin/clipse-gui || kitty --class clipse --single-instance -e clipse";}
     // 这是我自己的剪贴板程序，对应aur包shorinclip-git
