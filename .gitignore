@@ -10,6 +10,7 @@ dotfiles/.config/cava/themes/your-theme
 dotfiles/.config/yazi/theme.toml
 dotfiles/.config/wlogout/colors.css
 dotfiles/.config/gtk-3.0/colors.css
+dotfiles/.config/gtk-3.0/bookmarks
 dotfiles/.config/gtk-4.0/colors.css
 dotfiles/.config/niri/colors.kdl
 dotfiles/.config/swayosd/colors.css
