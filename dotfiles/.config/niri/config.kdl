@@ -28,10 +28,13 @@ environment {
     // qt主题
     QT_QPA_PLATFORMTHEME "gtk3"
     QT_QPA_PLATFORMTHEME_QT6 "gtk3"
+    // 解决quickshell图标主题缺失问题
+    QS_ICON_THEME "Adwaita"
     // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题，AMD或Intel单显卡不需要这行设置可以注释掉
     GSK_RENDERER "gl"
     // 默认文本编辑器
     EDITOR "vim"
+    
 }
 
 // 光标配置
