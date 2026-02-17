@@ -160,10 +160,10 @@ window-rule {
 // }
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
+    match app-id="wechat"
     block-out-from "screen-capture"
 
     // Use this instead if you want them visible on third-party screenshot tools.
