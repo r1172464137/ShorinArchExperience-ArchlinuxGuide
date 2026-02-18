@@ -1,21 +1,20 @@
 #!/bin/bash
 
 # ==============================================================================
-# web - 网络极速启动器 (v4.0 Final)
+# web - 网络极速启动器 (v5.0 History Edition)
 # ==============================================================================
 # 依赖: firefox, fuzzel
 # ==============================================================================
 
 CACHE_FILE="$HOME/.cache/web_search_engine"
+HISTORY_FILE="$HOME/.cache/web_search_history"
 BROWSER="firefox"
+MAX_HISTORY=50
 
 # --- 1. 定义引擎 & 书签 ---
 declare -A ENGINES
 declare -A DESCRIPTIONS
 
-# [核心逻辑]
-# 带有 %s 的是搜索引擎
-# 不带 %s 的是快速书签 (Quick Link)
 ENGINES=(
     ["google"]="https://www.google.com/search?q=%s"
     ["bing"]="https://www.bing.com/search?q=%s"
@@ -24,14 +23,11 @@ ENGINES=(
     ["w"]="https://wiki.archlinux.org/index.php?search=%s"
     ["aur"]="https://aur.archlinux.org/packages?K=%s"
     ["yt"]="https://www.youtube.com/results?search_query=%s"
-    
-    # === 纯书签区 ===
     ["gemini"]="https://gemini.google.com/app"
     ["gpt"]="https://chatgpt.com/"
     ["red"]="https://www.reddit.com/"
 )
 
-# 菜单描述
 DESCRIPTIONS=(
     ["google"]="Google Search"
     ["bing"]="Bing Search"
@@ -45,13 +41,30 @@ DESCRIPTIONS=(
     ["red"]="Reddit"
 )
 
-# 默认引擎
 DEFAULT_ENGINE_KEY="google"
 
 # --- 2. 辅助函数 ---
 
 get_current_engine_key() {
     if [ -f "$CACHE_FILE" ]; then cat "$CACHE_FILE"; else echo "$DEFAULT_ENGINE_KEY"; fi
+}
+
+# 更新历史记录 (去重 + 移动到末尾)
+update_history() {
+    local input="$1"
+    # 如果输入为空或是设置命令，不记录
+    if [[ -z "$input" || "$input" == *"Change Engine"* ]]; then return; fi
+
+    # 确保文件存在
+    touch "$HISTORY_FILE"
+
+    # 1. 删除旧的相同记录 (grep -vFx: 精确匹配整行并反选)
+    # 2. 追加新记录到末尾
+    # 3. 只保留最后 MAX_HISTORY 行
+    grep -vFx "$input" "$HISTORY_FILE" > "${HISTORY_FILE}.tmp"
+    echo "$input" >> "${HISTORY_FILE}.tmp"
+    tail -n "$MAX_HISTORY" "${HISTORY_FILE}.tmp" > "$HISTORY_FILE"
+    rm "${HISTORY_FILE}.tmp"
 }
 
 set_default_engine() {
@@ -80,8 +93,18 @@ if [ -n "$1" ]; then
     QUERY="$*"
 else
     CURRENT_ENG_KEY=$(get_current_engine_key)
-    # 提示符显示当前默认引擎
-    QUERY=$(echo -e "⚙️  Change Engine" | fuzzel -d -p "${DESCRIPTIONS[$CURRENT_ENG_KEY]} 🔍 : " --lines 1 --width 50)
+    MENU_ITEM="⚙️  Change Engine"
+    
+    # [核心修改] 读取历史记录
+    # tac: 反向读取文件 (最新的在最下面，反向后变成最上面)
+    HISTORY_LIST=""
+    if [ -f "$HISTORY_FILE" ]; then
+        HISTORY_LIST=$(tac "$HISTORY_FILE")
+    fi
+
+    # 拼接菜单: 设置选项 + 历史记录
+    # --lines 10: 稍微加高一点，方便看历史
+    QUERY=$(echo -e "$MENU_ITEM\n$HISTORY_LIST" | fuzzel -d -p "${DESCRIPTIONS[$CURRENT_ENG_KEY]} 🔍 : " --lines 10 --width 50)
 fi
 
 if [ -z "$QUERY" ]; then exit 0; fi
@@ -92,32 +115,30 @@ if [[ "$QUERY" == *"Change Engine"* ]]; then
     exec "$0"
 fi
 
-# --- 4. 智能路由 ---
+# --- 4. 记录历史 ---
+# 在执行搜索前，先把这次的 QUERY 存进去
+update_history "$QUERY"
+
+# --- 5. 智能路由 ---
 
 KEYWORD=$(echo "$QUERY" | awk '{print $1}')
 
 if [[ -n "${ENGINES[$KEYWORD]}" ]]; then
-    # 命中前缀 (例如输入了 "gemini" 或 "gemini hello")
     URL_TEMPLATE="${ENGINES[$KEYWORD]}"
-    # 提取剩余部分 (如果有的话)
     REST_QUERY=$(echo "$QUERY" | cut -d' ' -f2-)
 else
-    # 未命中前缀，使用默认引擎进行搜索
     DEFAULT_KEY=$(get_current_engine_key)
     if [[ -z "${ENGINES[$DEFAULT_KEY]}" ]]; then DEFAULT_KEY="google"; fi
     URL_TEMPLATE="${ENGINES[$DEFAULT_KEY]}"
     REST_QUERY="$QUERY"
 fi
 
-# --- 5. URL 构造 ---
-# 只有当 URL 里包含 %s 时，才把查询词填进去
-# 否则直接打开 URL (这就是你要的“快速打开”效果)
+# --- 6. URL 构造与启动 ---
 
 if [[ "$URL_TEMPLATE" == *"%s"* ]]; then
     ENCODED_QUERY="${REST_QUERY// /%20}"
     FINAL_URL="${URL_TEMPLATE/\%s/$ENCODED_QUERY}"
 else
-    # 纯链接模式：忽略后面的乱七八糟输入，直接跳首页
     FINAL_URL="$URL_TEMPLATE"
 fi
 
