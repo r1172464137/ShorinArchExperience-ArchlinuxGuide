@@ -131,3 +131,13 @@ pre_hook = 'mkdir -p ~/.cache/matugen/hypr/'
 input_path = "~/.config/matugen/templates/vscode-inject.json"
 output_path = "~/.cache/matugen_vscode_inject.json"
 post_hook = "~/.config/matugen/scripts/inject_vscode.sh"
+
+[templates.obs]
+input_path = '~/.config/matugen/templates/matugen.obt'
+output_path = '~/.config/obs-studio/themes/matugen.obt'
+
+#[templates.steam]
+#input_path = '~/.config/matugen/templates/steam.css'
+#output_path = '~/.config/AdwSteamGtk/custom.css'
+#post_hook =  'adwaita-steam-gtk -i'
+
