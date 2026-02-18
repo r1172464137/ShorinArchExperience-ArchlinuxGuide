@@ -1,0 +1,128 @@
+#!/bin/bash
+
+# ==============================================================================
+# web - 极简网络搜索工具 (v3.3 交互优化版)
+# ==============================================================================
+# 依赖: firefox, fuzzel
+# ==============================================================================
+
+CACHE_FILE="$HOME/.cache/web_search_engine"
+BROWSER="firefox"
+
+# --- 1. 定义搜索引擎 & 描述 ---
+declare -A ENGINES
+declare -A DESCRIPTIONS
+
+# 定义 URL 模板
+ENGINES=(
+    ["google"]="https://www.google.com/search?q=%s"
+    ["bing"]="https://www.bing.com/search?q=%s"
+    ["duck"]="https://duckduckgo.com/?q=%s"
+    ["b"]="https://search.bilibili.com/all?keyword=%s"
+    ["gh"]="https://github.com/search?q=%s"
+    ["w"]="https://wiki.archlinux.org/index.php?search=%s"
+    ["aur"]="https://aur.archlinux.org/packages?K=%s"
+    ["yt"]="https://www.youtube.com/results?search_query=%s"
+)
+
+# 定义描述 (用于菜单显示)
+DESCRIPTIONS=(
+    ["google"]="Google Search"
+    ["bing"]="Bing Search"
+    ["duck"]="DuckDuckGo"
+    ["b"]="Bilibili"
+    ["gh"]="GitHub"
+    ["w"]="Arch Wiki"
+    ["aur"]="Arch User Repository"
+    ["yt"]="YouTube"
+)
+
+# 默认引擎
+DEFAULT_ENGINE_KEY="google"
+
+# --- 2. 辅助函数 ---
+
+get_current_engine_key() {
+    if [ -f "$CACHE_FILE" ]; then
+        cat "$CACHE_FILE"
+    else
+        echo "$DEFAULT_ENGINE_KEY"
+    fi
+}
+
+set_default_engine() {
+    # 构造列表：Description (key)
+    # 使用管道直接传输，避免空行问题
+    # --lines 8: 设置菜单选项较多，保持足够高度
+    SELECTED_LINE=$(
+        for key in "${!ENGINES[@]}"; do
+            printf "%s (%s)\n" "${DESCRIPTIONS[$key]}" "$key"
+        done | sort | fuzzel -d -p "Set Engine ⚙️ : " --width 40 --lines 8
+    )
+    
+    if [ -n "$SELECTED_LINE" ]; then
+        # 提取括号里的 key
+        SELECTED_KEY=$(echo "$SELECTED_LINE" | sed -n 's/.*(\(.*\))$/\1/p')
+        
+        if [[ -n "${ENGINES[$SELECTED_KEY]}" ]]; then
+            mkdir -p "$(dirname "$CACHE_FILE")"
+            echo "$SELECTED_KEY" > "$CACHE_FILE"
+        fi
+    fi
+}
+
+show_help() {
+    echo "Usage: web [QUERY]"
+    echo "Type 'Settings' in the menu to change default engine."
+}
+
+# --- 3. 主逻辑 ---
+
+case "$1" in
+    -h|--help) show_help; exit 0 ;;
+    -s|--set)  set_default_engine; exit 0 ;;
+esac
+
+# 获取输入
+if [ -n "$1" ]; then
+    QUERY="$*"
+else
+    CURRENT_ENG_KEY=$(get_current_engine_key)
+    CURRENT_ENG_NAME="${DESCRIPTIONS[$CURRENT_ENG_KEY]}"
+    
+    MENU_ITEM="⚙️  Change Engine"
+    
+    # 优化点 1: 提示符不再重复 "Search"，直接显示引擎名，例如 "Google Search 🔍 :"
+    # 优化点 2: --lines 1，初始界面变紧凑，只显示输入行和菜单项
+    QUERY=$(echo -e "$MENU_ITEM" | fuzzel -d -p "$CURRENT_ENG_NAME 🔍 : " --lines 1 --width 50)
+fi
+
+if [ -z "$QUERY" ]; then exit 0; fi
+
+# --- 4. 拦截设置命令 ---
+if [[ "$QUERY" == *"Change Engine"* ]]; then
+    set_default_engine
+    
+    # 优化点 3: 设置完成后，重新执行脚本自身 (exec "$0")
+    # 这样用户会直接回到搜索框，且引擎已经更新
+    exec "$0"
+fi
+
+# --- 5. 搜索逻辑 ---
+
+KEYWORD=$(echo "$QUERY" | awk '{print $1}')
+
+if [[ -n "${ENGINES[$KEYWORD]}" ]]; then
+    URL_TEMPLATE="${ENGINES[$KEYWORD]}"
+    REST_QUERY=$(echo "$QUERY" | cut -d' ' -f2-)
+else
+    DEFAULT_KEY=$(get_current_engine_key)
+    if [[ -z "${ENGINES[$DEFAULT_KEY]}" ]]; then DEFAULT_KEY="google"; fi
+    URL_TEMPLATE="${ENGINES[$DEFAULT_KEY]}"
+    REST_QUERY="$QUERY"
+fi
+
+ENCODED_QUERY="${REST_QUERY// /%20}"
+FINAL_URL="${URL_TEMPLATE/\%s/$ENCODED_QUERY}"
+
+nohup "$BROWSER" --new-tab "$FINAL_URL" >/dev/null 2>&1 &
