@@ -187,7 +187,7 @@
   //logo+程序启动器
   "custom/applauncher": {
     "tooltip-format": "左键：软件启动菜单\n右键：打开终端\n中键：启用/禁用niri背景自动模糊",
-    "format": "",
+    "format": "󰍲",
     "on-click": "fuzzel",
     "on-click-right":"kitty || ghostty || alacritty || foot || konsole",
     "on-click-middle": "~/.config/scripts/niri_auto_blur_bg.sh || pkill -f niri_auto_blur_bg.sh"
