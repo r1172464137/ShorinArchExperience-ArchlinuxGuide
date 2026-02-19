@@ -56,6 +56,12 @@ function f
     mkdir -p "$USED_DIR"
     
     # --- 2. 核心函数 ---
+
+    # [新增] 网络连通性检测，防止没网时阻塞终端或后台死等
+    function check_network
+        curl -s --connect-timeout 2 "https://1.1.1.1" >/dev/null 2>&1
+        return $status
+    end
     
     function get_random_url -V NSFW_MODE
         set -l TIMEOUT --connect-timeout 5 --max-time 15
@@ -110,14 +116,24 @@ function f
         # 导出函数定义以便在 fish -c 中使用
         set -l get_random_url_def (functions get_random_url | string collect)
         set -l download_one_image_def (functions download_one_image | string collect)
+        set -l check_network_def (functions check_network | string collect)
         
         fish -c "
+            # [核心修复 1] 忽略终端关闭带来的 SIGHUP 信号
+            trap '' HUP
+
             # 重新定义需要的函数
             $get_random_url_def
             $download_one_image_def
+            $check_network_def
             
             # 使用 flock 防止并发
             flock -n 200 || exit 1
+
+            # [新增] 网络检查，没网就悄悄退出，不占后台资源
+            if not check_network
+                exit 0
+            end
             
             # 导入变量
             set CACHE_DIR '$CACHE_DIR'
@@ -140,6 +156,9 @@ function f
                 ls -tp \$CACHE_DIR/*.jpg 2>/dev/null | tail -n +\$DELETE_START_LINE | xargs -I {} rm -- '{}'
             end
         " 200>"$LOCK_FILE" &
+        
+        # [核心修复 2] 将刚才丢入后台的 fish 子进程剥离终端控制
+        disown
     end
     
     # --- 3. 主程序逻辑 ---
@@ -163,9 +182,14 @@ function f
         # 后台补货
         background_job >/dev/null 2>&1
     else
-        # 没库存，提示语更改
+        # 没库存，提示语更改并增加网络连通性容错
         echo "库存不够啦！正在去搬运新的图片，请稍等哦..."
-        download_one_image
+        
+        if check_network
+            download_one_image
+        else
+            echo "网络好像不太通畅，无法下载新图片 QAQ"
+        end
         
         set FILES $CACHE_DIR/*.jpg
         if test -f "$FILES[1]"
@@ -179,10 +203,10 @@ function f
         # 显示图片
         fastfetch --logo "$SELECTED_IMG" --logo-preserve-aspect-ratio true $ARGS_FOR_FASTFETCH
         
-        # === 修改点 1: 移动到 used 目录 ===
+        # === 逻辑: 移动到 used 目录 ===
         mv "$SELECTED_IMG" "$USED_DIR/"
         
-        # === 修改点 2: 检查 used 目录并清理旧图 ===
+        # === 逻辑: 检查 used 目录并清理旧图 ===
         # 注意：fish 的 glob 展开如果文件太多可能会卡，但这里有 limit 限制所以还好
         set -l used_files $USED_DIR/*.jpg
         set -l used_count (count $used_files)
@@ -212,9 +236,7 @@ function f
         end
     else
         # 失败提示语更改
-        echo "图片下载失败了，这次只能先显示默认的 Logo 啦 QAQ"
+        echo "图片获取失败了，这次只能先显示默认的 Logo 啦 QAQ"
         fastfetch $ARGS_FOR_FASTFETCH
     end
 end
-
-

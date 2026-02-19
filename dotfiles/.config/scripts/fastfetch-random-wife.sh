@@ -1,6 +1,7 @@
+#!/bin/bash
 # 脚本功能：
 # 从随机老婆图片生成 API 下载图片并使用 Fastfetch 展示。
-# 特性：支持 NSFW 模式，支持自动补货，支持已用图片归档与自动清理。
+# 特性：支持 NSFW 模式，支持自动补货，支持已用图片归档与自动清理，支持终端关闭后继续后台补货。
 
 # ================= 配置区域 =================
 
@@ -16,7 +17,7 @@ MAX_CACHE_LIMIT=100
 # 库存少于多少张时开始补货
 MIN_TRIGGER_LIMIT=60
 
-# [新增] used 目录最大存放数量
+# used 目录最大存放数量
 # 超过此数量将按照时间顺序删除最旧的文件
 MAX_USED_LIMIT=50
 
@@ -57,6 +58,12 @@ mkdir -p "$CACHE_DIR"
 mkdir -p "$USED_DIR"
 
 # --- 2. 核心函数 ---
+
+# [新增] 网络连通性检测，防止没网时阻塞终端或后台死等
+check_network() {
+    curl -s --connect-timeout 2 "https://1.1.1.1" >/dev/null 2>&1
+    return $?
+}
 
 get_random_url() {
     local TIMEOUT="--connect-timeout 5 --max-time 15"
@@ -103,7 +110,15 @@ download_one_image() {
 
 background_job() {
     (
+        # [核心修复 1] 忽略终端关闭带来的 SIGHUP 信号
+        trap '' HUP
+        
         flock -n 200 || exit 1
+        
+        # [新增] 网络检查，没网就悄悄退出，不占后台资源
+        if ! check_network; then
+            exit 0
+        fi
         
         # 1. 补货检查
         CURRENT_COUNT=$(find "$CACHE_DIR" -maxdepth 1 -name "*.jpg" 2>/dev/null | wc -l)
@@ -141,11 +156,19 @@ if [ "$NUM_FILES" -gt 0 ]; then
     
     # 后台补货
     background_job >/dev/null 2>&1 &
+    # [核心修复 2] 将任务从终端作业列表中移除，脱离终端控制
+    disown 
     
 else
     # 没库存，提示语更改
     echo "库存不够啦！正在去搬运新的图片，请稍等哦..."
-    download_one_image
+    
+    # 无网情况下的容错处理
+    if check_network; then
+        download_one_image
+    else
+        echo "网络好像不太通畅，无法下载新图片 QAQ"
+    fi
     
     shopt -s nullglob
     FILES=("$CACHE_DIR"/*.jpg)
@@ -154,6 +177,8 @@ else
     if [ ${#FILES[@]} -gt 0 ]; then
         SELECTED_IMG="${FILES[0]}"
         background_job >/dev/null 2>&1 &
+        # [核心修复 2] 将任务从终端作业列表中移除
+        disown 
     fi
 fi
 
@@ -163,10 +188,10 @@ if [ -n "$SELECTED_IMG" ] && [ -f "$SELECTED_IMG" ]; then
     # 显示图片
     fastfetch --logo "$SELECTED_IMG" --logo-preserve-aspect-ratio true "${ARGS_FOR_FASTFETCH[@]}"
     
-    # === 新增逻辑：移动到 used 目录 ===
+    # === 逻辑：移动到 used 目录 ===
     mv "$SELECTED_IMG" "$USED_DIR/"
     
-    # === 新增逻辑：检查 used 目录数量并清理 ===
+    # === 逻辑：检查 used 目录数量并清理 ===
     USED_COUNT=$(find "$USED_DIR" -maxdepth 1 -name "*.jpg" 2>/dev/null | wc -l)
     
     if [ "$USED_COUNT" -gt "$MAX_USED_LIMIT" ]; then
@@ -182,6 +207,6 @@ if [ -n "$SELECTED_IMG" ] && [ -f "$SELECTED_IMG" ]; then
     fi
 else
     # 失败提示语更改
-    echo "呜呜... 图片下载失败了，这次只能先显示默认的 Logo 啦 QAQ"
+    echo "呜呜... 图片获取失败了，这次只能先显示默认的 Logo 啦 QAQ"
     fastfetch "${ARGS_FOR_FASTFETCH[@]}"
 fi
