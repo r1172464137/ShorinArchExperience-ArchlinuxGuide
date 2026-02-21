@@ -318,9 +318,9 @@
     "tooltip": true,
     "format": "󱏜",
     "on-click": "hyprpicker -a && pw-play /usr/share/sounds/freedesktop/stereo/message.oga",
-    "on-click-right":"~/.config/scripts/matugen-select-type.sh",
-    "on-click-middle":"waypaper",
-    "tooltip-format":"左键：提取颜色\n右键：切换系统配置方案\n中键：打开壁纸切换器",
+    "on-click-middle":"~/.config/scripts/matugen-select-type.sh",
+    "on-click-right":"waypaper",
+    "tooltip-format":"左键：提取颜色\n右键：打开壁纸切换器\n中键：切换系统配置方案",
   },
   //音频可视化
   "custom/cava": {
