@@ -34,21 +34,20 @@ binds {
     // 警告：这是实验性功能
     // 切换 移动聚焦窗口至侧边栏 （建议配合切换浮动聚焦的快捷键使用，我设置的是super+n）
     Mod+Alt+S { spawn "~/.local/bin/niri-sidebar" "toggle-window"; }
+    Mod+M hotkey-overlay-title="收起窗口 Move to Sidebar" { spawn "~/.local/bin/niri-sidebar" "toggle-window"; }
     // 切换 收起/展开侧边栏
-    Mod+Alt+Z { spawn "~/.local/bin/niri-sidebar" "toggle-visibility";}
+    Mod+Alt+Z hotkey-overlay-title="展开/收起侧边栏 Toggle Sidebar" { spawn "~/.local/bin/niri-sidebar" "toggle-visibility";}
     // 反向排序侧边栏
-    Mod+Alt+X { spawn "~/.local/bin/niri-sidebar" "flip";}
+    Mod+Alt+X hotkey-overlay-title=null { spawn "~/.local/bin/niri-sidebar" "flip";}
     // 重新排列侧边栏中的窗口（侧边栏中的窗口本质是一个浮动窗口，你有时候可能会把它移动到别的地方
     // 例如 ctrl+c居中。此时按下此键可以重新排列）
-    Mod+Alt+R { spawn "~/.local/bin/niri-sidebar" "reorder"; }
+    Mod+Alt+R hotkey-overlay-title="重置侧边栏 Reorder Sidebar"  { spawn "~/.local/bin/niri-sidebar" "reorder"; }
     
 
     // 这一行是用waybar自己支持的信号功能隐藏waybar，但进程没有退出，资源占用依旧有
     Mod+Shift+F4 hotkey-overlay-title="隐藏任务栏 Hide bar" {spawn-sh "killall -SIGUSR1 waybar";}
     // 这一行是关闭waybar进程，释放资源占用。在意资源占用的时候使用。
     Mod+F4 hotkey-overlay-title="开关任务栏 Toggle bar" {spawn-sh "pkill waybar && pkill cava || waybar ";}
-    // 临时打开一个文本编辑器
-    Mod+M hotkey-overlay-title="记事本 Notebook" {spawn "kitty" "--single-instance" "--class" "notebook" "-e" "vim";}
     // 临时开一个浮动终端
     Mod+Slash hotkey-overlay-title="临时终端 Quick Terminal" {spawn "kitty" "--single-instance" "--class" "quickterminal";}
     Mod+F12 hotkey-overlay-title=null {spawn "kitty" "--class" "quickterminal";}
