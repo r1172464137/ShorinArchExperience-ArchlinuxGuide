@@ -23,10 +23,10 @@ window-rule {
     // 禁止边框画到背景里
     draw-border-with-background false
     // 窗口模糊
-    background-effect {
-	xray true
-	blur true
-    }
+    //background-effect {
+//	xray true
+//	blur true
+  //  }
 }
 // niri-siderbar需要的全局窗口规则
 window-rule {

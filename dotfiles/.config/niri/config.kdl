@@ -151,13 +151,13 @@ input {
 }
 
 //blur
-blur {
+//blur {
 	// off
-	passes 3
-	offset 1.5
-	noise 0.02
-	saturation 1.5 
-}
+//	passes 3
+//	offset 1.5
+//	noise 0.02
+//	saturation 1.5 
+//}
 
 overview {
 	// 关闭overview里的工作区阴影，配合layout里面的透明工作区背景可以做到让工作区和overview共用同一个背景。在意内存占用的可以把waypaper的后端改成swaybg,然后关闭桌面自动模糊功能，取消swww自动启动，能节省250MB左右内存
