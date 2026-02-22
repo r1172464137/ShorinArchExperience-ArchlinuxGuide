@@ -150,6 +150,14 @@ input {
     //focus-follows-mouse max-scroll-amount="50%"
 }
 
+//blur
+blur {
+	// off
+	passes 3
+	offset 1.5
+	noise 0.02
+	saturation 1.5 
+}
 
 overview {
 	// 关闭overview里的工作区阴影，配合layout里面的透明工作区背景可以做到让工作区和overview共用同一个背景。在意内存占用的可以把waypaper的后端改成swaybg,然后关闭桌面自动模糊功能，取消swww自动启动，能节省250MB左右内存
@@ -337,7 +345,7 @@ spawn-sh-at-startup "sleep 0.6 &&  waypaper --random"
 // 询问管理员权限功能（身份验证）
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 有聚焦窗口时桌面自动模糊的脚本
-spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
+//spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置
 spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
 // GNOME tracker修复
