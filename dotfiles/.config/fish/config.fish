@@ -19,6 +19,8 @@ function ls
 	command eza --icons $argv
 end
 
+# grub
+abbr grub 'sudo grub-mkconfig -o /boot/grub/grub.cfg'
 # 小黄鸭补帧 需要steam安装正版小黄鸭
 abbr lsfg 'LSFG_PROCESS="miyu"'
 # fa运行fastfetch
