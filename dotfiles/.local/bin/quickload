@@ -66,7 +66,7 @@ esac
 
 notify-send "$MSG_TITLE" "$MSG_START"
 
-if pkexec "$SCRIPT_PATH" --internal-run-as-root "$TARGET_MODE"; then
+if pkexec su - root -c "LANG=\"$LANG\" \"$SCRIPT_PATH\" --internal-run-as-root \"$TARGET_MODE\""; then
     notify-send -u critical "$MSG_TITLE" "$MSG_SUCCESS"
     sleep 3
     systemctl reboot
