@@ -33,8 +33,8 @@
         "bluetooth",
         "network",
         "idle_inhibitor",
-        "power-profiles-daemon",
         "battery",
+        "power-profiles-daemon",
         "clock",
         "group/powermenu"
     ],

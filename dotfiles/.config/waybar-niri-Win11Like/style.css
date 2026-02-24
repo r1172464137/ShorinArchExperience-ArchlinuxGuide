@@ -337,10 +337,15 @@ window#waybar.empty #window {
     color: @secondary;
 }
 #battery{
-    font-size:1.1em;
+    font-size:1.12em;
+}
+#battery {
+    padding: 0px 6px 0px 5px;
+    margin: 5px 0px 5px 0px;
+    border-radius: 0px 0px 0px 0px;
 }
 #idle_inhibitor {
-    padding: 0px 6px 0px 10px;
+    padding: 0px 5px 0px 10px;
     margin: 5px 0px 5px 5px;
     border-radius: 5px 0px 0px 5px;
     color: @tertiary;
@@ -349,16 +354,16 @@ window#waybar.empty #window {
     padding: 0px 6px 0px 11px;
 }
 #power-profiles-daemon {
-    padding: 0px 8px 0px 5px;
+    padding: 0px 12px 0px 6px;
     margin: 5px 0px 5px 0px;
-    border-radius: 0px 0px 0px 0px;
+    border-radius: 0px 5px 5px 0px;
     color: @tertiary;
 }
 
 #power-profiles-daemon.performance {
     color: @error;
-    font-size: 1.28em; /* 原 23px */
-    padding: 0px 10px 0px 8px;
+    font-size: 1.25em; /* 原 23px */
+    padding: 0px 14px 0px 9px;
 }
 
 /* #power-profiles-daemon.balanced {
@@ -367,14 +372,8 @@ window#waybar.empty #window {
 
 #power-profiles-daemon.power-saver {
     color: #1aa052;
-
 }
 
-#battery {
-    padding: 0px 10px 0px 5px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 0px 5px 5px 0px;
-}
 
 #battery.critical:not(.charging) {
     background-color: @error;
