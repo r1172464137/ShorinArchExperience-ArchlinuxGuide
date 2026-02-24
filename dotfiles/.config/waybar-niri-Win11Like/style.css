@@ -349,6 +349,7 @@ window#waybar.empty #window {
     margin: 5px 0px 5px 5px;
     border-radius: 5px 0px 0px 5px;
     color: @tertiary;
+    font-size:1.03em;
 }
 #idle_inhibitor.activated{
     padding: 0px 6px 0px 11px;
