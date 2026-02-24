@@ -294,7 +294,7 @@ binds {
     // mod+A/D 同效果
     Mod+A hotkey-overlay-title="向左移动窗口 Move window to left between columes" { consume-or-expel-window-left; }
     Mod+D hotkey-overlay-title="向右移动窗口 Move window to right between columes" { consume-or-expel-window-right; }
-    // mod+ctrl+S/W 上下切换窗口
+    // mod+S/W 上下切换窗口
     Mod+S { move-window-down; }
     Mod+W { move-window-up; }
 
