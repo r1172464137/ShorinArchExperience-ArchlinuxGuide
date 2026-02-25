@@ -28,25 +28,45 @@ def run_cmd(cmd):
         return result.stdout
     except Exception: return None
 
-def get_active_workspace_id():
+def get_active_output_workspace_ids():
+    """
+    获取当前活动显示器（output）上的所有工作区 ID
+    """
     workspaces = run_cmd("niri msg -j workspaces")
-    if not workspaces: return None
+    if not workspaces: return set()
+    
+    # 1. 找到当前聚焦的工作区所在的显示器名称
+    active_output = None
     for ws in workspaces:
-        if ws.get("is_focused"): return ws.get("id")
-    return None
+        if ws.get("is_focused"):
+            active_output = ws.get("output")
+            break
+            
+    if not active_output: return set()
+    
+    # 2. 收集该显示器上的所有工作区 ID
+    valid_ws_ids = set()
+    for ws in workspaces:
+        if ws.get("output") == active_output:
+            valid_ws_ids.add(ws.get("id"))
+            
+    return valid_ws_ids
 
 def get_window_sort_key(w):
+    # 将 workspace_id 作为第一排序优先级，确保不同工作区的窗口按组排列
+    ws_id = w.get("workspace_id", 0)
+    
     if w.get("is_floating"):
-        return (99999, 0, w.get("id"))
+        return (ws_id, 99999, 0, w.get("id"))
     try:
         layout = w.get("layout", {})
-        if not layout: return (9999, 0, w.get("id"))
+        if not layout: return (ws_id, 9999, 0, w.get("id"))
         pos = layout.get("pos_in_scrolling_layout")
         if pos and isinstance(pos, list) and len(pos) >= 2:
-            return (pos[0], pos[1], w.get("id"))
+            return (ws_id, pos[0], pos[1], w.get("id"))
     except Exception:
         pass
-    return (9999, 0, w.get("id"))
+    return (ws_id, 9999, 0, w.get("id"))
 
 def main():
     if not shutil.which("fuzzel"):
@@ -55,17 +75,18 @@ def main():
 
     # === 核心改动：开启死循环 ===
     while True:
-        # 1. 每次循环都重新获取最新的 Workspace ID (防止工作区变动)
-        ws_id = get_active_workspace_id()
-        if ws_id is None: break
+        # 1. 每次循环重新获取当前显示器上的所有 Workspace ID
+        valid_ws_ids = get_active_output_workspace_ids()
+        if not valid_ws_ids: break
 
-        # 2. 每次循环都重新获取最新的窗口列表 (因为刚才可能关掉了一个)
+        # 2. 每次循环都重新获取最新的窗口列表
         windows = run_cmd("niri msg -j windows")
         if not windows: break
 
         current_windows = []
         for w in windows:
-            if w.get("workspace_id") != ws_id: continue
+            # 判断窗口是否在允许的工作区集合内
+            if w.get("workspace_id") not in valid_ws_ids: continue
             app_id = w.get("app_id") or ""
             if app_id in EXCLUDE_APPS: continue
             current_windows.append(w)
