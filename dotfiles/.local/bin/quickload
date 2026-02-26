@@ -1,128 +1,132 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ==============================================================================
+# Quickload - Btrfs Snapshot Rollback Tool (Matugen UI Edition)
+# ==============================================================================
+set -euo pipefail
 
-SCRIPT_PATH=$(realpath "$0")
+SCRIPT_PATH=$(realpath "${BASH_SOURCE[0]}")
 
-# --- 语言检测优化与帮助文档 ---
-if echo "$LANG" | grep -q "zh_CN"; then
-    TXT_PROMPT="快速读档 > ⚠️会自动重启系统"
-    TXT_BOTH="全系统恢复 (both)"
-    TXT_ROOT="仅恢复root (root)"
-    TXT_HOME="仅恢复home (home)"
-    TXT_CANCEL="取消 (cancel)" 
+# ==============================================================================
+# --- 终端 UI 颜色配置 (适配 Matugen) ---
+# ==============================================================================
+readonly C_BOLD='\x1b[1m'
+# Matugen 基础配色
+readonly C_PRIMARY='\x1b[1;34m'
+readonly C_TERTIARY='\x1b[1;35m'
+readonly C_CYAN='\x1b[1;36m'
+readonly C_RESET='\x1b[0m'
+# 补充辅助配色
+readonly C_GOLD='\x1b[1;33m'      # 用于高亮当前正在执行的步骤
+readonly C_ERROR='\x1b[1;31m'     # 用于致命错误提示
+readonly C_GRAY='\x1b[38;5;245m'  # 用于边框和次要信息
+
+# --- 语言检测优化 ---
+if [[ "${LANG:-}" == *"zh_CN"* ]]; then
+    readonly TXT_PROMPT="快速读档 > 自动重启"
+    readonly TXT_BOTH="全系统恢复 (both)"
+    readonly TXT_ROOT="仅恢复根目录 (root)"
+    readonly TXT_HOME="仅恢复用户目录 (home)"
+    readonly TXT_CANCEL="取消操作 (cancel)" 
     
-    MSG_TITLE="系统恢复"
-    MSG_START="正在进行恢复，请勿关闭电脑..."
-    MSG_SUCCESS="恢复成功！3秒后自动重启..."
-    MSG_FAIL="恢复失败。"
-    MSG_NO_SNAP="未找到目标快照："
-    MSG_MAP_FAIL="无法映射快照 ID："
-
-    TXT_HELP_USAGE="用法: quickload [选项] [模式]
-一个防弹版的 Btrfs 快照回滚工具，支持图形界面 (Fuzzel) 与 TTY 终端。
-
-选项:
-  -h, --help        显示此帮助信息并退出。
-  -d <描述>         指定要回滚的快照描述文字 (默认: quicksave)。
-
-模式:
-  both              恢复 root 和 home 快照。
-  root              仅恢复 root 快照。
-  home              仅恢复 home 快照。
-
-注意: 
-  如果不提供 [模式]，将自动根据当前环境弹出图形菜单或终端文字菜单。
-
-示例:
-  quickload                                 # 弹出菜单，默认读取 quicksave
-  quickload both                            # 跳过菜单，直接全系统恢复 quicksave
-  quickload -d \"Before Shorin Setup\" root   # 仅恢复 root 到指定描述的快照"
+    readonly MSG_TITLE="系统恢复系统"
+    readonly MSG_START="正在准备底层环境..."
+    readonly MSG_SUCCESS="恢复指令下达成功！3秒后自动重启..."
+    readonly MSG_FAIL="发生致命错误，恢复中止。"
 else
-    TXT_PROMPT="Quickload > ⚠️ System will reboot"
-    TXT_BOTH="Full Restore (both)"
-    TXT_ROOT="Restore Root Only (root)"
-    TXT_HOME="Restore Home Only (home)"
-    TXT_CANCEL="Cancel"
+    readonly TXT_PROMPT="Quickload > Will reboot"
+    readonly TXT_BOTH="Full Restore (both)"
+    readonly TXT_ROOT="Restore Root Only (root)"
+    readonly TXT_HOME="Restore Home Only (home)"
+    readonly TXT_CANCEL="Cancel"
 
-    MSG_TITLE="System Restore"
-    MSG_START="Restoring in progress, do not turn off..."
-    MSG_SUCCESS="Success! Rebooting in 3s..."
-    MSG_FAIL="Restore failed."
-    MSG_NO_SNAP="No target snapshot found for:"
-    MSG_MAP_FAIL="Map failed for:"
-
-    TXT_HELP_USAGE="Usage: quickload [OPTIONS] [MODE]
-A bulletproof Btrfs snapshot rollback tool supporting GUI (Fuzzel) and TTY.
-
-Options:
-  -h, --help        Show this help message and exit.
-  -d <description>  Specify target snapshot description (Default: quicksave).
-
-Modes:
-  both              Restore both root and home snapshots.
-  root              Restore root snapshot only.
-  home              Restore home snapshot only.
-
-Note:
-  If [MODE] is not provided, an interactive menu will be shown based on your environment.
-
-Examples:
-  quickload                                 # Show menu, default to quicksave
-  quickload both                            # Direct full restore of quicksave
-  quickload -d \"Before Shorin Setup\" root   # Restore root only to specific snapshot"
+    readonly MSG_TITLE="System Restore"
+    readonly MSG_START="Preparing environment..."
+    readonly MSG_SUCCESS="Success! Rebooting in 3s..."
+    readonly MSG_FAIL="Fatal error, restore aborted."
 fi
 
 # ==============================================================================
-# --- Root 执行逻辑 (底层回滚) ---
+# --- Root 执行逻辑 (底层回滚与 Matugen UI) ---
 # ==============================================================================
-if [ "$1" == "--internal-run-as-root" ]; then
-    MODE="$2"
-    TARGET_SNAP="${3:-quicksave}" # 接收透传的快照名称，默认 fallback 为 quicksave
+if [[ "${1:-}" == "--internal-run-as-root" ]]; then
+    MODE="${2:-}"
+    TARGET_SNAP="${3:-quicksave}" 
     
-    # 1. 自动检测是否在快照启动项中
-    IS_SNAPSHOT_BOOT=false
+    IS_SNAPSHOT_BOOT="false"
     REAL_ROOT_MNT="/tmp/btrfs_real_root"
     
-    if findmnt -n -o OPTIONS / | grep -q "snapshots"; then
-        IS_SNAPSHOT_BOOT=true
-        ROOT_DEV=$(findmnt -n -o SOURCE / | cut -d'[' -f1)
+    if findmnt -n -o OPTIONS / 2>/dev/null | grep -q "snapshots" || false; then
+        IS_SNAPSHOT_BOOT="true"
+        ROOT_DEV=$(findmnt -n -o SOURCE / 2>/dev/null | cut -d'[' -f1 || true)
         
-        mkdir -p "$REAL_ROOT_MNT"
-        if ! mountpoint -q "$REAL_ROOT_MNT"; then
-            mount -t btrfs -o subvolid=5 "$ROOT_DEV" "$REAL_ROOT_MNT"
+        if [[ -n "$ROOT_DEV" ]]; then
+            mkdir -p "$REAL_ROOT_MNT"
+            if ! mountpoint -q "$REAL_ROOT_MNT"; then
+                mount -t btrfs -o subvolid=5 "$ROOT_DEV" "$REAL_ROOT_MNT" 2>/dev/null || true
+            fi
         fi
     fi
 
-    # 2. 清理钩子
     cleanup_mount() {
-        if [ "$IS_SNAPSHOT_BOOT" = true ] && mountpoint -q "$REAL_ROOT_MNT"; then
-            umount "$REAL_ROOT_MNT"
-            rmdir "$REAL_ROOT_MNT"
+        if [[ "$IS_SNAPSHOT_BOOT" == "true" ]] && mountpoint -q "$REAL_ROOT_MNT"; then
+            umount "$REAL_ROOT_MNT" 2>/dev/null || true
+            rmdir "$REAL_ROOT_MNT" 2>/dev/null || true
         fi
     }
     trap cleanup_mount EXIT
 
-    # 3. 执行回滚逻辑
     rollback_subvol() {
-        local subvol=$1       
-        local snap_conf=$2    
-        local SNAPPER_CMD="snapper -c $snap_conf"
+        local subvol="$1"
+        local snap_conf="$2"
+        local snapper_cmd="snapper -c $snap_conf"
         
-        if [ "$IS_SNAPSHOT_BOOT" = true ] && [ "$snap_conf" == "root" ]; then
-            SNAPPER_CMD="snapper --no-dbus --root ${REAL_ROOT_MNT}/@ -c root"
+        if [[ "$IS_SNAPSHOT_BOOT" == "true" ]] && [[ "$snap_conf" == "root" ]]; then
+            snapper_cmd="snapper --no-dbus --root ${REAL_ROOT_MNT}/@ -c root"
         fi
         
-        local snap_id=$($SNAPPER_CMD list --columns number,description | grep "$TARGET_SNAP" | tail -n 1 | awk '{print $1}')
-        if [ -z "$snap_id" ]; then echo "$MSG_NO_SNAP $snap_conf ($TARGET_SNAP)"; return 1; fi
+        echo -e "\n${C_BOLD}${C_PRIMARY}::${C_RESET} ${C_BOLD}正在处理子卷: ${C_TERTIARY}${subvol}${C_RESET}"
+        
+        local snap_id=""
+        snap_id=$($snapper_cmd list --columns number,description 2>/dev/null | awk -v tgt="$TARGET_SNAP" '$0 ~ tgt {print $1}' | tail -n 1) || true
 
-        local ba_index=$(btrfs-assistant -l | awk -v v="$subvol" -v s="$snap_id" '$2==v && $3==s {print $1}')
-        if [ -z "$ba_index" ]; then echo "$MSG_MAP_FAIL $subvol (ID: $snap_id)"; return 1; fi
+        if [[ -z "$snap_id" ]]; then 
+            echo -e "   ${C_BOLD}${C_ERROR}[ERROR]${C_RESET} 未找到描述为 [${TARGET_SNAP}] 的快照记录。"
+            return 1
+        fi
+        echo -e "   ${C_BOLD}${C_PRIMARY}[OK]${C_RESET} 匹配快照 : ${C_CYAN}$TARGET_SNAP${C_RESET} ${C_GRAY}(ID: $snap_id)${C_RESET}"
 
-        btrfs-assistant -r "$ba_index"
+        local ba_index=""
+        ba_index=$(btrfs-assistant -l 2>/dev/null | awk -v v="$subvol" -v s="$snap_id" '$2==v && $3==s {print $1}') || true
+
+        if [[ -z "$ba_index" ]]; then 
+            echo -e "   ${C_BOLD}${C_ERROR}[ERROR]${C_RESET} 无法将快照 ID $snap_id 映射到底层引擎。"
+            return 1
+        fi
+        echo -e "   ${C_BOLD}${C_PRIMARY}[OK]${C_RESET} 引擎就绪 : ${C_GRAY}(内部索引: $ba_index)${C_RESET}"
+
+        # 核心变动：当前阻塞执行的步骤使用高亮的金色显示，移除多余符号
+        echo -e "   ${C_BOLD}${C_GOLD}-> 正在执行底层回滚指令...${C_RESET}"
+        echo -e "   ${C_GRAY}╭──────────────────────────────────────────────────${C_RESET}"
+        
+        if btrfs-assistant -r "$ba_index" 2>&1 | sed "s/^/   ${C_GRAY}│${C_RESET} /"; then
+            echo -e "   ${C_GRAY}╰──────────────────────────────────────────────────${C_RESET}"
+            echo -e "   ${C_BOLD}${C_PRIMARY}[DONE] $subvol 子卷回滚已成功完成。${C_RESET}"
+        else
+            echo -e "   ${C_GRAY}╰──────────────────────────────────────────────────${C_RESET}"
+            echo -e "   ${C_BOLD}${C_ERROR}[FATAL] $subvol 子卷回滚遇到致命错误，请检查上方日志。${C_RESET}"
+            return 1
+        fi
     }
+
+    echo -e "\n${C_BOLD}${C_PRIMARY}=================[ BTRFS 极速回滚 ]=================${C_RESET}"
+    echo -e "${C_BOLD}   执行模式 : ${C_CYAN}$MODE${C_RESET}"
+    echo -e "${C_BOLD}   目标快照 : ${C_TERTIARY}$TARGET_SNAP${C_RESET}"
+    echo -e "${C_BOLD}${C_PRIMARY}====================================================${C_RESET}"
 
     if [[ "$MODE" == "both" || "$MODE" == "root" ]]; then rollback_subvol "@" "root" || exit 1; fi
     if [[ "$MODE" == "both" || "$MODE" == "home" ]]; then rollback_subvol "@home" "home" || exit 1; fi
     
+    echo -e "\n${C_BOLD}${C_PRIMARY}=================[ 所有任务已结束 ]=================${C_RESET}\n"
     exit 0
 fi
 
@@ -130,52 +134,43 @@ fi
 # --- 环境感知与交互逻辑 ---
 # ==============================================================================
 
-# 优先拦截帮助参数 (-h / --help)
-for arg in "$@"; do
-    if [[ "$arg" == "-h" || "$arg" == "--help" ]]; then
-        echo -e "$TXT_HELP_USAGE"
-        exit 0
-    fi
-done
-
-# 极简参数拦截：如果第一个参数是 -d，提取描述并踢掉前两个参数
 TARGET_SNAP="quicksave"
-if [[ "$1" == "-d" && -n "$2" ]]; then
+if [[ "${1:-}" == "-d" && -n "${2:-}" ]]; then
     TARGET_SNAP="$2"
     shift 2
 fi
 
-# 判断是否拥有图形界面
-HAS_GUI=false
-if [[ -n "$WAYLAND_DISPLAY" || -n "$DISPLAY" ]]; then
-    HAS_GUI=true
+HAS_GUI="false"
+if [[ -n "${WAYLAND_DISPLAY:-}" || -n "${DISPLAY:-}" ]]; then
+    HAS_GUI="true"
 fi
 
 notify_user() {
     local level="$1" 
     local msg="$2"
-    if [ "$HAS_GUI" = true ] && command -v notify-send >/dev/null; then
-        if [ "$level" == "critical" ]; then
-            notify-send -u critical "$MSG_TITLE" "$msg"
+    
+    if [[ "$HAS_GUI" == "true" ]] && command -v notify-send >/dev/null 2>&1; then
+        if [[ "$level" == "critical" ]]; then
+            notify-send -u critical "$MSG_TITLE" "$msg" 2>/dev/null || true
         else
-            notify-send "$MSG_TITLE" "$msg"
+            notify-send "$MSG_TITLE" "$msg" 2>/dev/null || true
         fi
-    else
-        echo -e "\n[ $MSG_TITLE ] $msg\n"
     fi
 }
 
 TARGET_MODE=""
 
-# 剩下的第一个参数就是目标模式 (如 both)
-if [[ "$1" == "both" || "$1" == "root" || "$1" == "home" ]]; then
+if [[ "${1:-}" == "both" || "${1:-}" == "root" || "${1:-}" == "home" ]]; then
     TARGET_MODE="$1"
 else
-    # 动态修改菜单标题，把目标快照名字显示出来
     PROMPT_TEXT="$TXT_PROMPT [$TARGET_SNAP]"
+    SELECTION=""
     
-    if [ "$HAS_GUI" = true ] && command -v fuzzel >/dev/null; then
-        SELECTION=$(printf "$TXT_BOTH\n$TXT_ROOT\n$TXT_HOME\n$TXT_CANCEL" | fuzzel -d -p "$PROMPT_TEXT")
+    if [[ "$HAS_GUI" == "true" ]] && command -v fuzzel >/dev/null 2>&1; then
+        SELECTION=$(printf "%s\n%s\n%s\n%s" "$TXT_BOTH" "$TXT_ROOT" "$TXT_HOME" "$TXT_CANCEL" | fuzzel -d -p "$PROMPT_TEXT" 2>/dev/null) || true
+    fi
+
+    if [[ -n "$SELECTION" ]]; then
         case "$SELECTION" in
             "$TXT_BOTH") TARGET_MODE="both" ;;
             "$TXT_ROOT") TARGET_MODE="root" ;;
@@ -183,16 +178,18 @@ else
             *) exit 0 ;; 
         esac
     else
-        echo "========================================="
-        echo "   $PROMPT_TEXT"
-        echo "========================================="
-        echo " 1) $TXT_BOTH"
-        echo " 2) $TXT_ROOT"
-        echo " 3) $TXT_HOME"
-        echo " 4) $TXT_CANCEL"
-        echo "========================================="
-        read -p "请选择 (1-4): " tty_sel
-        case "$tty_sel" in
+        echo -e "\n${C_BOLD}${C_PRIMARY}==============[ QUICKLOAD 读档程序 ]==============${C_RESET}"
+        echo -e "${C_BOLD}   目标快照: ${C_TERTIARY}$TARGET_SNAP${C_RESET}"
+        echo -e "${C_BOLD}${C_PRIMARY}==================================================${C_RESET}"
+        echo -e " 1) ${C_CYAN}$TXT_BOTH${C_RESET}"
+        echo -e " 2) ${C_PRIMARY}$TXT_ROOT${C_RESET}"
+        echo -e " 3) ${C_PRIMARY}$TXT_HOME${C_RESET}"
+        echo -e " 4) ${C_GRAY}$TXT_CANCEL${C_RESET}"
+        echo -e "${C_BOLD}${C_PRIMARY}==================================================${C_RESET}"
+        
+        tty_sel=""
+        read -r -p "$(echo -e ${C_BOLD}请选择序号 ${C_GOLD}[1-4]${C_RESET}: )" tty_sel || true
+        case "${tty_sel:-}" in
             1) TARGET_MODE="both" ;;
             2) TARGET_MODE="root" ;;
             3) TARGET_MODE="home" ;;
@@ -201,20 +198,33 @@ else
     fi
 fi
 
-if [ -z "$TARGET_MODE" ]; then
-    exit 0
-fi
+if [[ -z "$TARGET_MODE" ]]; then exit 0; fi
 
 # ==============================================================================
 # --- 执行提权与重启 ---
 # ==============================================================================
 notify_user "normal" "$MSG_START"
 
-# 极简透传：直接把 $TARGET_SNAP 塞进字符串最后面
-if pkexec su - root -c "LANG=\"$LANG\" \"$SCRIPT_PATH\" --internal-run-as-root \"$TARGET_MODE\" \"$TARGET_SNAP\""; then
-    notify_user "critical" "$MSG_SUCCESS"
-    sleep 3
-    systemctl reboot
+execute_rollback() {
+    env LANG="${LANG:-C}" "$SCRIPT_PATH" --internal-run-as-root "$TARGET_MODE" "$TARGET_SNAP"
+}
+
+if [[ "$(id -u)" == "0" ]]; then
+    if execute_rollback; then
+        notify_user "critical" "$MSG_SUCCESS"
+        sleep 3
+        systemctl reboot
+    else
+        notify_user "critical" "$MSG_FAIL"
+        exit 1
+    fi
 else
-    notify_user "critical" "$MSG_FAIL"
+    if pkexec su - root -c "env LANG=\"${LANG:-C}\" \"$SCRIPT_PATH\" --internal-run-as-root \"$TARGET_MODE\" \"$TARGET_SNAP\"" 2>/dev/null; then
+        notify_user "critical" "$MSG_SUCCESS"
+        sleep 3
+        systemctl reboot
+    else
+        notify_user "critical" "$MSG_FAIL"
+        exit 1
+    fi
 fi
