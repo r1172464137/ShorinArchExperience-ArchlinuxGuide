@@ -26,15 +26,16 @@ window-rule {
 //    background-effect {
 //	xray true
 //	blur true
-//    }
+//   }
 }
+
 // 全局浮动窗口实时渲染blur
 //window-rule {
 //    match is-floating=true
 //    background-effect {
 //	xray false
 //	blur true
-//    }
+ //   }
 //}
 
 // niri-siderbar需要的全局窗口规则
