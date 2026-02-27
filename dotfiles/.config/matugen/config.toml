@@ -133,7 +133,7 @@ output_path = "~/.cache/matugen_vscode_inject.json"
 post_hook = "~/.config/matugen/scripts/inject_vscode.sh"
 
 [templates.obs]
-input_path = '~/.config/matugen/templates/matugen.obt'
+input_path = '~/.config/matugen/templates/obs-matugen.obt'
 output_path = '~/.config/obs-studio/themes/matugen.obt'
 
 #[templates.steam]
