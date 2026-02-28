@@ -188,7 +188,7 @@ spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // 有聚焦窗口时桌面自动模糊的脚本
 //spawn-at-startup "~/.config/scripts/niri_auto_blur_bg.sh"
 // 屏幕分享、录屏相关的环境设置,如果屏幕分享出异常的话可以开启
-// spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
+ spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri & /usr/lib/xdg-desktop-portal-gnome"
 // GNOME tracker修复
 spawn-sh-at-startup "systemctl --user set-environment XDG_SESSION_CLASS=user"
 // 通知程序
