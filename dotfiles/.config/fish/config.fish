@@ -26,6 +26,9 @@ abbr lsfg 'LSFG_PROCESS="miyu"'
 # fa运行fastfetch
 abbr fa fastfetch
 abbr reboot 'systemctl reboot'
+function sl 
+	command sl | lolcat	
+end
 function 滚
 	sysup 
 end
