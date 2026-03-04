@@ -5,12 +5,14 @@
 # ==============================================================================
 # 脚本功能：
 # 1. 严格模式执行，保障代码健壮性。
-# 2. 启动时检测必要的前置依赖 (kitty)，若缺失则通过终端和桌面弹窗双重报错。
-# 3. 动态检测环境并按需生成 Fuzzel 菜单选项：
-#    - 检测 BTRFS 文件系统及快照工具，决定是否显示快速存读档和深度清理。
-#    - 检测 .local/share/shorin-niri 目录，决定是否显示 Shorin 更新。
-#    - 检测 NetworkManager 及其后端，动态显示并调用联网工具 (impala/nmtui)。
-#    - 检测是否存在蓝牙设备，动态探测并显示可用的蓝牙界面工具 (bluetuith/blueman/blueberry等)。
+# 2. 启动时检测必要的前置依赖 (kitty)，若缺失则报错。
+# 3. 动态环境与命令探测，按需生成菜单选项，不显示当前环境中不可用的功能：
+#    - BTRFS 检测：检测环境与依赖，决定是否显示快速存读档。
+#    - 维护命令探测：检测 sysup/mirror-update/clean 等命令是否独立存在于
+#      ~/.local/bin 中，或作为 shorin 的子命令存在。仅存在时才予以显示。
+#    - Niri 更新检测：结合目录与执行路径共同判断。
+#    - 深度清理：结合 BTRFS 条件与 clean 命令共同判断。
+#    - 网络与蓝牙工具：探测 NetworkManager 状态及可用的前端工具并显示。
 # ==============================================================================
 
 # 启用严格模式：
@@ -28,22 +30,42 @@ report_error() {
     fi
 }
 
+# 辅助函数：检测命令可执行路径或替代方案 (KISS原则：直接输出可供执行的命令格式)
+# 参数 $1: 命令名称 (如 sysup)
+get_exec_cmd() {
+    local target="$1"
+    if [[ -x "$HOME/.local/bin/$target" ]]; then
+        # 优先使用 .local/bin 下的独立脚本
+        echo "$HOME/.local/bin/$target"
+    elif command -v shorin >/dev/null 2>&1; then
+        # 如果不存在独立脚本但 shorin 存在，则转交为 shorin 的子命令
+        echo "shorin $target"
+    else
+        # 都不存在则输出空
+        echo ""
+    fi
+}
+
 # 0. 基础依赖检测 (kitty)
 if ! command -v kitty >/dev/null 2>&1; then
     report_error "未找到 kitty 终端，请先安装。"
     exit 1
 fi
 
-# 定义静态菜单选项
+# 声明所有可能用到的选项和执行命令变量，满足 set -u 要求
 OPT_SAVE="快速存档 (quicksave)"
 OPT_LOAD="快速读档 (quickload)"
-OPT_MIRROR="更新镜像源 (mirror-update)"
-OPT_SYSUP="更新系统 (sysup)"
-OPT_SHORIN="更新Shorin's Niri (shorin-update)"
-OPT_CLEAN="系统清理 (clean)"
-OPT_DEEP_CLEAN="深度系统清理 (clean all)"
 
-# 定义动态菜单选项及其对应的命令环境变量，满足 set -u 要求
+OPT_MIRROR=""
+CMD_MIRROR=""
+OPT_SYSUP=""
+CMD_SYSUP=""
+OPT_SHORIN=""
+CMD_SHORIN=""
+OPT_CLEAN=""
+CMD_CLEAN=""
+OPT_DEEP_CLEAN=""
+
 OPT_NETWORK=""
 NET_TOOL=""
 OPT_BLUETOOTH=""
@@ -63,23 +85,43 @@ if [[ "$(stat -f -c %T /)" == "btrfs" ]] && \
     OPTIONS_ARR+=("$OPT_LOAD")
 fi
 
-# 基础选项
-OPTIONS_ARR+=("$OPT_MIRROR")
-OPTIONS_ARR+=("$OPT_SYSUP")
+# 探测并添加：更新镜像源
+CMD_MIRROR=$(get_exec_cmd "mirror-update")
+if [[ -n "$CMD_MIRROR" ]]; then
+    OPT_MIRROR="更新镜像源 (mirror-update)"
+    OPTIONS_ARR+=("$OPT_MIRROR")
+fi
 
-# 5. 检测特定目录存在与否决定 Shorin 更新选项
+# 探测并添加：更新系统
+CMD_SYSUP=$(get_exec_cmd "sysup")
+if [[ -n "$CMD_SYSUP" ]]; then
+    OPT_SYSUP="更新系统 (sysup)"
+    OPTIONS_ARR+=("$OPT_SYSUP")
+fi
+
+# 探测并添加：Shorin Niri 更新 (需同时满足目录存在和命令可用)
 if [[ -d "$HOME/.local/share/shorin-niri" ]]; then
-    OPTIONS_ARR+=("$OPT_SHORIN")
+    CMD_SHORIN=$(get_exec_cmd "shorin-update")
+    if [[ -n "$CMD_SHORIN" ]]; then
+        OPT_SHORIN="更新Shorin's Niri (shorin-update)"
+        OPTIONS_ARR+=("$OPT_SHORIN")
+    fi
 fi
 
-OPTIONS_ARR+=("$OPT_CLEAN")
-
-# 2. 如果满足 BTRFS 判定条件，追加深度清理
-if [[ "$BTRFS_MODE" == true ]]; then
-    OPTIONS_ARR+=("$OPT_DEEP_CLEAN")
+# 探测并添加：系统清理与深度清理
+CMD_CLEAN=$(get_exec_cmd "clean")
+if [[ -n "$CMD_CLEAN" ]]; then
+    OPT_CLEAN="系统清理 (clean)"
+    OPTIONS_ARR+=("$OPT_CLEAN")
+    
+    # 深度清理同时依赖于 BTRFS 判定条件和 clean 命令自身的存在
+    if [[ "$BTRFS_MODE" == true ]]; then
+        OPT_DEEP_CLEAN="深度系统清理 (clean all)"
+        OPTIONS_ARR+=("$OPT_DEEP_CLEAN")
+    fi
 fi
 
-# 3. 判断当前是否使用 NetworkManager，并确定后端工具
+# 判断当前是否使用 NetworkManager，并确定后端工具
 if systemctl is-active --quiet NetworkManager; then
     if NetworkManager --print-config 2>/dev/null | grep -iq 'wifi\.backend.*iwd' || systemctl is-active --quiet iwd; then
         NET_TOOL="impala"
@@ -90,21 +132,27 @@ if systemctl is-active --quiet NetworkManager; then
     OPTIONS_ARR+=("$OPT_NETWORK")
 fi
 
-# 4. 判断蓝牙设备是否存在，并探测可用的图形/终端界面工具
+# 判断蓝牙设备是否存在，并探测可用的界面工具
 if [[ -d /sys/class/bluetooth ]] && [[ -n "$(ls -A /sys/class/bluetooth 2>/dev/null || true)" ]]; then
-    # 按照个人偏好或常见程度排列优先级
-    if command -v bluetui >/dev/null 2>&1; then
+    if command -v bluetuith >/dev/null 2>&1; then
+        BT_TOOL="bluetuith"
+    elif command -v bluetui >/dev/null 2>&1; then
         BT_TOOL="bluetui"
     elif command -v blueman-manager >/dev/null 2>&1; then
         BT_TOOL="blueman-manager"
     elif command -v blueberry >/dev/null 2>&1; then
         BT_TOOL="blueberry"
     else
-        BT_TOOL="bluetoothctl" # 兜底选项
+        BT_TOOL="bluetoothctl"
     fi
-    
     OPT_BLUETOOTH="蓝牙工具 ($BT_TOOL)"
     OPTIONS_ARR+=("$OPT_BLUETOOTH")
+fi
+
+# 如果没有探测到任何可用选项，直接退出以防止 fuzzel 报错
+if [[ ${#OPTIONS_ARR[@]} -eq 0 ]]; then
+    report_error "未探测到任何可用的维护指令。"
+    exit 1
 fi
 
 # 调用 Fuzzel 显示菜单
@@ -119,6 +167,7 @@ if [[ -z "$SELECTED" ]]; then
 fi
 
 # 根据选择执行命令
+# 所有的命令执行都使用探测所得的 CMD_ 变量，实现了真正的逻辑解耦
 case "$SELECTED" in
     "$OPT_SAVE")
         quicksave &
@@ -127,19 +176,20 @@ case "$SELECTED" in
         quickload &
         ;;
     "$OPT_MIRROR")
-        kitty --single-instance --class command-center --title "更新镜像源" bash -c "~/.local/bin/mirror-update; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "更新镜像源" bash -c "$CMD_MIRROR; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_SYSUP")
-        kitty --single-instance --class command-center --title "系统更新" bash -c "~/.local/bin/sysup; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "系统更新" bash -c "$CMD_SYSUP; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_SHORIN")
-        kitty --single-instance --class command-center --title "Shorin更新" bash -c "~/.local/bin/shorin-update; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "Shorin更新" bash -c "$CMD_SHORIN; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_CLEAN")
-        kitty --single-instance --class command-center --title "系统清理" bash -c "~/.local/bin/clean; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        kitty --single-instance --class command-center --title "系统清理" bash -c "$CMD_CLEAN; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_DEEP_CLEAN")
-        kitty --single-instance --class command-center --title "深度系统清理" bash -c "~/.local/bin/clean all; echo; echo '按任意键退出...'; read -n 1 -s -r"
+        # 无论是 ~/.local/bin/clean all 还是 shorin clean all 都能通过 $CMD_CLEAN all 完美适配
+        kitty --single-instance --class command-center --title "深度系统清理" bash -c "$CMD_CLEAN all; echo; echo '按任意键退出...'; read -n 1 -s -r"
         ;;
     "$OPT_NETWORK")
         if [[ -n "$NET_TOOL" ]]; then
@@ -148,8 +198,6 @@ case "$SELECTED" in
         ;;
     "$OPT_BLUETOOTH")
         if [[ -n "$BT_TOOL" ]]; then
-            # 统一使用 kitty 启动。如果是 TUI (如 bluetuith) 则完美适配。
-            # 即使探测到的是 GUI (如 blueman-manager)，通过 bash -c 启动同样有效，遵守了原设定的调用风格。
             kitty --single-instance --class command-center --title "蓝牙工具" bash -c "$BT_TOOL"
         fi
         ;;
