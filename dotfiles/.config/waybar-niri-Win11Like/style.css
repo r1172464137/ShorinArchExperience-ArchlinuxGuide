@@ -356,7 +356,7 @@ window#waybar.empty #window {
 }
 #power-profiles-daemon {
     padding: 0px 12px 0px 6px;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 5px 5px 0px;
     border-radius: 0px 5px 5px 0px;
     color: @tertiary;
 }
@@ -384,9 +384,6 @@ window#waybar.empty #window {
     animation-timing-function: steps(12);
     animation-iteration-count: infinite;
     animation-direction: alternate;
-    padding: 0px 10px 0px 5px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 0px 5px 5px 0px;
 }
 
 #clock {
