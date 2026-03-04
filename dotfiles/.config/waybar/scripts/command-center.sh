@@ -25,11 +25,11 @@ SELECTED=$(echo -e "$OPTIONS" | fuzzel --dmenu \
 case "$SELECTED" in
     "$OPT_SAVE")
         # 后台静默执行
-        ~/.local/bin/quicksave &
+        quicksave &
         ;;
     "$OPT_LOAD")
         # 后台静默执行
-        ~/.local/bin/quickload &
+        quickload &
         ;;
     "$OPT_MIRROR")
         # 打开终端，结束后按任意键退出
