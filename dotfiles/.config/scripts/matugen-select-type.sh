@@ -3,6 +3,7 @@
 CACHE_DIR="$HOME/.cache/matugen-strategy"
 TYPE_FILE="$CACHE_DIR/type"
 MODE_FILE="$CACHE_DIR/mode"
+INDEX_MODE_FILE="$CACHE_DIR/index_mode"
 UPDATE_SCRIPT="$HOME/.config/scripts/matugen-update.sh"
 WAYPAPER_CONFIG="$HOME/.config/waypaper/config.ini"
 
@@ -18,7 +19,7 @@ else
     IS_CN=false
 fi
 
-# --- 2. 读取当前模式 (用于实现 Toggle) ---
+# --- 2. 读取当前模式 (Toggle) ---
 CURRENT_MODE="dark"
 if [ -f "$MODE_FILE" ]; then
     READ_MODE=$(cat "$MODE_FILE")
@@ -27,21 +28,35 @@ if [ -f "$MODE_FILE" ]; then
     fi
 fi
 
+CURRENT_INDEX_MODE="random"
+if [ -f "$INDEX_MODE_FILE" ]; then
+    READ_INDEX_MODE=$(cat "$INDEX_MODE_FILE")
+    if [[ "$READ_INDEX_MODE" == "0" ]]; then
+        CURRENT_INDEX_MODE="0"
+    fi
+fi
+
 # --- 3. 定义选项 (动态生成 Toggle 行) ---
 
-# 根据当前模式，生成相反的选项
+# 模式 Toggle
 if [ "$CURRENT_MODE" == "dark" ]; then
-    if [ "$IS_CN" = true ]; then
-        MODE_OPTION=">> 切换到亮色模式 (light)"
-    else
-        MODE_OPTION=">> Switch to Light (light)"
-    fi
+    if [ "$IS_CN" = true ]; then MODE_OPTION=">> 切换到亮色模式"; else MODE_OPTION=">> Switch to Light"; fi
 else
-    if [ "$IS_CN" = true ]; then
-        MODE_OPTION=">> 切换到暗色模式 (dark)"
-    else
-        MODE_OPTION=">> Switch to Dark (dark)"
-    fi
+    if [ "$IS_CN" = true ]; then MODE_OPTION=">> 切换到暗色模式"; else MODE_OPTION=">> Switch to Dark"; fi
+fi
+
+# 颜色 Index Toggle (已修改为 第一主色)
+if [ "$CURRENT_INDEX_MODE" == "random" ]; then
+    if [ "$IS_CN" = true ]; then INDEX_OPTION=">> 切换到第一主色"; else INDEX_OPTION=">> Switch to First Color"; fi
+else
+    if [ "$IS_CN" = true ]; then INDEX_OPTION=">> 切换到随机/轮换主色"; else INDEX_OPTION=">> Switch to Random/Cycle Color"; fi
+fi
+
+# 重新生成选项
+if [ "$IS_CN" = true ]; then
+    REGEN_OPTION=">> 重新生成"
+else
+    REGEN_OPTION=">> Regenerate"
 fi
 
 # 定义配色策略列表
@@ -71,11 +86,13 @@ fi
 
 # 合并选项
 OPTIONS="${MODE_OPTION}
+${INDEX_OPTION}
+${REGEN_OPTION}
 --------------------
 ${SCHEMES}"
 
 # --- 4. Fuzzel 菜单 ---
-SELECTED_LINE=$(echo "$OPTIONS" | fuzzel -d --prompt="$PROMPT_TEXT" --lines=12)
+SELECTED_LINE=$(echo "$OPTIONS" | fuzzel -d --prompt="$PROMPT_TEXT" --lines=14)
 
 if [ -z "$SELECTED_LINE" ]; then
     exit 0
@@ -87,37 +104,53 @@ if [[ "$SELECTED_LINE" == *"----"* ]]; then
 fi
 
 # --- 5. 提取真实参数 ---
-REAL_VALUE=$(echo "$SELECTED_LINE" | awk '{print $NF}' | tr -d '()')
+# 通过字符串匹配识别控制选项
+if [[ "$SELECTED_LINE" == *">>"* ]]; then
+    if [[ "$SELECTED_LINE" == *"亮色"* ]] || [[ "$SELECTED_LINE" == *"Light"* ]]; then
+        REAL_VALUE="light"
+    elif [[ "$SELECTED_LINE" == *"暗色"* ]] || [[ "$SELECTED_LINE" == *"Dark"* ]]; then
+        REAL_VALUE="dark"
+    elif [[ "$SELECTED_LINE" == *"第一"* ]] || [[ "$SELECTED_LINE" == *"First"* ]]; then
+        REAL_VALUE="0"
+    elif [[ "$SELECTED_LINE" == *"随机"* ]] || [[ "$SELECTED_LINE" == *"Random"* ]]; then
+        REAL_VALUE="random"
+    elif [[ "$SELECTED_LINE" == *"重新生成"* ]] || [[ "$SELECTED_LINE" == *"Regenerate"* ]]; then
+        REAL_VALUE="regenerate"
+    fi
+else
+    # 否则是具体策略，继续提取括号里的内容
+    REAL_VALUE=$(echo "$SELECTED_LINE" | awk '{print $NF}' | tr -d '()')
+fi
 
 # --- 6. 执行逻辑 ---
 if [ -n "$REAL_VALUE" ]; then
     
-    # 判断是模式还是策略
-    if [[ "$REAL_VALUE" == "dark" ]] || [[ "$REAL_VALUE" == "light" ]]; then
+    # 根据 REAL_VALUE 保存对应的状态文件
+    if [[ "$REAL_VALUE" == "regenerate" ]]; then
+        # 仅触发更新，不修改任何文件状态
+        if [ "$IS_CN" = true ]; then NOTIFY_MSG="正在重新生成颜色..."; else NOTIFY_MSG="Regenerating colors..."; fi
+    elif [[ "$REAL_VALUE" == "dark" ]] || [[ "$REAL_VALUE" == "light" ]]; then
         echo "$REAL_VALUE" > "$MODE_FILE"
-        MSG_TYPE="Mode"
+        if [ "$IS_CN" = true ]; then NOTIFY_MSG="已切换为: $REAL_VALUE"; else NOTIFY_MSG="Mode updated to: $REAL_VALUE"; fi
+    elif [[ "$REAL_VALUE" == "0" ]] || [[ "$REAL_VALUE" == "random" ]]; then
+        echo "$REAL_VALUE" > "$INDEX_MODE_FILE"
+        if [ "$IS_CN" = true ]; then NOTIFY_MSG="颜色模式更新为: $REAL_VALUE"; else NOTIFY_MSG="Color strategy updated to: $REAL_VALUE"; fi
     else
         echo "$REAL_VALUE" > "$TYPE_FILE"
-        MSG_TYPE="Scheme"
+        if [ "$IS_CN" = true ]; then NOTIFY_MSG="色彩策略更新为: $REAL_VALUE"; else NOTIFY_MSG="Scheme updated to: $REAL_VALUE"; fi
     fi
 
     # 发送通知
-    if [ "$IS_CN" = true ]; then
-        notify-send "Matugen" "已更新设置: $REAL_VALUE"
-    else
-        notify-send "Matugen" "Updated $MSG_TYPE to: $REAL_VALUE"
-    fi
+    notify-send "Matugen" "$NOTIFY_MSG"
 
     # 获取壁纸路径
     CURRENT_WALLPAPER=""
-    # 1. 问 swww
     if command -v swww &>/dev/null && pgrep -x "swww-daemon" >/dev/null; then
         WP_SWWW=$(swww query | head -n 1 | awk -F ': ' '{print $2}' | awk '{print $1}')
         if [ -n "$WP_SWWW" ] && [ -f "$WP_SWWW" ]; then
             CURRENT_WALLPAPER="$WP_SWWW"
         fi
     fi
-    # 2. 问 Waypaper 配置
     if [ -z "$CURRENT_WALLPAPER" ] && [ -f "$WAYPAPER_CONFIG" ]; then
         WP_CONF=$(sed -n 's/^wallpaper[[:space:]]*=[[:space:]]*//p' "$WAYPAPER_CONFIG")
         WP_CONF="${WP_CONF/#\~/$HOME}"
