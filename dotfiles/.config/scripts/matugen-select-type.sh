@@ -28,11 +28,11 @@ if [ -f "$MODE_FILE" ]; then
     fi
 fi
 
-CURRENT_INDEX_MODE="random"
+CURRENT_INDEX_MODE="0" # 【修改點】：預設為 0
 if [ -f "$INDEX_MODE_FILE" ]; then
     READ_INDEX_MODE=$(cat "$INDEX_MODE_FILE")
-    if [[ "$READ_INDEX_MODE" == "0" ]]; then
-        CURRENT_INDEX_MODE="0"
+    if [[ "$READ_INDEX_MODE" == "random" ]]; then
+        CURRENT_INDEX_MODE="random"
     fi
 fi
 
@@ -45,7 +45,7 @@ else
     if [ "$IS_CN" = true ]; then MODE_OPTION=">> 切换到暗色模式"; else MODE_OPTION=">> Switch to Dark"; fi
 fi
 
-# 颜色 Index Toggle (已修改为 第一主色)
+# 颜色 Index Toggle 
 if [ "$CURRENT_INDEX_MODE" == "random" ]; then
     if [ "$IS_CN" = true ]; then INDEX_OPTION=">> 切换到第一主色"; else INDEX_OPTION=">> Switch to First Color"; fi
 else
