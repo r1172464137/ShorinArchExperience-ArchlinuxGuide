@@ -31,6 +31,7 @@ if [ -z "$WALLPAPER" ] || [ ! -f "$WALLPAPER" ]; then
     exit 1
 fi
 ln -sf "$WALLPAPER" "$HOME/.cache/.current_wallpaper"
+
 # --- 2. 读取策略 (Type) ---
 if [ -f "$TYPE_FILE" ]; then
     STRATEGY=$(cat "$TYPE_FILE")
@@ -50,13 +51,12 @@ fi
 # 确保 D-Bus 发出 'changed' 信号，强制 Nautilus 等应用重绘
 
 
-
 # --- 5. 执行 Matugen ---
-matugen image "$WALLPAPER" -t "$STRATEGY" -m "$MODE"
+# 添加了 --source-color-index 0 参数以跳过交互式颜色选择
+matugen image "$WALLPAPER" -t "$STRATEGY" -m "$MODE" --source-color-index 0
 
 if [ "$MODE" == "light" ]; then
     # === 目标：亮色 ===
-
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
     gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
     gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
