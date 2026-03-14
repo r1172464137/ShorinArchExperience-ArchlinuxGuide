@@ -35,9 +35,9 @@ CACHE_DIR="$HOME/.cache/matugen-strategy"
 TYPE_FILE="$CACHE_DIR/type"
 MODE_FILE="$CACHE_DIR/mode"
 INDEX_MODE_FILE="$CACHE_DIR/index_mode"
-LAST_WALL_FILE="$CACHE_DIR/last_wallpaper"     
-CURRENT_INDEX_FILE="$CACHE_DIR/current_index"  
-VALID_INDICES_FILE="$CACHE_DIR/valid_indices"  
+LAST_WALL_FILE="$CACHE_DIR/last_wallpaper"     # 记录上一次处理的壁纸路径
+CURRENT_INDEX_FILE="$CACHE_DIR/current_index"  # 记录当前使用的颜色索引
+VALID_INDICES_FILE="$CACHE_DIR/valid_indices"  # 新增：记录当前壁纸所有有效的索引（如 "0 1 2 3"）
 WAYPAPER_CONFIG="$HOME/.config/waypaper/config.ini"
 
 # --- 3. 获取壁纸路径 ---
@@ -73,10 +73,10 @@ if [ "$NO_INDEX" = true ]; then
     matugen image "$WALLPAPER" -t "$STRATEGY" -m "$MODE"
 else
     # 后台自动化模式：判断是固定 0 还是 随机/轮换
-    FORCE_ZERO=true # 【修改點】：預設為強制第一主色
+    FORCE_ZERO=false
     if [ -f "$INDEX_MODE_FILE" ]; then
-        if [ "$(cat "$INDEX_MODE_FILE")" == "random" ]; then
-            FORCE_ZERO=false
+        if [ "$(cat "$INDEX_MODE_FILE")" == "0" ]; then
+            FORCE_ZERO=true
         fi
     fi
 
@@ -89,7 +89,7 @@ else
         # 判断：如果壁纸没变，且缓存都存在，直接走“光速轮换”
         if [ "$LAST_WALL" == "$WALLPAPER" ] && [ -f "$VALID_INDICES_FILE" ] && [ -f "$CURRENT_INDEX_FILE" ]; then
             
-            # 读取缓存的有效数组
+            # 读取缓存的有效数组 (如 "0 1 2")
             read -r -a VALID_INDICES < "$VALID_INDICES_FILE"
             LAST_INDEX=$(cat "$CURRENT_INDEX_FILE")
             NEXT_POS=0
@@ -104,7 +104,7 @@ else
             SELECTED_INDEX=${VALID_INDICES[$NEXT_POS]}
 
         else
-            # === 新壁纸：执行探测 ===
+            # === 新壁纸：执行探测 (仅此一次会稍微慢点) ===
             VALID_INDICES=()
             for i in {0..5}; do
                 if matugen image "$WALLPAPER" --source-color-index "$i" --dry-run &>/dev/null; then
@@ -114,7 +114,7 @@ else
                 fi
             done
             
-            # 缓存这次的探测结果
+            # 缓存这次的探测结果，下次就不用测了
             echo "${VALID_INDICES[@]}" > "$VALID_INDICES_FILE"
             echo "$WALLPAPER" > "$LAST_WALL_FILE"
 
