@@ -1,8 +1,5 @@
 
-[config.wallpaper]
-command = "swww"
-#arguments = ["img", "--transition-type", "center"]
-#set = false 
+[config]
 
 [templates.waybar]
 input_path = '~/.config/matugen/templates/colors.css'
@@ -17,6 +14,7 @@ post_hook = 'pywalfox update &'
 [templates.fuzzel]
 input_path = '~/.config/matugen/templates/fuzzel.ini'
 output_path = '~/.config/fuzzel/colors.ini'
+
 [templates.kitty]
 input_path = '~/.config/matugen/templates/kitty-colors.conf'
 output_path ='~/.config/kitty/themes/matugen.conf'
@@ -50,19 +48,21 @@ output_path = '~/.config/starship.toml'
 input_path = '~/.config/matugen/templates/yazi-theme.toml'
 output_path = '~/.config/yazi/theme.toml'
 
-[templates.wlogout]
-input_path = '~/.config/matugen/templates/colors.css'
-output_path = '~/.config/wlogout/colors.css'
-[templates.wlogout-recolor]
-input_path = '~/.config/matugen/templates/wlogout/recolor.sh'
-output_path = '~/.config/wlogout/icons/recolor.sh'
-post_hook = 'chmod +x ~/.config/wlogout/icons/recolor.sh && bash ~/.config/wlogout/icons/recolor.sh &'
+#[templates.wlogout]
+#input_path = '~/.config/matugen/templates/colors.css'
+#output_path = '~/.config/wlogout/colors.css'
+#[templates.wlogout-recolor]
+#input_path = '~/.config/matugen/templates/wlogout/recolor.sh'
+#output_path = '~/.config/wlogout/icons/recolor.sh'
+#post_hook = 'chmod +x ~/.config/wlogout/icons/recolor.sh && bash ~/.config/wlogout/icons/recolor.sh &'
+
 [templates.gtk3]
 input_path ='~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-3.0/colors.css'
 [templates.gtk4]
 input_path ='~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
+
 #[templates.swaync]
 #input_path = '~/.config/matugen/templates/swaync-colors.css'
 #output_path = '~/.config/swaync/colors.css'
