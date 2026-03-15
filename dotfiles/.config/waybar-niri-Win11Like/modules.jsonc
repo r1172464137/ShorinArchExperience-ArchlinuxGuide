@@ -206,32 +206,32 @@
     ],
   },
   "custom/wlogout": {
-    "tooltip": false,
+    "tooltip-format": "左键：关机",
     "format": "󰐥",
-    "on-click": "systemctl poweroff",
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
+    "on-click": "notify-send '关机中...' && systemctl poweroff",
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
   },
   "custom/lockscreen": {
-    "tooltip": false,
+    "tooltip-format": "左键：锁屏",
     "format": "",
     "on-click": "swaylock || hyprlock",
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
   },
   "custom/reboot": {
-    "tooltip": false,
+    "tooltip-format": "左键：重启",
     "format": "",
-    "on-click": "systemctl reboot",
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
+    "on-click": "notify-send '重启中...' && systemctl reboot",
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
   },
   "custom/logout": {
+    "tooltip-format": "左键：登出",
     "format": "󰈆",
     "on-click": "niri msg action quit",
-    "tooltip": false,
-    "on-scroll-up":"true",
-    "on-scroll-down":"true"
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
   },
   //内屏亮度
   "backlight/slider": {
