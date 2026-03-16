@@ -56,7 +56,6 @@ window-rule {
     match app-id="nm-connection-editor"
     match app-id="niri-quick-switch"
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    match app-id="steam" title="Friends List"
     match app-id="blueberry.py" title="蓝牙"
     match app-id="blueman-manager"
     match app-id="flameshot"
@@ -81,6 +80,14 @@ window-rule {
     match app-id="niri-hotkey-menu"
     open-floating true
 }
+// steam 好友列表
+window-rule {
+    match app-id="steam" title="Friends List"
+    match app-id="steam" title="好友列表"
+    default-column-width { proportion 0.20; }
+
+}
+
 // waybar命令中心模块
 window-rule {
     match app-id="command-center"
