@@ -1,8 +1,8 @@
 #!/bin/bash
 # ==============================================================================
 # 功能：Waybar 更新检测后台守护脚本
-# 特性：定期检查 Pacman 和 AUR 更新，生成 JSON 供 Waybar 渲染，
-#       同时生成纯净文本缓存供 fzf 脚本极速读取。
+# 特性：定期检查 Pacman 和 AUR 更新，生成 JSON 和 txt 供前端极速读取。
+# 修复：引入动态信号屏蔽与 FORCE_UPDATE 标志，完美解决高频触发导致的并发地狱。
 # ==============================================================================
 
 set -euo pipefail
@@ -17,6 +17,9 @@ CHECK_INTERVAL=3600
 # 确保缓存目录存在
 mkdir -p "$CACHE_DIR"
 
+# 全局状态标志：0=按需检查，1=强制无视缓存检查
+FORCE_UPDATE=0
+
 # === 自动检测 AUR Helper ===
 if command -v paru &> /dev/null; then
     AUR_HELPER="paru"
@@ -25,6 +28,15 @@ elif command -v yay &> /dev/null; then
 else
     AUR_HELPER=""
 fi
+
+# === 信号处理函数 ===
+# 不再粗暴删除文件，仅修改标志位
+on_sigusr1() {
+    FORCE_UPDATE=1
+}
+
+# 初始绑定信号
+trap 'on_sigusr1' SIGUSR1
 
 # === 生成 JSON 函数 ===
 generate_json() {
@@ -56,12 +68,10 @@ generate_json() {
 
 # === 真正的检查逻辑 ===
 perform_update_check() {
-    # 1. 官方源 (兼容 set -e：如果没有更新 checkupdates 返回 2，捕获状态码避免退出)
     local REPO_UPDATES=""
     local STATUS=0
     REPO_UPDATES=$(checkupdates 2>/dev/null) || STATUS=$?
 
-    # 2. AUR 源
     local AUR_UPDATES=""
     if [[ -n "$AUR_HELPER" ]]; then
         AUR_UPDATES=$("$AUR_HELPER" -Qua 2>/dev/null || true)
@@ -77,22 +87,18 @@ perform_update_check() {
             ALL_UPDATES="$AUR_UPDATES"
         fi
         
-        # 写入分离的纯净数据缓存供 fzf 脚本精细化读取和染色
         echo "$REPO_UPDATES" > "${CACHE_FILE%.json}-repo.txt"
         echo "$AUR_UPDATES" > "${CACHE_FILE%.json}-aur.txt"
-        
-        # 写入 JSON 缓存
         generate_json "$ALL_UPDATES" > "$CACHE_FILE"
     else
-        # 检查失败时不覆盖缓存，防止写入错误数据
         return 1
     fi
 }
 
 # === 主控制逻辑 ===
 run_check() {
-    # 1. 检查缓存是否“新鲜”
-    if [[ -f "$CACHE_FILE" ]]; then
+    # 1. 检查缓存是否新鲜 (如果收到刷新信号 FORCE_UPDATE=1，则跳过判断)
+    if [[ $FORCE_UPDATE -eq 0 ]] && [[ -f "$CACHE_FILE" ]]; then
         local current_time file_time age
         current_time=$(date +%s)
         file_time=$(stat -c %Y "$CACHE_FILE")
@@ -104,14 +110,24 @@ run_check() {
         fi
     fi
 
-    # 2. 缓存过期，尝试获取锁进行更新
+    # 准备干脏活累活前，重置标志位
+    FORCE_UPDATE=0
+    
+    # 【核心修复】：动态屏蔽 SIGUSR1 信号！
+    # 在执行耗时的网络和数据库操作时，无视一切 Ctrl+R 带来的外部干扰。
+    trap '' SIGUSR1
+
+    # 2. 获取锁进行更新
     (
         if flock -x -n 9; then
-            perform_update_check
+            perform_update_check || true
         else
-            flock -x -w 120 9
+            flock -x -w 120 9 || true
         fi
-    ) 9>"$LOCK_FILE"
+    ) 9>"$LOCK_FILE" || true
+
+    # 【核心修复】：干完活了，重新恢复对 SIGUSR1 信号的监听
+    trap 'on_sigusr1' SIGUSR1
 
     # 3. 最终输出缓存内容
     if [[ -f "$CACHE_FILE" ]]; then
@@ -121,12 +137,11 @@ run_check() {
     fi
 }
 
-# === 信号处理 ===
-trap 'rm -f "$CACHE_FILE" "${CACHE_FILE%.json}-repo.txt" "${CACHE_FILE%.json}-aur.txt"; run_check' SIGUSR1
-
 # === 主循环 ===
 while true; do
     run_check
     sleep "$CHECK_INTERVAL" &
-    wait $!
+    
+    # 即使 sleep 被信号强行打断，|| true 也能保住脚本的命
+    wait $! || true
 done
