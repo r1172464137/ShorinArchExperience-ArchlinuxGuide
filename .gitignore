@@ -32,3 +32,4 @@ dotfiles/.local/bin/screenrec
 dotfiles/.local/bin/shorinclip
 dotfiles/.local/bin/sysup
 dotfiles/.local/bin/video2gif
+dotfiles/.local/bin/niri-blur-toggle
