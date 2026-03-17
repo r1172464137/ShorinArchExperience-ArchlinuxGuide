@@ -35,3 +35,4 @@ dotfiles/.local/bin/video2gif
 dotfiles/.local/bin/niri-blur-toggle
 dotfiles/.local/bin/pacd
 dotfiles/.local/bin/li
+dotfiles/.config/fcitx5/conf/notifications.conf

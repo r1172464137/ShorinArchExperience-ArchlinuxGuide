@@ -208,7 +208,7 @@
   "custom/wlogout": {
     "tooltip-format": "左键：关机",
     "format": "󰐥",
-    "on-click": "notify-send '关机中...' && systemctl poweroff",
+    "on-click": "zenity --question --title='系统提示' --text='确定要关机吗？' && notify-send '关机中...' && systemctl poweroff",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
@@ -222,7 +222,7 @@
   "custom/reboot": {
     "tooltip-format": "左键：重启",
     "format": "",
-    "on-click": "notify-send '重启中...' && systemctl reboot",
+    "on-click": "zenity --question --title='系统提示' --text='确定要重启吗？' && notify-send '重启中...' && systemctl reboot",
     "on-scroll-up": "true",
     "on-scroll-down": "true"
   },
