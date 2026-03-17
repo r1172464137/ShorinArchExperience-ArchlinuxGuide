@@ -11,7 +11,7 @@
 include "binds.kdl"
 include "rule.kdl"
 include "output.kdl"
-include "animation.kdl"
+include "animations.kdl"
 include "layout.kdl"
 // 截图保存位置
 screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d %H-%M-%S.png"
@@ -180,7 +180,7 @@ spawn-at-startup "swww-daemon"
 // 总览界面背景壁纸的守护进程
 spawn-at-startup "swww-daemon" "-n" "overview"
 // 随机更换一张壁纸
-spawn-sh-at-startup "sleep 1.5 &&  waypaper --random"
+spawn-sh-at-startup "sleep 1 &&  waypaper --random"
 // 恢复壁纸
 //spawn-at-startup "waypaper" "--restore"
 // 询问管理员权限功能（身份验证）
