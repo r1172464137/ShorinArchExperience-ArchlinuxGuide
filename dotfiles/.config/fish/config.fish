@@ -15,6 +15,10 @@ function y
 	rm -f -- "$tmp"
 end
 
+function cat 
+	command bat $argv
+end
+
 function ls
 	command eza --icons $argv
 end
