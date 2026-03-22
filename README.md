@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="pictures/shorinarchlogo.png" alt="SHORiNのARCH Logo" width="500" />
+  <img src="pictures/shorinarch.png" alt="SHORiNのARCH Logo" width="500" />
 </div>
 
 ---
