@@ -103,6 +103,7 @@ window-rule {
 window-rule{
     match app-id="bluetui"
     match app-id="impala"
+    match app-id="network-tui"
 default-column-width { fixed 800; }
     default-window-height { fixed 800; }
 	open-floating true
