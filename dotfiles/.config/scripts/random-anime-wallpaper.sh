@@ -137,7 +137,7 @@ fi
 
 # --- 3. 应用模块 ---
 
-swww img "$FINAL_PATH" --transition-duration 2 --transition-type center --transition-fps 60
+awww img "$FINAL_PATH" --transition-duration 2 --transition-type center --transition-fps 60
 
 # --- 4. 钩子与清理 ---
 (

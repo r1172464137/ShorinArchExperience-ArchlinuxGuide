@@ -161,7 +161,6 @@ input {
 //}
 
 overview {
-	// 关闭overview里的工作区阴影，配合layout里面的透明工作区背景可以做到让工作区和overview共用同一个背景。在意内存占用的可以把waypaper的后端改成swaybg,然后关闭桌面自动模糊功能，取消swww自动启动，能节省250MB左右内存
 	workspace-shadow {
 	//off
 	}
@@ -176,9 +175,9 @@ overview {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // 自动启动设置
 // 桌面壁纸的守护进程
-spawn-at-startup "swww-daemon"
+spawn-at-startup "awww-daemon"
 // 总览界面背景壁纸的守护进程
-spawn-at-startup "swww-daemon" "-n" "overview"
+spawn-at-startup "awww-daemon" "-n" "overview"
 // 随机更换一张壁纸
 spawn-sh-at-startup "sleep 1 &&  waypaper --random"
 // 恢复壁纸

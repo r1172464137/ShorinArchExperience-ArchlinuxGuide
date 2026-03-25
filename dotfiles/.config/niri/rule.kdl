@@ -4,9 +4,7 @@
 
 // 放进overview里的壁纸程序
 layer-rule{
-    match namespace="hyprpaper"
-    match namespace="wallpaper"
-    match namespace="awww-daemon"
+    match namespace="awww-daemonoverview"
     match namespace="swww-daemonoverview"
      place-within-backdrop true
 }

@@ -5,11 +5,14 @@
 # ==============================================================================
 
 # --- 核心设置 ---
-# 可选: "swww" 或 "swaybg"
-WALLPAPER_BACKEND="swww" 
+# 可选: "swww", "awww" 或 "swaybg"
+WALLPAPER_BACKEND="awww" 
 
 # [SWWW 专用] 参数
 SWWW_ARGS="-n overview --transition-type fade --transition-duration 0.5"
+
+# [AWWW 专用] 参数 (保持与 SWWW 相似的过渡参数)
+AWWW_ARGS="-n overview --transition-type fade --transition-duration 0.5"
 
 # [Swaybg 专用] 填充模式 (fill, fit, center, tile)
 SWAYBG_MODE="fill"
@@ -39,11 +42,12 @@ WALL_DIR="$HOME/Pictures/Wallpapers"
 # ==============================================================================
 
 DEPENDENCIES=("magick" "notify-send")
-# 只有当后端是 swww 时才强制检查 swww，swaybg 同理
+
+# 根据后端不同，动态检查依赖
 if [ "$WALLPAPER_BACKEND" == "swww" ]; then
-    DEPENDENCIES+=("swww")
-    # 增加 niri 依赖检查，因为后续需要用到 niri msg
-    DEPENDENCIES+=("niri")
+    DEPENDENCIES+=("swww" "niri")
+elif [ "$WALLPAPER_BACKEND" == "awww" ]; then
+    DEPENDENCIES+=("awww" "niri")
 elif [ "$WALLPAPER_BACKEND" == "swaybg" ]; then
     DEPENDENCIES+=("swaybg")
 fi
@@ -57,14 +61,19 @@ done
 
 INPUT_FILE="$1"
 
-# === 自动获取当前壁纸逻辑 (修改部分) ===
+# === 自动获取当前壁纸逻辑 ===
 if [ -z "$INPUT_FILE" ]; then
     # 策略 1: 尝试从 swww query 获取 (最准确，如果正在运行 swww)
     if command -v swww &> /dev/null && swww query &> /dev/null; then
         INPUT_FILE=$(swww query | head -n1 | grep -oP 'image: \K.*')
     fi
+    
+    # 策略 2: 尝试从 awww query 获取 (如果是 awww 用户)
+    if [ -z "$INPUT_FILE" ] && command -v awww &> /dev/null && awww query &> /dev/null; then
+        INPUT_FILE=$(awww query | head -n1 | grep -oP 'image: \K.*')
+    fi
 
-    # 策略 2: 如果 swww 没拿到，且配置文件指向 waypaper，尝试读取 waypaper 配置
+    # 策略 3: 如果上述都没拿到，且配置文件指向 waypaper，尝试读取 waypaper 配置
     if [ -z "$INPUT_FILE" ] && [ -f "$WAYPAPER_CONFIG" ]; then
         # 读取 ini 文件中的 wallpaper = /path/to/img 字段
         # 使用 grep 和 cut 提取，xargs 去除空格
@@ -72,13 +81,10 @@ if [ -z "$INPUT_FILE" ]; then
         # 处理可能的波浪号 ~ 路径
         INPUT_FILE="${INPUT_FILE/#\~/$HOME}"
     fi
-    
-    # 策略 3 (可选): 也可以尝试 awww query
-    # if [ -z "$INPUT_FILE" ] && command -v awww &> /dev/null; then ...
 fi
 
 if [ -z "$INPUT_FILE" ] || [ ! -f "$INPUT_FILE" ]; then
-    notify-send "Blur Error" "无法自动获取当前壁纸 (尝试了 swww query 和 waypaper config)。请手动指定路径。"
+    notify-send "Blur Error" "无法自动获取当前壁纸 (尝试了 swww/awww query 和 waypaper config)。请手动指定路径。"
     exit 1
 fi
 
@@ -88,7 +94,7 @@ if [ -z "$WALL_DIR" ] || [ ! -d "$WALL_DIR" ]; then
 fi
 
 # ==============================================================================
-# 3. 路径与链接逻辑 (保持不变)
+# 3. 路径与链接逻辑
 # ==============================================================================
 
 REAL_CACHE_DIR="$REAL_CACHE_BASE/$CACHE_SUBDIR_NAME"
@@ -114,7 +120,7 @@ BLUR_FILENAME="${PARAM_PREFIX}${FILENAME}"
 FINAL_IMG_PATH="$REAL_CACHE_DIR/$BLUR_FILENAME"
 
 # ==============================================================================
-# 4. 后台维护功能 (保持不变)
+# 4. 后台维护功能
 # ==============================================================================
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
@@ -183,7 +189,7 @@ run_maintenance_in_background() {
 }
 
 # ==============================================================================
-# 5. 生成与应用函数 (修改部分)
+# 5. 生成与应用函数
 # ==============================================================================
 
 apply_wallpaper() {
@@ -191,35 +197,36 @@ apply_wallpaper() {
     
     touch -a "$img_path"
 
-    if [ "$WALLPAPER_BACKEND" == "swww" ]; then
-        # === [新增] 检测 daemon overview layer 是否存在 ===
-        # 使用 grep -qE 同时匹配 swww-daemonoverview 或 awww-daemonoverview
-        if ! niri msg layers | grep -qE "(swww-daemonoverview|awww-daemonoverview)"; then
-            # 如果 layer 不存在，启动 daemon
-            # 优先检查 swww-daemon，如果不存在则检查 awww-daemon
-            if command -v swww-daemon &> /dev/null; then
-                swww-daemon -n overview &
-            elif command -v awww-daemon &> /dev/null; then
-                awww-daemon -n overview &
-            fi
-            
+    # 处理 swww 和 awww 逻辑
+    if [ "$WALLPAPER_BACKEND" == "swww" ] || [ "$WALLPAPER_BACKEND" == "awww" ]; then
+        local daemon_name="${WALLPAPER_BACKEND}-daemon"
+        
+        # === 检测对应 daemon overview layer 是否存在 ===
+        if ! niri msg layers | grep -q "${daemon_name}overview"; then
+            # 如果 layer 不存在，启动对应的 daemon
+            $daemon_name -n overview &
             # 等待一小会儿确保 socket 就绪
             sleep 0.5
         fi
         
-        # SWWW 逻辑
-        swww img $SWWW_ARGS "$img_path" &
+        # 应用壁纸
+        if [ "$WALLPAPER_BACKEND" == "swww" ]; then
+            swww img $SWWW_ARGS "$img_path" &
+        else
+            awww img $AWWW_ARGS "$img_path" &
+        fi
         
     elif [ "$WALLPAPER_BACKEND" == "swaybg" ]; then
         # Swaybg 逻辑
-        # 1. 检查 niri 的图层状态，如果发现 overview 正在运行
+        # 1. 检查 niri 的图层状态，如果发现任何 overview 正在运行
         if niri msg layers | grep -qE "(swww-daemonoverview|awww-daemonoverview)"; then
             # 2. 杀掉对应的后台进程
             pkill -f "swww-daemon -n overview" || true
             pkill -f "awww-daemon -n overview" || true
-        fi        # 启动新的
-        swaybg -i "$img_path" -m "$SWAYBG_MODE" &
+        fi
         
+        # 启动新的 swaybg 进程
+        swaybg -i "$img_path" -m "$SWAYBG_MODE" &
     fi
 }
 
