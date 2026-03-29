@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="pictures/shorinarch.png" alt="SHORiNのARCH Logo" width="800" />
+  <img src="pictures/shorinarch.png" alt="SHORiNのARCH Logo" width="600" />
 
 
   <a href="https://space.bilibili.com/9202840">
