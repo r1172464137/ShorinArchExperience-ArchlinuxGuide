@@ -1,6 +1,7 @@
 <div align="center">
   <img src="pictures/shorinarch.png" alt="SHORiNのARCH Logo" width="500" />
 
+
   <a href="https://space.bilibili.com/9202840">
     <img src="https://img.shields.io/badge/Bilibili-关注我-pink?logo=bilibili" alt="Bilibili">
   </a>
