@@ -14,9 +14,10 @@
 这是我作为纯小白尝试Linux后选择日用Arch Linux的实践经历，从中总结出了我心中入门桌面端Linux的最佳路径。你可以沿着我走过的路上手，应该会轻松很多。
 
 <details><summary> [展开/收起] 内容包括 </summary>
+<br><br> 
 
 - 发行版选择方法和避坑排雷
-- LinuxMint、CachyOS、ArchLinux等发行版的完整安装和配置流程
+- Linux Mint、CachyOS、Arch Linux等发行版的完整安装和配置流程
 - Btrfs快照配置和使用方法
 - 众多桌面环境配置和自定义
 - 日常使用和软件推荐
