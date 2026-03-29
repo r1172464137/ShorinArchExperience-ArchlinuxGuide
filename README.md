@@ -1,19 +1,15 @@
 <div align="center">
-  <img src="pictures/shorinarch.png" alt="SHORiNのARCH Logo" width="600" />
-
-
-  <a href="https://space.bilibili.com/9202840">
-    <img src="https://img.shields.io/badge/Bilibili-关注我-pink?logo=bilibili" alt="Bilibili">
-  </a>
-    <img src="https://img.shields.io/badge/Platform-Arch_Linux-blue?logo=arch-linux" alt="Platform">
-  <a href="https://github.com/SHORiN-KiWATA/Shorin-ArchLinux-Guide/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/SHORiN-KiWATA/Shorin-ArchLinux-Guide" alt="License">
-  </a>
+  <img src="pictures/shorinarch.png" alt="SHORiNのARCH Logo" width="500" />
+  <br><br> 
+  
+  <a href="https://space.bilibili.com/9202840"><img src="https://img.shields.io/badge/Bilibili-关注我-pink?logo=bilibili" alt="Bilibili"></a>
+  <img src="https://img.shields.io/badge/Platform-Arch_Linux-blue?logo=arch-linux" alt="Platform">
+  <a href="https://github.com/SHORiN-KiWATA/Shorin-ArchLinux-Guide/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SHORiN-KiWATA/Shorin-ArchLinux-Guide" alt="License"></a>
 </div>
 
 # ShorinArch指南
 
-## ✨ 项目简介
+## 项目简介
 
 这是我作为纯小白尝试Linux后选择日用Arch Linux的实践经历，从中总结出了我心中入门桌面端Linux的最佳路径。你可以沿着我走过的路上手，应该会轻松很多。
 
@@ -32,19 +28,15 @@
   
 </details>
 
-## 📄 [开始阅读](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki)
+## [开始阅读](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki)
 
 - [**ShorinWiki-文档本体在这里**](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki)
 
 - [**便利脚本：一键配置Arch Linux**](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki/%E4%B8%80%E9%94%AE%E9%85%8D%E7%BD%AE%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83)
 
-    ```
-    curl -L shorin.xyz/archsetup | bash 
-    ```
-
     我的一键配置脚本。用于为安装好的Arch Linux和Arch衍生发行版进行所有必要的基础配置，还可以使用我的配置文件搭建桌面环境。
 
-## 📺 电子榨菜
+## 电子榨菜
 
 这里有一些我制作的视频，欢迎关注我的bilibili频道。
 
@@ -57,7 +49,7 @@
     [「女友体验Linux」全程禁用命令行，颠覆刻板印象，纯小白也能轻松上手！](https://www.bilibili.com/video/BV1YvenzUEFf/?share_source=copy_web)
 
 
-## 🙏鸣谢
+## 鸣谢
 
 *排名不分先后*
 
@@ -82,7 +74,7 @@
 - [Blue Screen of Life](https://github.com/harishnkr/bsol)
 - [mechabar](https://github.com/sejjy/mechabar)
 
-## 📈 Star History
+## Star History
 
 <a href="https://star-history.com/#SHORiN-KiWATA/Shorin-ArchLinux-Guide&Date">
   <picture>
