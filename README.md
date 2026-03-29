@@ -7,8 +7,6 @@
   <a href="https://github.com/SHORiN-KiWATA/Shorin-ArchLinux-Guide/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SHORiN-KiWATA/Shorin-ArchLinux-Guide" alt="License"></a>
 </div>
 
-# ShorinArch指南
-
 ## 项目简介
 
 这是我作为纯小白尝试Linux后选择日用Arch Linux的实践经历，从中总结出了我心中入门桌面端Linux的最佳路径。你可以沿着我走过的路上手，应该会轻松很多。
