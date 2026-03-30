@@ -11,6 +11,28 @@
 
 这是我作为纯小白尝试Linux后选择日用Arch Linux的实践经历，总结出了我心中入门桌面端Linux的最佳路径。你可以沿着我走过的路上手，应该会轻松很多。
 
+
+<details><summary>[展开/收起] 内容包括</summary>
+
+- 选择Linux发行版和排雷避坑
+- 安装Linux的必做通用准备工作
+- Linux Mint、CachyOS等易用发行版的安装和使用教程（包含Win双系统配置）
+- Arch Linux安装详解（含手动安装、脚本安装、btrfs文件系统特化配置、Win双系统配置等等）
+- Arch安装桌面环境前的所有准备工作（显卡驱动、固件、音视频服务、休眠、蓝牙、软件源和商城等等）
+- 详细的快照配置方法、系统维护口诀
+- 常用桌面环境介绍、安装、配置和美化方法（GNOME、Plasma、Niri、Hyprland等等）
+- 中文输入法、软件安装等常见需求
+- Linux玩游戏详解
+- 常用虚拟机安装和使用方法（VMware、VirtualBox、DistroBox等）
+- KVM虚拟机安装和配置详解（安装虚拟机Win11、文件共享、远程桌面、冷切换和热切换显卡直通、lookingglass、虚拟机性能优化和伪装等等）
+- 实用小技巧和常见问题
+- 干净地删除Linux系统
+- 其他
+
+</details>
+
+
+
 ## [点击开始阅读](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki)
 
 - [**ShorinWiki-文档本体在这里**](https://github.com/SHORiN-KiWATA/ShorinArchExperience-ArchlinuxGuide/wiki)
