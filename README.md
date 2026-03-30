@@ -43,10 +43,10 @@
 - [Reddit](https://www.reddit.com/) 在这可以找到任何东西
 - [Google Gemini Ai](https://gemini.google.com) 最有人味的强大Ai
 - [Youtuber@Bog](https://www.youtube.com/@bogxd) 启发我制作视频
-- [Youtuber@michael_tunnell](https://www.youtube.com/@michael_tunnell) Awesome Linux 资讯教程博主
-- [Youtuber@MichaelNROH](https://www.youtube.com/@MichaelNROH) Awesome Linux 资讯教程博主
-- [Youtuber@TheLinuxEXP](https://www.youtube.com/@TheLinuxEXP) Awesome Linux 资讯教程博主
-- [Youtuber@@saneAspect](https://www.youtube.com/@saneAspect) Awesome Hyprland 教程博主
+- [Youtuber@michael_tunnell](https://www.youtube.com/@michael_tunnell) 优质 Linux 资讯教程博主
+- [Youtuber@MichaelNROH](https://www.youtube.com/@MichaelNROH) 优质 Linux 资讯教程博主
+- [Youtuber@TheLinuxEXP](https://www.youtube.com/@TheLinuxEXP) 优质 Linux 资讯教程博主
+- [Youtuber@@saneAspect](https://www.youtube.com/@saneAspect) 优质 Hyprland 教程博主
 
 ### 项目引用
 
