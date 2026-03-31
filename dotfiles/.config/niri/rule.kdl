@@ -42,6 +42,11 @@ window-rule{
 	open-floating true
 	default-floating-position x=0 y=18 relative-to="top"
 }
+// bilibili webapp 的窗口规则，以标签页模式打开
+window-rule{
+	match app-id="WebApp-bilibili8002"
+	 default-column-display "tabbed"
+}
 // 以浮动模式打开的软件
 window-rule {
     // This app-id regular expression will work for both:
