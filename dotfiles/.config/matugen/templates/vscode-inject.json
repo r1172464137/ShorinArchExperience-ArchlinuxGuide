@@ -37,6 +37,8 @@
     "activityBar.inactiveForeground": "{{colors.outline.default.hex}}",
     "activityBarBadge.background": "{{colors.primary.default.hex}}",
     "activityBarBadge.foreground": "{{colors.on_primary.default.hex}}",
+    "badge.background": "{{colors.primary.default.hex}}",
+    "badge.foreground": "{{colors.on_primary.default.hex}}",
     "sideBar.background": "{{colors.surface_container_low.default.hex}}",
     "sideBar.foreground": "{{colors.on_surface_variant.default.hex}}",
     "sideBar.border": "{{colors.outline_variant.default.hex}}",

@@ -132,7 +132,7 @@ release_hugepages() {
     printf "${C_CYAN}[INFO] 正在将大页内存释放回宿主机系统...${C_NC}\n"
     echo 0 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages 2>/dev/null || true
     sysctl -w vm.nr_hugepages=0 &>/dev/null
-    action_summary+=("大页内存已清空，物理内存已归还宿主机。")
+    action_summary+=("大页内存已清空，物理内存已归还宿主机")
 }
 
 check_nvidia_busy() {
@@ -144,18 +144,50 @@ check_nvidia_busy() {
 
     if [[ ${#check_list[@]} -eq 0 ]]; then return 0; fi
 
-    local busy_pids
-    busy_pids=$(fuser "${check_list[@]}" 2>/dev/null | grep -oE '[0-9]+' | sort -u | tr '\n' ',' | sed 's/,$//' || true)
+    local pids_comma
+    pids_comma=$(fuser "${check_list[@]}" 2>/dev/null | grep -oE '[0-9]+' | sort -u | tr '\n' ',' | sed 's/,$//' || true)
     
-    if [[ -n "$busy_pids" ]]; then
+    if [[ -n "$pids_comma" ]]; then
         printf "\n${C_RED}[ERROR] 目标设备正被以下进程占用：${C_NC}\n"
         echo "--------------------------------------------------"
-        ps -p "$busy_pids" -o pid,comm,args | tail -n +2 || true
+        ps -p "$pids_comma" -o pid,comm,args | tail -n +2 || true
         echo "--------------------------------------------------"
-        printf "${C_YELLOW}为避免内核崩溃 (Kernel Panic)，请在尝试热切换前终止上述进程。${C_NC}\n\n"
-        exit 1
+        
+        read -rp "$(printf "${C_YELLOW}[PROMPT] 是否需要强制终止上述进程以继续？[y/N]: ${C_NC}")" kill_choice
+        case "$kill_choice" in
+            [Yy]* )
+                printf "${C_CYAN}[INFO] 正在发送 SIGKILL 信号并尝试停止相关守护进程...${C_NC}\n"
+                local pids_space=$(echo "$pids_comma" | tr ',' ' ')
+                
+                # 针对顽固的显卡轮询守护进程进行系统级截杀
+                systemctl stop lactd 2>/dev/null || true
+                systemctl stop lact 2>/dev/null || true
+                
+                kill -9 $pids_space 2>/dev/null || true
+                sleep 1
+                
+                local new_pids
+                new_pids=$(fuser "${check_list[@]}" 2>/dev/null | grep -oE '[0-9]+' | sort -u | tr '\n' ',' | sed 's/,$//' || true)
+                
+                if [[ -n "$new_pids" ]]; then
+                    printf "\n${C_RED}[ERROR] 终止失败。部分进程（可能为守护进程）自动复活或拒绝响应。${C_NC}\n"
+                    echo "--------------------------------------------------"
+                    ps -p "$new_pids" -o pid,comm,args | tail -n +2 || true
+                    echo "--------------------------------------------------"
+                    printf "${C_YELLOW}[WARN] 为保护系统数据，调度已安全中止。${C_NC}\n"
+                    exit 1
+                else
+                    printf "${C_GREEN}[OK] 进程清理完毕，目标设备句柄已释放。${C_NC}\n"
+                fi
+                ;;
+            * )
+                printf "\n${C_YELLOW}[WARN] 操作已取消。系统保持现状。${C_NC}\n"
+                exit 1
+                ;;
+        esac
+    else
+        printf "${C_GREEN}[OK] 未检测到活跃的进程锁。${C_NC}\n"
     fi
-    printf "${C_GREEN}[OK] 未检测到活跃的进程锁。${C_NC}\n"
 }
 
 check_vfio_running() {
@@ -169,7 +201,7 @@ check_vfio_running() {
         echo "--------------------------------------------------"
         ps -p "$vfio_pids" -o pid,comm,args | tail -n +2 || true
         echo "--------------------------------------------------"
-        printf "${C_YELLOW}在回收显卡之前，请彻底关闭虚拟机。${C_NC}\n\n"
+        printf "${C_YELLOW}[WARN] 在回收显卡之前，请彻底关闭虚拟机以免引发内核崩溃。${C_NC}\n\n"
         exit 1
     fi
     printf "${C_GREEN}[OK] 未检测到活跃的 VFIO 锁定。${C_NC}\n"
@@ -182,7 +214,7 @@ switch_mode() {
 
     if [[ "$action_type" == "hot" ]]; then
         if [[ "$target_mode" == "vfio" ]]; then
-            printf "\n${C_YELLOW}[EXEC] 正在启动动态热切换至 VFIO 隔离模式...${C_NC}\n"
+            printf "\n${C_YELLOW}[EXEC] 正在启动动态热切换至 VFIO 直通...${C_NC}\n"
             check_nvidia_busy
 
             if [[ -f "/sys/bus/pci/devices/${VGA_PCI_ID}/power/control" ]]; then
@@ -191,13 +223,13 @@ switch_mode() {
 
             systemctl stop nvidia-persistenced 2>/dev/null || true
             fuser -k -9 /dev/nvidia-uvm /dev/nvidia-uvm-tools /dev/nvidia* 2>/dev/null || true
-            action_summary+=("已清理残留的占用进程 (SIGKILL)")
+            action_summary+=("清理残留进程 (SIGKILL)")
 
             rmmod nvidia_drm 2>/dev/null || true
             rmmod nvidia_modeset 2>/dev/null || true
             rmmod nvidia_uvm 2>/dev/null || true
             rmmod nvidia 2>/dev/null || true
-            action_summary+=("已卸载原生 NVIDIA 内核模块")
+            action_summary+=("卸载原生 NVIDIA 内核模块")
 
             allocate_hugepages
 
@@ -220,7 +252,7 @@ switch_mode() {
             printf "\n${C_GREEN}>> 动态热切换至 VFIO 完成。${C_NC}\n\n"
 
         elif [[ "$target_mode" == "nvidia" ]]; then
-            printf "\n${C_YELLOW}[EXEC] 正在启动动态热切换至原生 NVIDIA 模式...${C_NC}\n"
+            printf "\n${C_YELLOW}[EXEC] 正在启动动态热切换至原生 NVIDIA...${C_NC}\n"
             
             check_vfio_running
             release_hugepages
@@ -276,12 +308,12 @@ switch_mode() {
             if [[ -f "$HUGEPAGE_CONF" ]] && grep -q "^vm.nr_hugepages" "$HUGEPAGE_CONF"; then
                 sed -i 's/^\(vm.nr_hugepages\)/#\1/' "$HUGEPAGE_CONF"
             fi
-            action_summary+=("静态 IOMMU 硬件锁已清除。设备限制解除。")
+            action_summary+=("静态 IOMMU 硬件锁已清除，设备限制解除")
         fi
 
         printf "${C_CYAN}[INFO] 正在重新生成 initramfs 引导镜像...${C_NC}\n"
         mkinitcpio -P
-        action_summary+=("initramfs 重新生成完毕。需要重启系统以生效。")
+        action_summary+=("initramfs 重新生成完毕 (需重启生效)")
         
         echo ""
         echo "  +------------------------------------------------"
@@ -303,8 +335,8 @@ show_status
 printf "  +------------------------------------------------------\n"
 printf "  |  ${C_BOLD}模块 A : 动态热部署 (无需重启)${C_NC}\n"
 printf "  +------------------------------------------------------\n"
-printf "      ${C_GREEN}[1]${C_NC} 隔离显卡 -> 切换为 VFIO 直通\n"
-printf "      ${C_GREEN}[2]${C_NC} 归还显卡 -> 切换为原生 NVIDIA\n\n"
+printf "      ${C_GREEN}[1]${C_NC} 切换为 VFIO 直通\n"
+printf "      ${C_GREEN}[2]${C_NC} 切换为原生 NVIDIA\n\n"
 
 printf "  +------------------------------------------------------\n"
 printf "  |  ${C_BOLD}模块 B : 静态烙印配置 (必须重启)${C_NC}\n"
