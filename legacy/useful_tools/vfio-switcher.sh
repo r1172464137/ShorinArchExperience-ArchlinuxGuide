@@ -30,8 +30,32 @@ VGA_PCI_ID=""
 
 check_root() {
     if [[ $EUID -ne 0 ]]; then
-        printf "\n${C_RED}[ERROR] 需要 Root 权限。请使用 sudo 运行此脚本。${C_NC}\n\n"
-        exit 1
+        printf "\n${C_YELLOW}[INFO] 检测到当前非 Root，正在请求 sudo 提权...${C_NC}\n"
+
+        if ! command -v sudo >/dev/null 2>&1; then
+            printf "\n${C_RED}[ERROR] 未找到 sudo，无法自动提权。${C_NC}\n\n"
+            exit 1
+        fi
+
+        local cmd="$0"
+        if [[ "$cmd" != */* ]]; then
+            local local_cmd="./$cmd"
+            if [[ -f "$local_cmd" ]]; then
+                cmd="$local_cmd"
+            else
+                cmd="$(command -v -- "$cmd" || true)"
+            fi
+        fi
+        if [[ -z "$cmd" ]]; then
+            printf "\n${C_RED}[ERROR] 无法在当前目录或当前 PATH 中定位脚本，自动提权失败。${C_NC}\n\n"
+            exit 1
+        fi
+
+        if [[ "$cmd" == ./* && ! -x "$cmd" ]]; then
+            exec sudo -- bash "$cmd" "$@"
+        fi
+
+        exec sudo -- "$cmd" "$@"
     fi
 }
 
@@ -326,7 +350,7 @@ switch_mode() {
 }
 
 # --- Initialization ---
-check_root
+check_root "$@"
 printf "\n"
 detect_nvidia_gpu
 show_status
